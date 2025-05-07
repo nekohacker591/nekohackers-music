@@ -3,163 +3,358 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Default OG Meta Tags -->
   <meta property="og:title" content="🎧 Nekohacker591 Portfolio">
   <meta property="og:description" content="Check out my music portfolio!">
   <meta property="og:type" content="website">
   <title>🎧 Nekohacker591 Portfolio</title>
   <style>
+    /* --- Global Styles & CSS Variables --- */
+    :root {
+      --primary-color: #ff4d4d; /* Your signature red */
+      --primary-color-hover: #ff6666; /* Lighter red for hover */
+      --background-color: #121212; /* A deep, modern dark grey */
+      --surface-color: #1e1e1e;   /* For player cards and input backgrounds */
+      --surface-highlight: #2a2a2a; /* Slightly lighter for borders, progress track */
+      --text-color: #e0e0e0;       /* Primary text - light grey */
+      --text-secondary-color: #b3b3b3; /* Secondary text - medium grey */
+      --border-radius: 8px;          /* Consistent rounded corners */
+      --transition-speed: 0.2s ease-in-out;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #fff;
+      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
       margin: 0;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      line-height: 1.6;
     }
+
     h1 {
-      color: #ff4d4d;
+      color: var(--primary-color);
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
+
+    /* --- Search Bar & Header Controls --- */
     .search-bar {
       margin-bottom: 20px;
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
     }
+
     .search-input {
       width: 100%;
-      padding: 10px;
+      padding: 12px 15px;
       font-size: 16px;
-      border: 2px solid #ff4d4d;
-      border-radius: 5px;
-      background-color: #333;
-      color: #fff;
+      border: 1px solid var(--surface-highlight);
+      border-radius: var(--border-radius);
+      background-color: var(--surface-color);
+      color: var(--text-color);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
     }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.3); /* Softer focus ring */
+    }
+    .search-input::placeholder {
+      color: var(--text-secondary-color);
+    }
+
     .controls-header {
       display: flex;
       justify-content: flex-end;
       align-items: center;
       width: 100%;
-      max-width: 600px;
-      margin-bottom: 10px;
+      max-width: 650px;
+      margin-bottom: 15px;
+      color: var(--text-secondary-color);
     }
     .controls-header label {
-      margin-right: 5px;
+      margin-right: 8px;
       font-size: 14px;
+      cursor: pointer;
     }
+    .controls-header input[type="checkbox"] {
+      accent-color: var(--primary-color); /* Modern way to color checkboxes */
+      cursor: pointer;
+      transform: scale(1.1);
+      margin-right: 5px; /* Spacing for the label */
+    }
+
+    /* --- Player Container & Individual Players --- */
     .scroll-container {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 25px;
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
     }
+
     .player {
-      background-color: #2a2a2a;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255, 77, 77, 0.2); /* Slightly softer shadow */
-      border: 1px solid transparent; /* For active state */
-      transition: border-color 0.3s ease;
+      background-color: var(--surface-color);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--surface-color); /* Start with matching border */
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
     }
-    .player.player-playing { /* Style for the currently playing track */
-      border-color: #ff4d4d;
-      box-shadow: 0 0 15px rgba(255, 77, 77, 0.7);
+    .player:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 7px 18px rgba(0,0,0,0.3);
     }
+    .player.player-playing {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 12px rgba(255, 77, 77, 0.3), 0 4px 12px rgba(0,0,0,0.25);
+    }
+
     .track-title {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #ff4d4d;
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: var(--text-color);
+      font-weight: 500;
     }
+
+    /* --- Player Controls (Play button, Progress bar area) --- */
     .controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
+      margin-bottom: 15px;
     }
+
     .play-btn {
-      background-color: #ff4d4d;
+      background-color: var(--primary-color);
       border: none;
       color: #fff;
-      font-size: 18px;
-      padding: 5px 10px;
-      border-radius: 5px;
+      font-size: 20px; /* For the icon like ▶ or ▮▮ */
+      width: 48px;
+      height: 48px;
+      border-radius: 50%; /* Circular button */
       cursor: pointer;
-      min-width: 40px; /* Ensure button size is consistent */
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0; /* Prevent shrinking */
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
+    .play-btn:hover {
+      background-color: var(--primary-color-hover);
+      transform: scale(1.05);
+    }
+    .play-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* --- Progress Bar --- */
     .progress-container {
       flex-grow: 1;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
     }
+
     .progress {
       flex-grow: 1;
-      height: 10px;
-      background-color: #444;
-      border-radius: 5px;
+      height: 8px;
+      background-color: var(--surface-highlight);
+      border-radius: 4px;
       overflow: hidden;
       position: relative;
-      cursor: pointer; /* Allow seeking by clicking progress bar */
+      cursor: pointer;
     }
+
     .progress-filled {
       height: 100%;
-      background-color: #ff4d4d;
+      background-color: var(--primary-color);
       width: 0;
-      /* transition: width 0.1s linear; Removed for smoother manual seeking */
+      border-radius: 4px;
+      transition: width 0.1s linear; /* Keep this for smoothness, others can be var(--transition-speed) */
     }
+
     .current-time, .duration {
-      font-size: 12px;
-      color: #ccc;
+      font-size: 13px;
+      color: var(--text-secondary-color);
+      min-width: 38px; /* Prevent layout shifts */
+      text-align: center;
+      flex-shrink: 0;
     }
+
+    /* --- Action Buttons (Download, Share) --- */
     .actions {
-      margin-top: 10px;
+      margin-top: 15px;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
+      flex-wrap: wrap; /* Allow wrapping on small screens if needed */
     }
+
     .download-link, .share-btn {
-      background-color: #ff4d4d;
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 5px;
+      background-color: var(--surface-highlight);
+      color: var(--text-secondary-color);
+      padding: 8px 15px;
+      border-radius: var(--border-radius);
       text-decoration: none;
       border: none;
       cursor: pointer;
-      font-size: 12px; /* Consistent font size */
+      font-size: 13px;
+      font-weight: 500;
+      transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px; /* Space between icon and text */
     }
+    .download-link:hover, .share-btn:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
     .copied {
       opacity: 0;
-      color: #ff4d4d;
-      font-size: 12px;
-      transition: opacity 0.3s;
+      color: var(--primary-color);
+      font-size: 13px;
+      transition: opacity 0.3s var(--transition-speed);
+      margin-left: 5px;
     }
     .copied.show {
       opacity: 1;
     }
-    .volume-container { /* Container for volume slider and mute button */
+
+    /* --- Volume Controls --- */
+    .volume-container {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 12px; /* Increased gap */
+      margin-top: 15px;
     }
+
     .mute-btn {
-      background-color: #555;
-      border: none;
-      color: #fff;
-      font-size: 14px;
-      padding: 6px 8px;
-      border-radius: 5px;
+      background-color: transparent;
+      border: 1px solid var(--text-secondary-color);
+      color: var(--text-secondary-color);
+      font-size: 18px; /* For 🔇 / 🔊 icons */
+      width: 38px; /* Slightly larger */
+      height: 38px;
+      border-radius: 50%;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
     }
+    .mute-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
     .volume-slider {
-      flex-grow: 1; /* Slider takes remaining space */
-      /* width: 100%; No, let flexbox handle it */
-      margin-top: 0; /* Removed as it's in a flex container now */
+      flex-grow: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--surface-highlight);
+      outline: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: opacity var(--transition-speed);
     }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid var(--surface-color); /* Make it pop from the track */
+      transition: background-color var(--transition-speed);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .volume-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid var(--surface-color);
+      transition: background-color var(--transition-speed);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .volume-slider:hover::-webkit-slider-thumb { background: var(--primary-color-hover); }
+    .volume-slider:hover::-moz-range-thumb { background: var(--primary-color-hover); }
+
+    .volume-slider:disabled { opacity: 0.6; cursor: default; }
+    .volume-slider:disabled::-webkit-slider-thumb { background: var(--text-secondary-color); border-color: var(--surface-color); }
+    .volume-slider:disabled::-moz-range-thumb { background: var(--text-secondary-color); border-color: var(--surface-color); }
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 680px) { /* Adjusted breakpoint */
+      body {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.8em; /* Relative sizing */
+        margin-bottom: 25px;
+      }
+      .player {
+        padding: 15px;
+      }
+      .track-title {
+        font-size: 18px;
+      }
+      .controls {
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .play-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+      }
+      .current-time, .duration {
+          font-size: 12px;
+          min-width: 32px;
+      }
+      .actions, .volume-container {
+        margin-top: 12px;
+      }
+      .download-link, .share-btn {
+        padding: 7px 12px;
+        font-size: 12px;
+      }
+      .mute-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+      }
+      .volume-slider::-webkit-slider-thumb { width: 14px; height: 14px; border-width: 2px; }
+      .volume-slider::-moz-range-thumb { width: 14px; height: 14px; border-width: 2px; }
+    }
+
+    /* Styling for when a track is shared directly */
+    body.share-mode .scroll-container {
+        max-width: 700px; /* Allow shared player to be a bit wider if desired */
+    }
+    body.share-mode h1,
+    body.share-mode .search-bar,
+    body.share-mode .controls-header {
+        display: none;
+    }
+    body.share-mode .player {
+        margin-top: 20px; /* Add some top margin when it's the only thing */
+    }
+
   </style>
 </head>
 <body>
@@ -170,8 +365,8 @@
   </div>
 
   <div class="controls-header">
-    <label for="autoplay-next">Autoplay Next:</label>
-    <input type="checkbox" id="autoplay-next" checked>
+    <input type="checkbox" id="autoplay-next"> <!-- Initial state set by JS -->
+    <label for="autoplay-next">Autoplay Next</label>
   </div>
 
   <div class="scroll-container" id="player-container">
@@ -182,13 +377,28 @@
     const globalPlayerState = {
         currentPlayingAudio: null,
         currentPlayingPlayerDiv: null,
-        lastVolume: parseFloat(localStorage.getItem('nekohacker_globalVolume')) || 0.75, // Default to 75%
+        lastVolume: parseFloat(localStorage.getItem('nekohacker_globalVolume')) || 0.75,
         isMuted: JSON.parse(localStorage.getItem('nekohacker_isMuted')) || false,
-        autoplayNext: document.getElementById('autoplay-next').checked
+        get autoplayNext() {
+            return document.getElementById('autoplay-next').checked;
+        },
+        set autoplayNext(value) {
+            document.getElementById('autoplay-next').checked = value;
+            localStorage.setItem('nekohacker_autoplayNext', JSON.stringify(value));
+        }
     };
 
-    document.getElementById('autoplay-next').addEventListener('change', function() {
-        globalPlayerState.autoplayNext = this.checked;
+    const autoplayCheckbox = document.getElementById('autoplay-next');
+    const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
+    if (storedAutoplay !== null) {
+        autoplayCheckbox.checked = JSON.parse(storedAutoplay);
+    } else {
+        autoplayCheckbox.checked = true; // Default to true if not in localStorage
+        globalPlayerState.autoplayNext = true; // Sync global state
+    }
+
+    autoplayCheckbox.addEventListener('change', (e) => {
+        globalPlayerState.autoplayNext = e.target.checked;
     });
 
 
@@ -220,13 +430,15 @@
     ];
 
     const playerContainer = document.getElementById("player-container");
+    const searchInput = document.querySelector('.search-input'); // Defined earlier for keydown check
 
     function initializeAudioForPlayer(playerDiv) {
-      if (playerDiv.audio) return; // Already initialized
+      if (playerDiv.audioInitialized) return;
 
       const audio = new Audio();
-      audio.preload = "metadata"; // Load only metadata initially for lazy loading
-      playerDiv.audio = audio; // Attach to player div
+      audio.preload = "metadata";
+      playerDiv.audio = audio;
+      playerDiv.audioInitialized = true;
 
       const playBtn = playerDiv.querySelector('.play-btn');
       const progressFilled = playerDiv.querySelector('.progress-filled');
@@ -237,24 +449,24 @@
       const durationDisplay = playerDiv.querySelector('.duration');
       const trackTitleElement = playerDiv.querySelector('.track-title');
 
-      // Apply global/persisted volume and mute state
-      audio.volume = globalPlayerState.isMuted ? 0 : globalPlayerState.lastVolume;
-      volumeSlider.value = globalPlayerState.isMuted ? 0 : globalPlayerState.lastVolume; // Keep slider in sync
+      // Initial state based on global/persisted settings
+      audio.muted = globalPlayerState.isMuted;
+      audio.volume = globalPlayerState.isMuted ? 0 : globalPlayerState.lastVolume; // This seems redundant if audio.muted works right
+      volumeSlider.value = globalPlayerState.lastVolume; // Slider always reflects unmuted volume preference
       muteBtn.textContent = globalPlayerState.isMuted ? '🔊' : '🔇';
-      if(globalPlayerState.isMuted) volumeSlider.disabled = true;
+      volumeSlider.disabled = globalPlayerState.isMuted;
 
 
       audio.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(audio.duration);
-        // If this track was meant to be played via URL param, play it now
         if (playerDiv.shouldAutoPlay) {
             playBtn.click();
-            playerDiv.shouldAutoPlay = false; // Reset flag
+            playerDiv.shouldAutoPlay = false;
         }
       });
 
       audio.addEventListener('timeupdate', () => {
-        if (audio.duration) { // Ensure duration is available
+        if (audio.duration) {
           const percent = (audio.currentTime / audio.duration) * 100;
           progressFilled.style.width = percent + '%';
         }
@@ -267,7 +479,7 @@
       audio.addEventListener('ended', () => {
         playBtn.textContent = '▶';
         progressFilled.style.width = '0%';
-        currentTimeDisplay.textContent = formatTime(0); // Reset current time display
+        currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing');
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) {
             globalPlayerState.currentPlayingAudio = null;
@@ -275,96 +487,88 @@
             document.title = '🎧 Nekohacker591 Portfolio';
         }
 
-        // Autoplay next logic
         if (globalPlayerState.autoplayNext) {
-            let currentPlayerIndex = -1;
-            const allPlayers = Array.from(playerContainer.children).filter(p => p.style.display !== 'none'); // Consider only visible players
-            for(let i=0; i<allPlayers.length; i++) {
-                if(allPlayers[i] === playerDiv) {
-                    currentPlayerIndex = i;
-                    break;
-                }
-            }
+            let allPlayers = Array.from(playerContainer.children).filter(p => p.style.display !== 'none');
+            let currentPlayerIndex = allPlayers.indexOf(playerDiv);
 
             if (currentPlayerIndex !== -1 && currentPlayerIndex < allPlayers.length - 1) {
                 const nextPlayerDiv = allPlayers[currentPlayerIndex + 1];
                 if (nextPlayerDiv) {
                     const nextPlayBtn = nextPlayerDiv.querySelector('.play-btn');
                     if (nextPlayBtn) {
-                        // Ensure next player is initialized if not already
-                        if (!nextPlayerDiv.audio) {
+                        if (!nextPlayerDiv.audioInitialized) {
                            initializeAudioForPlayer(nextPlayerDiv);
-                           // Source needs to be set for initialization to complete
-                           if (!nextPlayerDiv.audio.src) nextPlayerDiv.audio.src = nextPlayerDiv.dataset.src;
                         }
-                        nextPlayBtn.click(); // Simulate click to play next
+                        if (!nextPlayerDiv.audio.src && nextPlayerDiv.dataset.src) {
+                            nextPlayerDiv.audio.src = nextPlayerDiv.dataset.src;
+                        }
+                        nextPlayBtn.click(); // This should trigger play
                     }
                 }
             }
         }
       });
-
-      audio.addEventListener('volumechange', () => { // Update mute button based on actual volume
-          if (audio.volume === 0 || audio.muted) {
-              muteBtn.textContent = '🔊'; // Show unmute icon
-              volumeSlider.value = 0; // Reflect mute on slider
-              volumeSlider.disabled = true;
-              globalPlayerState.isMuted = true;
-          } else {
-              muteBtn.textContent = '🔇'; // Show mute icon
-              volumeSlider.value = audio.volume;
-              volumeSlider.disabled = false;
-              globalPlayerState.isMuted = false;
-              globalPlayerState.lastVolume = audio.volume;
+      
+      audio.addEventListener('volumechange', () => {
+          // Update UI based on audio's current state (volume and muted)
+          muteBtn.textContent = audio.muted || audio.volume === 0 ? '🔊' : '🔇';
+          volumeSlider.disabled = audio.muted;
+          
+          // If not muted by the API, slider reflects actual volume
+          // If muted by API, slider still shows 'lastVolume' but is disabled
+          if (!audio.muted) {
+            volumeSlider.value = audio.volume;
+            globalPlayerState.lastVolume = audio.volume; // Store unmuted volume
           }
+          
+          globalPlayerState.isMuted = audio.muted; // Update global mute state
+
           localStorage.setItem('nekohacker_globalVolume', globalPlayerState.lastVolume);
-          localStorage.setItem('nekohacker_isMuted', globalPlayerState.isMuted);
+          localStorage.setItem('nekohacker_isMuted', JSON.stringify(globalPlayerState.isMuted));
       });
+
 
       volumeSlider.addEventListener('input', () => {
         const newVolume = parseFloat(volumeSlider.value);
+        audio.muted = false; // Explicitly unmute if user interacts with slider
         audio.volume = newVolume;
-        audio.muted = newVolume === 0; // Mute if volume is 0
-        // The 'volumechange' event will handle UI updates and localStorage
+        // 'volumechange' event handles further UI updates and localStorage
       });
 
       muteBtn.addEventListener('click', () => {
-          if (audio.muted || audio.volume === 0) { // Unmute
-              audio.muted = false;
-              audio.volume = globalPlayerState.lastVolume > 0 ? globalPlayerState.lastVolume : 0.1; // Restore last volume or a small default
-              volumeSlider.value = audio.volume;
-          } else { // Mute
-              globalPlayerState.lastVolume = audio.volume; // Save current volume before muting
-              audio.muted = true; // This will trigger volumechange if supported, or set volume to 0
-              audio.volume = 0; // Explicitly set volume to 0 for visual consistency
-          }
-          // State saving is handled by 'volumechange' event
+          audio.muted = !audio.muted;
+          // 'volumechange' event will handle UI and localStorage updates
       });
 
       playBtn.addEventListener('click', () => {
-        if (!audio.src) { // If src not set yet (e.g., initial click after IntersectionObserver)
+        if (!audio.src && playerDiv.dataset.src) { // Ensure src is set if not already
             audio.src = playerDiv.dataset.src;
-            //loadedmetadata will handle duration, play will be triggered below after src is set
         }
 
         if (audio.paused) {
           // Pause any other playing audio
           if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
             globalPlayerState.currentPlayingAudio.pause();
-            globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn').textContent = '▶';
-            globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
+            if(globalPlayerState.currentPlayingPlayerDiv) {
+                globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn').textContent = '▶';
+                globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
+            }
           }
+          // Play this audio
           audio.play().then(() => {
             playBtn.textContent = '▮▮';
             playerDiv.classList.add('player-playing');
             globalPlayerState.currentPlayingAudio = audio;
             globalPlayerState.currentPlayingPlayerDiv = playerDiv;
-          }).catch(error => console.error("Error playing audio:", error));
+          }).catch(error => {
+            console.error("Damn, audio play failed:", error);
+            playBtn.textContent = '▶'; // Reset button if play fails
+          });
         } else {
           audio.pause();
           playBtn.textContent = '▶';
           playerDiv.classList.remove('player-playing');
-          if (globalPlayerState.currentPlayingAudio === audio) {
+          if (globalPlayerState.currentPlayingAudio === audio) { // Clear global state if this was the one playing
               globalPlayerState.currentPlayingAudio = null;
               globalPlayerState.currentPlayingPlayerDiv = null;
           }
@@ -373,19 +577,19 @@
       });
 
       progressBar.addEventListener('click', (e) => {
-          if (!audio.duration) return; // Can't seek if duration isn't known
+          if (!audio.duration || audio.duration === Infinity) return; 
           const progressBarRect = progressBar.getBoundingClientRect();
           const clickPosition = (e.clientX - progressBarRect.left) / progressBarRect.width;
           audio.currentTime = clickPosition * audio.duration;
-          if (audio.paused) { // If paused, update progress bar manually
+          // If paused, manually update UI as 'timeupdate' won't fire immediately
+          if (audio.paused) { 
             progressFilled.style.width = (clickPosition * 100) + '%';
             currentTimeDisplay.textContent = formatTime(audio.currentTime);
           }
       });
 
-      // Set the src to start loading metadata (IntersectionObserver has already fired)
-      // Do this last after all listeners are attached
-      if (!audio.src) {
+      // If src needs to be set (it might be deferred until intersection)
+      if (!audio.src && playerDiv.dataset.src) {
           audio.src = playerDiv.dataset.src;
       }
     }
@@ -393,18 +597,18 @@
     const observerOptions = {
       root: null, // viewport
       rootMargin: '0px',
-      threshold: 0.1 // Trigger when 10% of the element is visible
+      threshold: 0.01 // Trigger when even a tiny bit is visible
     };
 
     const playerObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const playerDiv = entry.target;
-          if (!playerDiv.audio) { // Initialize only if not already done
+          if (!playerDiv.audioInitialized) { 
             initializeAudioForPlayer(playerDiv);
           }
-          // No need to unobserve if we want to re-check (e.g. if src might change, but not in this case)
-          // observer.unobserve(playerDiv); // Unobserve after initializing to save resources
+          // Could unobserve here if initialization is strictly one-time:
+          // observer.unobserve(playerDiv); 
         }
       });
     }, observerOptions);
@@ -413,8 +617,8 @@
       const playerDiv = document.createElement("div");
       playerDiv.className = "player";
       playerDiv.id = `player-${index}`;
-      playerDiv.dataset.src = track.file; // Changed to data-src for clarity with lazy loading
-      playerDiv.dataset.index = index; // Store index for autoplay next
+      playerDiv.dataset.src = track.file; // Store src here for lazy loading
+      playerDiv.dataset.index = index; // For share links and identification
 
       playerDiv.innerHTML = `
         <div class="track-title">${track.title}</div>
@@ -427,18 +631,17 @@
           </div>
         </div>
         <div class="actions">
-          <a class="download-link" href="${track.file}" download="${track.title}.wav">⬇ Download</a>
+          <a class="download-link" href="${track.file}" download="${track.title.replace(/[^\w\s.-]/g, '') || 'track'}.wav">⬇ Download</a>
           <button class="share-btn">🔗 Share</button>
           <span class="copied">Copied!</span>
         </div>
         <div class="volume-container">
-          <button class="mute-btn">🔇</button>
+          <button class="mute-btn">🔇</button> <!-- Initial icon state can be set by JS -->
           <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${globalPlayerState.lastVolume}">
         </div>
       `;
       playerContainer.appendChild(playerDiv);
 
-      // Share button logic (remains mostly the same, just ensure it's attached per player)
       const shareBtn = playerDiv.querySelector('.share-btn');
       const copiedMsg = playerDiv.querySelector('.copied');
       const baseUrl = window.location.origin + window.location.pathname;
@@ -448,14 +651,13 @@
         navigator.clipboard.writeText(shareUrl).then(() => {
           copiedMsg.classList.add('show');
           setTimeout(() => copiedMsg.classList.remove('show'), 1500);
-        }).catch(err => console.error('Failed to copy share link: ', err));
+        }).catch(err => console.error('Failed to copy share link, what a pain: ', err));
       });
       
-      playerObserver.observe(playerDiv); // Observe each player for lazy initialization
+      playerObserver.observe(playerDiv); // Start observing the player for lazy init
     });
 
 
-    const searchInput = document.querySelector('.search-input');
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
       document.querySelectorAll('.player').forEach(player => {
@@ -476,6 +678,7 @@
         }
       });
 
+      // Update URL with search query
       const newUrl = new URL(window.location.href);
       if (query) {
         newUrl.searchParams.set('s', query.replace(/ /g, '+'));
@@ -486,12 +689,13 @@
     });
 
     function setOgMetaTags(title, description, url) {
-      document.title = title; // Also set the document title for consistency
+      document.title = title; // Also set the document title
       const metaTags = [
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:url', content: url },
         { property: 'og:type', content: 'music.song' }
+        // Add og:image if you have an image URL, e.g., { property: 'og:image', content: 'https://example.com/image.jpg' }
       ];
       metaTags.forEach(tag => {
         let meta = document.querySelector(`meta[property="${tag.property}"]`);
@@ -514,102 +718,114 @@
       let pageDescription = 'Check out my music portfolio!';
       let pageUrl = window.location.origin + window.location.pathname;
 
-      document.getElementById('autoplay-next').checked = globalPlayerState.autoplayNext; // Sync checkbox with loaded state
-
       if (shareMode && id !== null && tracks[id]) {
+        document.body.classList.add('share-mode'); // Add class for CSS styling
         const track = tracks[id];
         pageTitle = `🎧 ${track.title} - Nekohacker591 Portfolio`;
         pageDescription = `Listen to "${track.title}" by Nekohacker591`;
-        pageUrl = window.location.href; // Full share URL
+        pageUrl = window.location.href; // Use the full share URL for OG
 
         const playerToFocus = document.getElementById(`player-${id}`);
         if (playerToFocus) {
           document.querySelectorAll('.player').forEach(p => {
             p.style.display = (p === playerToFocus) ? 'block' : 'none';
           });
-          document.querySelector('h1').style.display = 'none';
-          document.querySelector('.search-bar').style.display = 'none';
-          document.querySelector('.controls-header').style.display = 'none'; // Hide autoplay toggle in share mode
+          // Hiding of other elements is now primarily handled by CSS via .share-mode
           
-          const container = document.getElementById('player-container');
-          container.style.maxWidth = 'none'; // Allow full width for single shared player
-          container.style.width = '100%';
+          playerContainer.style.maxWidth = 'none'; // Allow full width for shared player
+          playerContainer.style.width = '100%';
 
-          // Ensure the shared track's audio is initialized and potentially autoplayed
-          // The IntersectionObserver might not fire immediately if element is already visible
-          // Or if the element is forced to be visible by JS before observer runs.
-          if (!playerToFocus.audio) {
+          if (!playerToFocus.audioInitialized) { // Ensure it's initialized
             initializeAudioForPlayer(playerToFocus);
           }
-          // Small delay to ensure audio can be played after initialization
-          playerToFocus.shouldAutoPlay = true; // Flag for autoplay after metadata loaded
-          if (playerToFocus.audio && playerToFocus.audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
-             playerToFocus.querySelector('.play-btn').click(); // Autoplay if ready
-             playerToFocus.shouldAutoPlay = false;
+          playerToFocus.shouldAutoPlay = true; // Flag for autoplay on metadata load
+          
+          // If src isn't set yet (due to IntersectionObserver not firing yet), set it now.
+          if (playerToFocus.audio && !playerToFocus.audio.src && playerToFocus.dataset.src) {
+              playerToFocus.audio.src = playerToFocus.dataset.src;
+          } 
+          // If metadata is already loaded, click play directly (e.g., if it was already visible)
+          else if (playerToFocus.audio && playerToFocus.audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
+             playerToFocus.querySelector('.play-btn').click(); 
+             playerToFocus.shouldAutoPlay = false; // Autoplay handled
           }
+          // else, loadedmetadata event will handle the autoplay via playerToFocus.shouldAutoPlay
 
-          // Scroll to the player
-          playerToFocus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          playerToFocus.scrollIntoView({ behavior: 'auto', block: 'start' });
         }
       } else if (searchQuery) {
         const cleanQuery = searchQuery.replace(/\+/g, ' ');
         searchInput.value = cleanQuery;
-        // Trigger the input event to filter tracks
         const event = new Event('input', { bubbles: true, cancelable: true });
-        searchInput.dispatchEvent(event);
+        searchInput.dispatchEvent(event); // Trigger search filtering
       }
 
       setOgMetaTags(pageTitle, pageDescription, pageUrl);
     });
 
-    // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
-        // Don't interfere if user is typing in the search bar
-        if (e.target === searchInput) return;
+        // Ignore keydown if focus is on an input field
+        if (e.target === searchInput || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        let activeAudio = globalPlayerState.currentPlayingAudio;
+        let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
 
         if (e.code === 'Space') {
-            e.preventDefault(); // Prevent page scroll
-            if (globalPlayerState.currentPlayingAudio) {
-                const playBtn = globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn');
-                playBtn.click();
+            e.preventDefault(); 
+            if (activeAudio && activePlayerDiv) {
+                activePlayerDiv.querySelector('.play-btn').click();
             } else {
-                // Try to play the first visible, unplayed track
-                const firstVisiblePlayer = Array.from(playerContainer.children).find(p => p.style.display !== 'none' && (!p.audio || p.audio.paused));
+                // Try to play the first visible player
+                const firstVisiblePlayer = Array.from(playerContainer.children).find(p => p.style.display !== 'none');
                 if (firstVisiblePlayer) {
-                    const playBtn = firstVisiblePlayer.querySelector('.play-btn');
-                     if (!firstVisiblePlayer.audio) { // Ensure initialized
+                    if (!firstVisiblePlayer.audioInitialized) { 
                         initializeAudioForPlayer(firstVisiblePlayer);
-                        if (!firstVisiblePlayer.audio.src) firstVisiblePlayer.audio.src = firstVisiblePlayer.dataset.src;
+                        if (firstVisiblePlayer.audio && !firstVisiblePlayer.audio.src && firstVisiblePlayer.dataset.src) {
+                           firstVisiblePlayer.audio.src = firstVisiblePlayer.dataset.src; // Ensure src is set
+                        }
                     }
-                    playBtn.click();
+                    // Defer play if audio is not ready
+                    if (firstVisiblePlayer.audio && firstVisiblePlayer.audio.readyState < HTMLMediaElement.HAVE_METADATA && firstVisiblePlayer.audio.src) {
+                        firstVisiblePlayer.shouldAutoPlay = true; 
+                    } else if (firstVisiblePlayer.querySelector('.play-btn')) {
+                       firstVisiblePlayer.querySelector('.play-btn').click();
+                    }
                 }
             }
-        } else if (e.code === 'KeyM') { // M for Mute/Unmute
-            if (globalPlayerState.currentPlayingAudio) {
-                const muteBtn = globalPlayerState.currentPlayingPlayerDiv.querySelector('.mute-btn');
-                muteBtn.click();
+        } else if (e.code === 'KeyM') { 
+            e.preventDefault();
+            if (activePlayerDiv && activePlayerDiv.querySelector('.mute-btn')) {
+                activePlayerDiv.querySelector('.mute-btn').click();
+            } else { // If no active player, try to mute/unmute the first visible one
+                const firstVisiblePlayer = Array.from(playerContainer.children).find(p => p.style.display !== 'none');
+                if (firstVisiblePlayer && firstVisiblePlayer.audioInitialized && firstVisiblePlayer.audio && firstVisiblePlayer.querySelector('.mute-btn')) {
+                     firstVisiblePlayer.querySelector('.mute-btn').click();
+                }
             }
-        }
-        // Add more shortcuts like ArrowLeft/Right for seek, ArrowUp/Down for volume for the currentPlayingAudio
-        else if (globalPlayerState.currentPlayingAudio) {
+        } else if (activeAudio && activePlayerDiv) { // Ensure we have an active player for these
             let handled = false;
+            const currentTime = activeAudio.currentTime;
+            const duration = activeAudio.duration;
+            const volume = activeAudio.volume;
+
             if (e.code === 'ArrowLeft') {
-                globalPlayerState.currentPlayingAudio.currentTime = Math.max(0, globalPlayerState.currentPlayingAudio.currentTime - 5); // Seek back 5s
+                if (duration && duration !== Infinity) activeAudio.currentTime = Math.max(0, currentTime - 5); 
                 handled = true;
             } else if (e.code === 'ArrowRight') {
-                globalPlayerState.currentPlayingAudio.currentTime = Math.min(globalPlayerState.currentPlayingAudio.duration, globalPlayerState.currentPlayingAudio.currentTime + 5); // Seek forward 5s
+                if (duration && duration !== Infinity) activeAudio.currentTime = Math.min(duration, currentTime + 5); 
                 handled = true;
             } else if (e.code === 'ArrowUp') {
-                globalPlayerState.currentPlayingAudio.volume = Math.min(1, globalPlayerState.currentPlayingAudio.volume + 0.1);
+                activeAudio.muted = false; // Ensure unmuted when adjusting volume
+                activeAudio.volume = Math.min(1, volume + 0.05);
                 handled = true;
             } else if (e.code === 'ArrowDown') {
-                globalPlayerState.currentPlayingAudio.volume = Math.max(0, globalPlayerState.currentPlayingAudio.volume - 0.1);
+                activeAudio.muted = false; // Ensure unmuted
+                activeAudio.volume = Math.max(0, volume - 0.05);
                 handled = true;
             }
             if (handled) e.preventDefault();
         }
     });
-
   </script>
 </body>
 </html>
