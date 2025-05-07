@@ -48,33 +48,38 @@
       background-color: #1e1e1e;
       border: 2px solid #ff4d4d;
       border-radius: 12px;
-      padding: 20px;
+      padding: 15px;
       margin-bottom: 20px;
       box-shadow: 0 0 10px #ff4d4d50;
-      position: relative;
+    }
+
+    .player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
 
     .track-title {
       font-size: 1.2em;
-      margin-bottom: 10px;
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .play-btn {
       background-color: #ff4d4d;
       border: none;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
       color: black;
       cursor: pointer;
       transition: 0.2s;
+      margin-right: 10px;
     }
 
     .play-btn:hover {
@@ -82,12 +87,11 @@
     }
 
     .progress {
-      flex-grow: 1;
       height: 8px;
       background-color: #333;
-      margin: 0 15px;
       border-radius: 4px;
       overflow: hidden;
+      margin: 10px 0;
     }
 
     .progress-filled {
@@ -140,16 +144,13 @@
 
     .volume-slider {
       -webkit-appearance: none;
-      width: 100px;
+      width: 80px;
       height: 6px;
       background: #333;
       border-radius: 3px;
       outline: none;
       cursor: pointer;
       box-shadow: 0 0 5px #ff4d4d80;
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
     }
 
     .volume-slider::-webkit-slider-thumb {
@@ -190,17 +191,17 @@
       playerDiv.dataset.file = track.file;
 
       playerDiv.innerHTML = `
-        <div class="track-title">${track.title}</div>
-        <div class="controls">
+        <div class="player-header">
           <button class="play-btn">▶</button>
-          <div class="progress"><div class="progress-filled"></div></div>
+          <div class="track-title">${track.title}</div>
+          <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
         </div>
+        <div class="progress"><div class="progress-filled"></div></div>
         <div class="actions">
           <a class="download-link" href="${track.file}" download>⬇ Download</a>
           <button class="share-btn">🔗 Share</button>
           <span class="copied">Copied!</span>
         </div>
-        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
       `;
 
       container.appendChild(playerDiv);
