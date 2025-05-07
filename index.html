@@ -96,15 +96,36 @@
       transition: width 0.1s;
     }
 
-    .download-link {
-      color: #aaa;
-      text-decoration: none;
+    .actions {
       margin-top: 10px;
-      display: inline-block;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .download-link:hover {
+    .download-link, .share-btn {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .share-btn:hover, .download-link:hover {
       color: #fff;
+    }
+
+    .copied {
+      font-size: 12px;
+      color: #6aff78;
+      margin-left: 10px;
+      display: none;
+    }
+
+    .copied.show {
+      display: inline;
     }
   </style>
 </head>
@@ -149,7 +170,11 @@
           <button class="play-btn">▶</button>
           <div class="progress"><div class="progress-filled"></div></div>
         </div>
-        <a class="download-link" href="${track.file}" download>⬇ Download</a>
+        <div class="actions">
+          <a class="download-link" href="${track.file}" download>⬇ Download</a>
+          <button class="share-btn">🔗 Share</button>
+          <span class="copied">Copied!</span>
+        </div>
       `;
 
       container.appendChild(playerDiv);
@@ -187,6 +212,21 @@
         playBtn.textContent = '▶';
         progress.style.width = '0%';
       });
+
+      const shareBtn = player.querySelector('.share-btn');
+      const copiedMsg = player.querySelector('.copied');
+      const title = player.querySelector('.track-title').textContent;
+
+      shareBtn.addEventListener('click', () => {
+        const query = encodeURIComponent(title.toLowerCase().replace(/ /g, '+'));
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?s=${query}`;
+
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          copiedMsg.classList.add('show');
+          setTimeout(() => copiedMsg.classList.remove('show'), 1500);
+        });
+      });
     });
 
     const searchInput = document.querySelector('.search-input');
@@ -197,7 +237,6 @@
         player.style.display = title.includes(query) ? 'block' : 'none';
       });
 
-      // ✏ Update URL param
       const newUrl = new URL(window.location.href);
       if (query) {
         newUrl.searchParams.set('s', query.replace(/ /g, '+'));
@@ -207,7 +246,6 @@
       window.history.replaceState({}, '', newUrl);
     });
 
-    // 🧠 On page load, prefill search from URL
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const searchQuery = urlParams.get('s');
