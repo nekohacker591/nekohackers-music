@@ -38,6 +38,18 @@
       background-color: #333;
       color: #fff;
     }
+    .controls-header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 10px;
+    }
+    .controls-header label {
+      margin-right: 5px;
+      font-size: 14px;
+    }
     .scroll-container {
       display: flex;
       flex-direction: column;
@@ -49,7 +61,13 @@
       background-color: #2a2a2a;
       padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.2); /* Slightly softer shadow */
+      border: 1px solid transparent; /* For active state */
+      transition: border-color 0.3s ease;
+    }
+    .player.player-playing { /* Style for the currently playing track */
+      border-color: #ff4d4d;
+      box-shadow: 0 0 15px rgba(255, 77, 77, 0.7);
     }
     .track-title {
       font-size: 18px;
@@ -69,6 +87,8 @@
       padding: 5px 10px;
       border-radius: 5px;
       cursor: pointer;
+      min-width: 40px; /* Ensure button size is consistent */
+      text-align: center;
     }
     .progress-container {
       flex-grow: 1;
@@ -83,12 +103,13 @@
       border-radius: 5px;
       overflow: hidden;
       position: relative;
+      cursor: pointer; /* Allow seeking by clicking progress bar */
     }
     .progress-filled {
       height: 100%;
       background-color: #ff4d4d;
       width: 0;
-      transition: width 0.1s linear;
+      /* transition: width 0.1s linear; Removed for smoother manual seeking */
     }
     .current-time, .duration {
       font-size: 12px;
@@ -108,6 +129,7 @@
       text-decoration: none;
       border: none;
       cursor: pointer;
+      font-size: 12px; /* Consistent font size */
     }
     .copied {
       opacity: 0;
@@ -118,24 +140,60 @@
     .copied.show {
       opacity: 1;
     }
-    .volume-slider {
-      width: 100%;
+    .volume-container { /* Container for volume slider and mute button */
+      display: flex;
+      align-items: center;
+      gap: 8px;
       margin-top: 10px;
+    }
+    .mute-btn {
+      background-color: #555;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      padding: 6px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .volume-slider {
+      flex-grow: 1; /* Slider takes remaining space */
+      /* width: 100%; No, let flexbox handle it */
+      margin-top: 0; /* Removed as it's in a flex container now */
     }
   </style>
 </head>
 <body>
   <h1>🎧 Nekohacker591 Portfolio</h1>
+
   <div class="search-bar">
     <input type="text" class="search-input" placeholder="Search for a track...">
   </div>
+
+  <div class="controls-header">
+    <label for="autoplay-next">Autoplay Next:</label>
+    <input type="checkbox" id="autoplay-next" checked>
+  </div>
+
   <div class="scroll-container" id="player-container">
     <!-- Players will be injected here -->
   </div>
 
   <script>
+    const globalPlayerState = {
+        currentPlayingAudio: null,
+        currentPlayingPlayerDiv: null,
+        lastVolume: parseFloat(localStorage.getItem('nekohacker_globalVolume')) || 0.75, // Default to 75%
+        isMuted: JSON.parse(localStorage.getItem('nekohacker_isMuted')) || false,
+        autoplayNext: document.getElementById('autoplay-next').checked
+    };
+
+    document.getElementById('autoplay-next').addEventListener('change', function() {
+        globalPlayerState.autoplayNext = this.checked;
+    });
+
+
     function formatTime(seconds) {
-      if (isNaN(seconds)) return '--:--';
+      if (isNaN(seconds) || seconds === Infinity) return '--:--';
       const minutes = Math.floor(seconds / 60);
       const secs = Math.floor(seconds % 60);
       return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
@@ -161,13 +219,202 @@
       { title: "Save The World", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/good%20remix%20rock%20sprit%20rock.wav?download=true" }
     ];
 
-    const container = document.getElementById("player-container");
+    const playerContainer = document.getElementById("player-container");
+
+    function initializeAudioForPlayer(playerDiv) {
+      if (playerDiv.audio) return; // Already initialized
+
+      const audio = new Audio();
+      audio.preload = "metadata"; // Load only metadata initially for lazy loading
+      playerDiv.audio = audio; // Attach to player div
+
+      const playBtn = playerDiv.querySelector('.play-btn');
+      const progressFilled = playerDiv.querySelector('.progress-filled');
+      const progressBar = playerDiv.querySelector('.progress');
+      const volumeSlider = playerDiv.querySelector('.volume-slider');
+      const muteBtn = playerDiv.querySelector('.mute-btn');
+      const currentTimeDisplay = playerDiv.querySelector('.current-time');
+      const durationDisplay = playerDiv.querySelector('.duration');
+      const trackTitleElement = playerDiv.querySelector('.track-title');
+
+      // Apply global/persisted volume and mute state
+      audio.volume = globalPlayerState.isMuted ? 0 : globalPlayerState.lastVolume;
+      volumeSlider.value = globalPlayerState.isMuted ? 0 : globalPlayerState.lastVolume; // Keep slider in sync
+      muteBtn.textContent = globalPlayerState.isMuted ? '🔊' : '🔇';
+      if(globalPlayerState.isMuted) volumeSlider.disabled = true;
+
+
+      audio.addEventListener('loadedmetadata', () => {
+        durationDisplay.textContent = formatTime(audio.duration);
+        // If this track was meant to be played via URL param, play it now
+        if (playerDiv.shouldAutoPlay) {
+            playBtn.click();
+            playerDiv.shouldAutoPlay = false; // Reset flag
+        }
+      });
+
+      audio.addEventListener('timeupdate', () => {
+        if (audio.duration) { // Ensure duration is available
+          const percent = (audio.currentTime / audio.duration) * 100;
+          progressFilled.style.width = percent + '%';
+        }
+        currentTimeDisplay.textContent = formatTime(audio.currentTime);
+        if (!audio.paused) {
+          document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        playBtn.textContent = '▶';
+        progressFilled.style.width = '0%';
+        currentTimeDisplay.textContent = formatTime(0); // Reset current time display
+        playerDiv.classList.remove('player-playing');
+        if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) {
+            globalPlayerState.currentPlayingAudio = null;
+            globalPlayerState.currentPlayingPlayerDiv = null;
+            document.title = '🎧 Nekohacker591 Portfolio';
+        }
+
+        // Autoplay next logic
+        if (globalPlayerState.autoplayNext) {
+            let currentPlayerIndex = -1;
+            const allPlayers = Array.from(playerContainer.children).filter(p => p.style.display !== 'none'); // Consider only visible players
+            for(let i=0; i<allPlayers.length; i++) {
+                if(allPlayers[i] === playerDiv) {
+                    currentPlayerIndex = i;
+                    break;
+                }
+            }
+
+            if (currentPlayerIndex !== -1 && currentPlayerIndex < allPlayers.length - 1) {
+                const nextPlayerDiv = allPlayers[currentPlayerIndex + 1];
+                if (nextPlayerDiv) {
+                    const nextPlayBtn = nextPlayerDiv.querySelector('.play-btn');
+                    if (nextPlayBtn) {
+                        // Ensure next player is initialized if not already
+                        if (!nextPlayerDiv.audio) {
+                           initializeAudioForPlayer(nextPlayerDiv);
+                           // Source needs to be set for initialization to complete
+                           if (!nextPlayerDiv.audio.src) nextPlayerDiv.audio.src = nextPlayerDiv.dataset.src;
+                        }
+                        nextPlayBtn.click(); // Simulate click to play next
+                    }
+                }
+            }
+        }
+      });
+
+      audio.addEventListener('volumechange', () => { // Update mute button based on actual volume
+          if (audio.volume === 0 || audio.muted) {
+              muteBtn.textContent = '🔊'; // Show unmute icon
+              volumeSlider.value = 0; // Reflect mute on slider
+              volumeSlider.disabled = true;
+              globalPlayerState.isMuted = true;
+          } else {
+              muteBtn.textContent = '🔇'; // Show mute icon
+              volumeSlider.value = audio.volume;
+              volumeSlider.disabled = false;
+              globalPlayerState.isMuted = false;
+              globalPlayerState.lastVolume = audio.volume;
+          }
+          localStorage.setItem('nekohacker_globalVolume', globalPlayerState.lastVolume);
+          localStorage.setItem('nekohacker_isMuted', globalPlayerState.isMuted);
+      });
+
+      volumeSlider.addEventListener('input', () => {
+        const newVolume = parseFloat(volumeSlider.value);
+        audio.volume = newVolume;
+        audio.muted = newVolume === 0; // Mute if volume is 0
+        // The 'volumechange' event will handle UI updates and localStorage
+      });
+
+      muteBtn.addEventListener('click', () => {
+          if (audio.muted || audio.volume === 0) { // Unmute
+              audio.muted = false;
+              audio.volume = globalPlayerState.lastVolume > 0 ? globalPlayerState.lastVolume : 0.1; // Restore last volume or a small default
+              volumeSlider.value = audio.volume;
+          } else { // Mute
+              globalPlayerState.lastVolume = audio.volume; // Save current volume before muting
+              audio.muted = true; // This will trigger volumechange if supported, or set volume to 0
+              audio.volume = 0; // Explicitly set volume to 0 for visual consistency
+          }
+          // State saving is handled by 'volumechange' event
+      });
+
+      playBtn.addEventListener('click', () => {
+        if (!audio.src) { // If src not set yet (e.g., initial click after IntersectionObserver)
+            audio.src = playerDiv.dataset.src;
+            //loadedmetadata will handle duration, play will be triggered below after src is set
+        }
+
+        if (audio.paused) {
+          // Pause any other playing audio
+          if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
+            globalPlayerState.currentPlayingAudio.pause();
+            globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn').textContent = '▶';
+            globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
+          }
+          audio.play().then(() => {
+            playBtn.textContent = '▮▮';
+            playerDiv.classList.add('player-playing');
+            globalPlayerState.currentPlayingAudio = audio;
+            globalPlayerState.currentPlayingPlayerDiv = playerDiv;
+          }).catch(error => console.error("Error playing audio:", error));
+        } else {
+          audio.pause();
+          playBtn.textContent = '▶';
+          playerDiv.classList.remove('player-playing');
+          if (globalPlayerState.currentPlayingAudio === audio) {
+              globalPlayerState.currentPlayingAudio = null;
+              globalPlayerState.currentPlayingPlayerDiv = null;
+          }
+          document.title = '🎧 Nekohacker591 Portfolio';
+        }
+      });
+
+      progressBar.addEventListener('click', (e) => {
+          if (!audio.duration) return; // Can't seek if duration isn't known
+          const progressBarRect = progressBar.getBoundingClientRect();
+          const clickPosition = (e.clientX - progressBarRect.left) / progressBarRect.width;
+          audio.currentTime = clickPosition * audio.duration;
+          if (audio.paused) { // If paused, update progress bar manually
+            progressFilled.style.width = (clickPosition * 100) + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+          }
+      });
+
+      // Set the src to start loading metadata (IntersectionObserver has already fired)
+      // Do this last after all listeners are attached
+      if (!audio.src) {
+          audio.src = playerDiv.dataset.src;
+      }
+    }
+
+    const observerOptions = {
+      root: null, // viewport
+      rootMargin: '0px',
+      threshold: 0.1 // Trigger when 10% of the element is visible
+    };
+
+    const playerObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const playerDiv = entry.target;
+          if (!playerDiv.audio) { // Initialize only if not already done
+            initializeAudioForPlayer(playerDiv);
+          }
+          // No need to unobserve if we want to re-check (e.g. if src might change, but not in this case)
+          // observer.unobserve(playerDiv); // Unobserve after initializing to save resources
+        }
+      });
+    }, observerOptions);
 
     tracks.forEach((track, index) => {
       const playerDiv = document.createElement("div");
       playerDiv.className = "player";
       playerDiv.id = `player-${index}`;
-      playerDiv.dataset.file = track.file;
+      playerDiv.dataset.src = track.file; // Changed to data-src for clarity with lazy loading
+      playerDiv.dataset.index = index; // Store index for autoplay next
 
       playerDiv.innerHTML = `
         <div class="track-title">${track.title}</div>
@@ -180,72 +427,20 @@
           </div>
         </div>
         <div class="actions">
-          <a class="download-link" href="${track.file}" download>⬇ Download</a>
+          <a class="download-link" href="${track.file}" download="${track.title}.wav">⬇ Download</a>
           <button class="share-btn">🔗 Share</button>
           <span class="copied">Copied!</span>
         </div>
-        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
+        <div class="volume-container">
+          <button class="mute-btn">🔇</button>
+          <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${globalPlayerState.lastVolume}">
+        </div>
       `;
+      playerContainer.appendChild(playerDiv);
 
-      container.appendChild(playerDiv);
-    });
-
-    document.querySelectorAll('.player').forEach(player => {
-      const playBtn = player.querySelector('.play-btn');
-      const progress = player.querySelector('.progress-filled');
-      const volumeSlider = player.querySelector('.volume-slider');
-      const currentTimeDisplay = player.querySelector('.current-time');
-      const durationDisplay = player.querySelector('.duration');
-      const audio = new Audio(player.dataset.file);
-      audio.preload = "auto";
-      player.audio = audio;
-
-      audio.volume = parseFloat(volumeSlider.value);
-
-      audio.addEventListener('loadedmetadata', () => {
-        durationDisplay.textContent = formatTime(audio.duration);
-      });
-
-      audio.addEventListener('timeupdate', () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = percent + '%';
-        currentTimeDisplay.textContent = formatTime(audio.currentTime);
-        if (!audio.paused) {
-          document.title = `🎧 ${player.querySelector('.track-title').textContent} - Nekohacker591`;
-        }
-      });
-
-      audio.addEventListener('ended', () => {
-        playBtn.textContent = '▶';
-        progress.style.width = '0%';
-        document.title = '🎧 Nekohacker591 Portfolio';
-      });
-
-      volumeSlider.addEventListener('input', () => {
-        audio.volume = parseFloat(volumeSlider.value);
-      });
-
-      playBtn.addEventListener('click', () => {
-        if (audio.paused) {
-          document.querySelectorAll('.player').forEach(other => {
-            if (other !== player && other.audio && !other.audio.paused) {
-              other.audio.pause();
-              const otherBtn = other.querySelector('.play-btn');
-              otherBtn.textContent = '▶';
-            }
-          });
-          audio.play();
-          playBtn.textContent = '▮▮';
-        } else {
-          audio.pause();
-          playBtn.textContent = '▶';
-          document.title = '🎧 Nekohacker591 Portfolio';
-        }
-      });
-
-      const shareBtn = player.querySelector('.share-btn');
-      const copiedMsg = player.querySelector('.copied');
-      const index = Array.from(container.children).indexOf(player);
+      // Share button logic (remains mostly the same, just ensure it's attached per player)
+      const shareBtn = playerDiv.querySelector('.share-btn');
+      const copiedMsg = playerDiv.querySelector('.copied');
       const baseUrl = window.location.origin + window.location.pathname;
 
       shareBtn.addEventListener('click', () => {
@@ -253,16 +448,32 @@
         navigator.clipboard.writeText(shareUrl).then(() => {
           copiedMsg.classList.add('show');
           setTimeout(() => copiedMsg.classList.remove('show'), 1500);
-        });
+        }).catch(err => console.error('Failed to copy share link: ', err));
       });
+      
+      playerObserver.observe(playerDiv); // Observe each player for lazy initialization
     });
+
 
     const searchInput = document.querySelector('.search-input');
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
       document.querySelectorAll('.player').forEach(player => {
         const title = player.querySelector('.track-title').textContent.toLowerCase();
-        player.style.display = title.includes(query) ? 'block' : 'none';
+        const isVisible = title.includes(query);
+        player.style.display = isVisible ? 'block' : 'none';
+        
+        // If a playing track is hidden by search, pause it
+        if (!isVisible && player.audio && !player.audio.paused) {
+            player.audio.pause();
+            player.querySelector('.play-btn').textContent = '▶';
+            player.classList.remove('player-playing');
+            if (globalPlayerState.currentPlayingPlayerDiv === player) {
+                globalPlayerState.currentPlayingAudio = null;
+                globalPlayerState.currentPlayingPlayerDiv = null;
+                document.title = '🎧 Nekohacker591 Portfolio';
+            }
+        }
       });
 
       const newUrl = new URL(window.location.href);
@@ -275,13 +486,12 @@
     });
 
     function setOgMetaTags(title, description, url) {
-      document.title = title;
+      document.title = title; // Also set the document title for consistency
       const metaTags = [
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
         { property: 'og:url', content: url },
         { property: 'og:type', content: 'music.song' }
-        // Add og:image if you have an image URL, e.g., { property: 'og:image', content: 'https://example.com/image.jpg' }
       ];
       metaTags.forEach(tag => {
         let meta = document.querySelector(`meta[property="${tag.property}"]`);
@@ -300,42 +510,106 @@
       const shareMode = urlParams.get('share') === 'true';
       const searchQuery = urlParams.get('s');
 
-      let title = '🎧 Nekohacker591 Portfolio';
-      let description = 'Check out my music portfolio!';
-      let url = window.location.origin + window.location.pathname;
+      let pageTitle = '🎧 Nekohacker591 Portfolio';
+      let pageDescription = 'Check out my music portfolio!';
+      let pageUrl = window.location.origin + window.location.pathname;
 
-      if (shareMode && id) {
+      document.getElementById('autoplay-next').checked = globalPlayerState.autoplayNext; // Sync checkbox with loaded state
+
+      if (shareMode && id !== null && tracks[id]) {
         const track = tracks[id];
-        if (track) {
-          title = `🎧 ${track.title} - Nekohacker591 Portfolio`;
-          description = `Listen to "${track.title}" by Nekohacker591`;
-          url = window.location.href;
-          const player = document.getElementById(`player-${id}`);
-          if (player) {
-            document.querySelectorAll('.player').forEach(p => {
-              p.style.display = p === player ? 'block' : 'none';
-            });
-            document.querySelector('h1').style.display = 'none';
-            document.querySelector('.search-bar').style.display = 'none';
-            const container = document.getElementById('player-container');
-            container.style.maxWidth = 'none';
-            container.style.width = '100%';
+        pageTitle = `🎧 ${track.title} - Nekohacker591 Portfolio`;
+        pageDescription = `Listen to "${track.title}" by Nekohacker591`;
+        pageUrl = window.location.href; // Full share URL
+
+        const playerToFocus = document.getElementById(`player-${id}`);
+        if (playerToFocus) {
+          document.querySelectorAll('.player').forEach(p => {
+            p.style.display = (p === playerToFocus) ? 'block' : 'none';
+          });
+          document.querySelector('h1').style.display = 'none';
+          document.querySelector('.search-bar').style.display = 'none';
+          document.querySelector('.controls-header').style.display = 'none'; // Hide autoplay toggle in share mode
+          
+          const container = document.getElementById('player-container');
+          container.style.maxWidth = 'none'; // Allow full width for single shared player
+          container.style.width = '100%';
+
+          // Ensure the shared track's audio is initialized and potentially autoplayed
+          // The IntersectionObserver might not fire immediately if element is already visible
+          // Or if the element is forced to be visible by JS before observer runs.
+          if (!playerToFocus.audio) {
+            initializeAudioForPlayer(playerToFocus);
           }
-        } else {
-          const message = document.createElement('p');
-          message.textContent = 'Song not found';
-          message.style.color = '#ff4d4d';
-          container.appendChild(message);
+          // Small delay to ensure audio can be played after initialization
+          playerToFocus.shouldAutoPlay = true; // Flag for autoplay after metadata loaded
+          if (playerToFocus.audio && playerToFocus.audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
+             playerToFocus.querySelector('.play-btn').click(); // Autoplay if ready
+             playerToFocus.shouldAutoPlay = false;
+          }
+
+          // Scroll to the player
+          playerToFocus.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       } else if (searchQuery) {
         const cleanQuery = searchQuery.replace(/\+/g, ' ');
         searchInput.value = cleanQuery;
-        const event = new Event('input');
+        // Trigger the input event to filter tracks
+        const event = new Event('input', { bubbles: true, cancelable: true });
         searchInput.dispatchEvent(event);
       }
 
-      setOgMetaTags(title, description, url);
+      setOgMetaTags(pageTitle, pageDescription, pageUrl);
     });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        // Don't interfere if user is typing in the search bar
+        if (e.target === searchInput) return;
+
+        if (e.code === 'Space') {
+            e.preventDefault(); // Prevent page scroll
+            if (globalPlayerState.currentPlayingAudio) {
+                const playBtn = globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn');
+                playBtn.click();
+            } else {
+                // Try to play the first visible, unplayed track
+                const firstVisiblePlayer = Array.from(playerContainer.children).find(p => p.style.display !== 'none' && (!p.audio || p.audio.paused));
+                if (firstVisiblePlayer) {
+                    const playBtn = firstVisiblePlayer.querySelector('.play-btn');
+                     if (!firstVisiblePlayer.audio) { // Ensure initialized
+                        initializeAudioForPlayer(firstVisiblePlayer);
+                        if (!firstVisiblePlayer.audio.src) firstVisiblePlayer.audio.src = firstVisiblePlayer.dataset.src;
+                    }
+                    playBtn.click();
+                }
+            }
+        } else if (e.code === 'KeyM') { // M for Mute/Unmute
+            if (globalPlayerState.currentPlayingAudio) {
+                const muteBtn = globalPlayerState.currentPlayingPlayerDiv.querySelector('.mute-btn');
+                muteBtn.click();
+            }
+        }
+        // Add more shortcuts like ArrowLeft/Right for seek, ArrowUp/Down for volume for the currentPlayingAudio
+        else if (globalPlayerState.currentPlayingAudio) {
+            let handled = false;
+            if (e.code === 'ArrowLeft') {
+                globalPlayerState.currentPlayingAudio.currentTime = Math.max(0, globalPlayerState.currentPlayingAudio.currentTime - 5); // Seek back 5s
+                handled = true;
+            } else if (e.code === 'ArrowRight') {
+                globalPlayerState.currentPlayingAudio.currentTime = Math.min(globalPlayerState.currentPlayingAudio.duration, globalPlayerState.currentPlayingAudio.currentTime + 5); // Seek forward 5s
+                handled = true;
+            } else if (e.code === 'ArrowUp') {
+                globalPlayerState.currentPlayingAudio.volume = Math.min(1, globalPlayerState.currentPlayingAudio.volume + 0.1);
+                handled = true;
+            } else if (e.code === 'ArrowDown') {
+                globalPlayerState.currentPlayingAudio.volume = Math.max(0, globalPlayerState.currentPlayingAudio.volume - 0.1);
+                handled = true;
+            }
+            if (handled) e.preventDefault();
+        }
+    });
+
   </script>
 </body>
 </html>
