@@ -4,131 +4,190 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Default OG Meta Tags -->
-  <meta property="og:title" content="🎧 Nekohacker591 Portfolio">
-  <meta property="og:description" content="Check out my music portfolio!">
+  <meta property="og:title" content="🎧 Nekohacker591 Music Portfolio">
+  <meta property="og:description" content="Explore Nekohacker591's music collection, featuring tracks like Rock and Roll, Chill Synth Wave, and more!">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://via.placeholder.com/1200x600/1e1e1e/ff4d4d?text=Nekohacker591+Portfolio">
+  <meta property="og:image:alt" content="Nekohacker591 Music Portfolio">
+  <meta property="og:site_name" content="Nekohacker591 Portfolio">
   <title>🎧 Nekohacker591 Portfolio</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
+      background-color: #121212;
+      color: #eee;
+      font-family: 'Courier New', monospace;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 40px;
     }
+
     h1 {
       color: #ff4d4d;
-      text-align: center;
       margin-bottom: 20px;
     }
+
     .search-bar {
       margin-bottom: 20px;
       width: 100%;
       max-width: 600px;
     }
+
     .search-input {
       width: 100%;
-      padding: 10px;
+      padding: 10px 15px;
       font-size: 16px;
-      border: 2px solid #ff4d4d;
-      border-radius: 5px;
-      background-color: #333;
+      border-radius: 8px;
+      border: 1px solid #ff4d4d;
+      background-color: #1e1e1e;
       color: #fff;
+      box-shadow: 0 0 8px #ff4d4d40;
     }
+
     .scroll-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
       width: 100%;
       max-width: 600px;
     }
+
     .player {
-      background-color: #2a2a2a;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+      background-color: #1e1e1e;
+      border: 2px solid #ff4d4d;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #ff4d4d50;
+      position: relative;
     }
+
     .track-title {
-      font-size: 18px;
+      font-size: 1.2em;
       margin-bottom: 10px;
-      color: #ff4d4d;
     }
+
     .controls {
       display: flex;
       align-items: center;
-      gap: 10px;
     }
+
     .play-btn {
       background-color: #ff4d4d;
       border: none;
-      color: #fff;
-      font-size: 18px;
-      padding: 5px 10px;
-      border-radius: 5px;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      color: black;
       cursor: pointer;
+      transition: 0.2s;
     }
+
+    .play-btn:hover {
+      background-color: #ff1a1a;
+    }
+
     .progress-container {
-      flex-grow: 1;
       display: flex;
       align-items: center;
-      gap: 5px;
+      flex-grow: 1;
+      margin-left: 10px;
     }
+
+    .current-time, .duration {
+      font-size: 14px;
+      min-width: 40px;
+      text-align: center;
+    }
+
     .progress {
       flex-grow: 1;
-      height: 10px;
-      background-color: #444;
-      border-radius: 5px;
+      height: 8px;
+      background-color: #333;
+      margin: 0 5px;
+      border-radius: 4px;
       overflow: hidden;
-      position: relative;
     }
+
     .progress-filled {
+      width: 0%;
       height: 100%;
       background-color: #ff4d4d;
-      width: 0;
-      transition: width 0.1s linear;
+      transition: width 0.1s;
     }
-    .current-time, .duration {
-      font-size: 12px;
-      color: #ccc;
-    }
+
     .actions {
-      margin-top: 10px;
       display: flex;
-      gap: 10px;
       align-items: center;
-    }
-    .download-link, .share-btn {
-      background-color: #ff4d4d;
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 5px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-    }
-    .copied {
-      opacity: 0;
-      color: #ff4d4d;
-      font-size: 12px;
-      transition: opacity 0.3s;
-    }
-    .copied.show {
-      opacity: 1;
-    }
-    .volume-slider {
-      width: 100%;
+      gap: 10px;
       margin-top: 10px;
+    }
+
+    .download-link {
+      color: #aaa;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .download-link:hover {
+      color: #fff;
+    }
+
+    .share-btn {
+      background-color: #ff4d4d;
+      border: none;
+      color: black;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .share-btn:hover {
+      background-color: #ff1a1a;
+    }
+
+    .copied {
+      color: #00ff88;
+      font-size: 12px;
+      display: none;
+    }
+
+    .copied.show {
+      display: inline;
+    }
+
+    .volume-slider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 0 5px #ff4d4d80;
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #ff4d4d;
+      cursor: pointer;
+      border: none;
     }
   </style>
 </head>
 <body>
+
   <h1>🎧 Nekohacker591 Portfolio</h1>
+
   <div class="search-bar">
     <input type="text" class="search-input" placeholder="Search for a track...">
   </div>
+
   <div class="scroll-container" id="player-container">
     <!-- Players will be injected here -->
   </div>
@@ -274,14 +333,17 @@
       window.history.replaceState({}, '', newUrl);
     });
 
-    function setOgMetaTags(title, description, url) {
-      document.title = title;
+    function setOgMetaTags(title, description, image, audio, url) {
       const metaTags = [
         { property: 'og:title', content: title },
         { property: 'og:description', content: description },
+        { property: 'og:image', content: image },
+        { property: 'og:image:alt', content: `Waveform for ${title}` },
+        { property: 'og:audio', content: audio },
+        { property: 'og:audio:type', content: 'audio/wav' },
+        { property: 'og:type', content: 'music.song' },
         { property: 'og:url', content: url },
-        { property: 'og:type', content: 'music.song' }
-        // Add og:image if you have an image URL, e.g., { property: 'og:image', content: 'https://example.com/image.jpg' }
+        { property: 'og:site_name', content: 'Nekohacker591 Portfolio' }
       ];
       metaTags.forEach(tag => {
         let meta = document.querySelector(`meta[property="${tag.property}"]`);
@@ -300,15 +362,20 @@
       const shareMode = urlParams.get('share') === 'true';
       const searchQuery = urlParams.get('s');
 
-      let title = '🎧 Nekohacker591 Portfolio';
-      let description = 'Check out my music portfolio!';
+      let title = '🎧 Nekohacker591 Music Portfolio';
+      let description = 'Explore Nekohacker591\'s music collection, featuring tracks like Rock and Roll, Chill Synth Wave, and more!';
+      let image = 'https://via.placeholder.com/1200x600/1e1e1e/ff4d4d?text=Nekohacker591+Portfolio';
+      let audio = '';
       let url = window.location.origin + window.location.pathname;
 
       if (shareMode && id) {
         const track = tracks[id];
         if (track) {
-          title = `🎧 ${track.title} - Nekohacker591 Portfolio`;
-          description = `Listen to "${track.title}" by Nekohacker591`;
+          title = `${track.title} by Nekohacker591`;
+          description = `Listen to "${track.title}" from Nekohacker591's music portfolio.`;
+          // Placeholder waveform image; replace with actual waveform if available
+          image = `https://via.placeholder.com/1200x600/1e1e1e/ff4d4d?text=${encodeURIComponent(track.title)}+Waveform`;
+          audio = track.file;
           url = window.location.href;
           const player = document.getElementById(`player-${id}`);
           if (player) {
@@ -334,8 +401,9 @@
         searchInput.dispatchEvent(event);
       }
 
-      setOgMetaTags(title, description, url);
+      setOgMetaTags(title, description, image, audio, url);
     });
   </script>
+
 </body>
 </html>
