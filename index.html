@@ -51,6 +51,7 @@
       padding: 20px;
       margin-bottom: 20px;
       box-shadow: 0 0 10px #ff4d4d50;
+      position: relative;
     }
 
     .track-title {
@@ -96,50 +97,21 @@
       transition: width 0.1s;
     }
 
-    .download-link {
-      color: #aaa;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 10px;
-    }
-
-    .download-link:hover {
-      color: #fff;
-    }
-
-    .volume-container {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-      gap: 10px;
-    }
-
-    .volume-slider {
-      -webkit-appearance: none;
-      width: 100px;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      outline: none;
-      cursor: pointer;
-      box-shadow: 0 0 5px #ff4d4d80;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 14px;
-      width: 14px;
-      border-radius: 50%;
-      background: #ff4d4d;
-      cursor: pointer;
-      border: none;
-    }
-
     .actions {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-top: 10px;
+    }
+
+    .download-link {
+      color: #aaa;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .download-link:hover {
+      color: #fff;
     }
 
     .share-btn {
@@ -165,6 +137,30 @@
     .copied.show {
       display: inline;
     }
+
+    .volume-slider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 0 5px #ff4d4d80;
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #ff4d4d;
+      cursor: pointer;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -176,7 +172,7 @@
   </div>
 
   <div class="scroll-container" id="player-container">
-    <!-- Dynamic players go here -->
+    <!-- Players will be injected here -->
   </div>
 
   <script>
@@ -199,15 +195,12 @@
           <button class="play-btn">▶</button>
           <div class="progress"><div class="progress-filled"></div></div>
         </div>
-        <div class="volume-container">
-          <label style="font-size: 14px;">🔉</label>
-          <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
-        </div>
         <div class="actions">
           <a class="download-link" href="${track.file}" download>⬇ Download</a>
           <button class="share-btn">🔗 Share</button>
           <span class="copied">Copied!</span>
         </div>
+        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
       `;
 
       container.appendChild(playerDiv);
