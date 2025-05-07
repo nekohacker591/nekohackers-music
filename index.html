@@ -2,14 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Default OG Meta Tags -->
-  <meta property="og:title" content="🎧 Nekohacker591 Music Portfolio">
-  <meta property="og:description" content="Explore Nekohacker591's music collection, featuring tracks like Rock and Roll, Chill Synth Wave, and more!">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://via.placeholder.com/1200x600/1e1e1e/ff4d4d?text=Nekohacker591+Portfolio">
-  <meta property="og:image:alt" content="Nekohacker591 Music Portfolio">
-  <meta property="og:site_name" content="Nekohacker591 Portfolio">
   <title>🎧 Nekohacker591 Portfolio</title>
   <style>
     body {
@@ -225,7 +217,7 @@
     tracks.forEach((track, index) => {
       const playerDiv = document.createElement("div");
       playerDiv.className = "player";
-      playerDiv.id = `player-${index}`;
+      playerDiv.id = `player-${index}`; // Assign unique ID
       playerDiv.dataset.file = track.file;
 
       playerDiv.innerHTML = `
@@ -257,7 +249,7 @@
       const durationDisplay = player.querySelector('.duration');
       const audio = new Audio(player.dataset.file);
       audio.preload = "auto";
-      player.audio = audio;
+      player.audio = audio; // Attach audio to player for later access
 
       audio.volume = parseFloat(volumeSlider.value);
 
@@ -333,61 +325,23 @@
       window.history.replaceState({}, '', newUrl);
     });
 
-    function setOgMetaTags(title, description, image, audio, url) {
-      const metaTags = [
-        { property: 'og:title', content: title },
-        { property: 'og:description', content: description },
-        { property: 'og:image', content: image },
-        { property: 'og:image:alt', content: `Waveform for ${title}` },
-        { property: 'og:audio', content: audio },
-        { property: 'og:audio:type', content: 'audio/wav' },
-        { property: 'og:type', content: 'music.song' },
-        { property: 'og:url', content: url },
-        { property: 'og:site_name', content: 'Nekohacker591 Portfolio' }
-      ];
-      metaTags.forEach(tag => {
-        let meta = document.querySelector(`meta[property="${tag.property}"]`);
-        if (!meta) {
-          meta = document.createElement('meta');
-          meta.setAttribute('property', tag.property);
-          document.head.appendChild(meta);
-        }
-        meta.setAttribute('content', tag.content);
-      });
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const id = urlParams.get('id');
       const shareMode = urlParams.get('share') === 'true';
       const searchQuery = urlParams.get('s');
 
-      let title = '🎧 Nekohacker591 Music Portfolio';
-      let description = 'Explore Nekohacker591\'s music collection, featuring tracks like Rock and Roll, Chill Synth Wave, and more!';
-      let image = 'https://via.placeholder.com/1200x600/1e1e1e/ff4d4d?text=Nekohacker591+Portfolio';
-      let audio = '';
-      let url = window.location.origin + window.location.pathname;
-
       if (shareMode && id) {
-        const track = tracks[id];
-        if (track) {
-          title = `${track.title} by Nekohacker591`;
-          description = `Listen to "${track.title}" from Nekohacker591's music portfolio.`;
-          // Placeholder waveform image; replace with actual waveform if available
-          image = `https://via.placeholder.com/1200x600/1e1e1e/ff4d4d?text=${encodeURIComponent(track.title)}+Waveform`;
-          audio = track.file;
-          url = window.location.href;
-          const player = document.getElementById(`player-${id}`);
-          if (player) {
-            document.querySelectorAll('.player').forEach(p => {
-              p.style.display = p === player ? 'block' : 'none';
-            });
-            document.querySelector('h1').style.display = 'none';
-            document.querySelector('.search-bar').style.display = 'none';
-            const container = document.getElementById('player-container');
-            container.style.maxWidth = 'none';
-            container.style.width = '100%';
-          }
+        const player = document.getElementById(`player-${id}`);
+        if (player) {
+          document.querySelectorAll('.player').forEach(p => {
+            p.style.display = p === player ? 'block' : 'none';
+          });
+          document.querySelector('h1').style.display = 'none';
+          document.querySelector('.search-bar').style.display = 'none';
+          const container = document.getElementById('player-container');
+          container.style.maxWidth = 'none';
+          container.style.width = '100%';
         } else {
           const message = document.createElement('p');
           message.textContent = 'Song not found';
@@ -400,8 +354,6 @@
         const event = new Event('input');
         searchInput.dispatchEvent(event);
       }
-
-      setOgMetaTags(title, description, image, audio, url);
     });
   </script>
 
