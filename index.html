@@ -36,10 +36,10 @@
       box-shadow: 0 0 8px #ff4d4d40;
     }
 
-.scroll-container {
-  width: 100%;
-  max-width: 600px;
-}
+    .scroll-container {
+      width: 100%;
+      max-width: 600px;
+    }
 
     .player {
       background-color: #1e1e1e;
@@ -214,9 +214,10 @@
 
     const container = document.getElementById("player-container");
 
-    tracks.forEach(track => {
+    tracks.forEach((track, index) => {
       const playerDiv = document.createElement("div");
       playerDiv.className = "player";
+      playerDiv.id = `player-${index}`; // Assign unique ID
       playerDiv.dataset.file = track.file;
 
       playerDiv.innerHTML = `
@@ -260,7 +261,6 @@
         const percent = (audio.currentTime / audio.duration) * 100;
         progress.style.width = percent + '%';
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
-        // Update page title with current track
         if (!audio.paused) {
           document.title = `🎧 ${player.querySelector('.track-title').textContent} - Nekohacker591`;
         }
@@ -269,7 +269,7 @@
       audio.addEventListener('ended', () => {
         playBtn.textContent = '▶';
         progress.style.width = '0%';
-        document.title = '🎧 Nekohacker591 Portfolio'; // Reset title when track ends
+        document.title = '🎧 Nekohacker591 Portfolio';
       });
 
       volumeSlider.addEventListener('input', () => {
@@ -278,7 +278,6 @@
 
       playBtn.addEventListener('click', () => {
         if (audio.paused) {
-          // Pause other playing audios
           document.querySelectorAll('.player').forEach(other => {
             if (other !== player && other.audio && !other.audio.paused) {
               other.audio.pause();
@@ -291,18 +290,17 @@
         } else {
           audio.pause();
           playBtn.textContent = '▶';
-          document.title = '🎧 Nekohacker591 Portfolio'; // Reset title when paused
+          document.title = '🎧 Nekohacker591 Portfolio';
         }
       });
 
       const shareBtn = player.querySelector('.share-btn');
       const copiedMsg = player.querySelector('.copied');
-      const title = player.querySelector('.track-title').textContent;
+      const index = Array.from(container.children).indexOf(player);
+      const baseUrl = window.location.origin + window.location.pathname;
 
       shareBtn.addEventListener('click', () => {
-        const query = encodeURIComponent(title.toLowerCase().replace(/ /g, '+'));
-        const baseUrl = window.location.origin + window.location.pathname;
-        const shareUrl = `${baseUrl}?s=${query}`;
+        const shareUrl = `${baseUrl}?id=${index}&share=true`;
         navigator.clipboard.writeText(shareUrl).then(() => {
           copiedMsg.classList.add('show');
           setTimeout(() => copiedMsg.classList.remove('show'), 1500);
@@ -329,8 +327,28 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      const shareMode = urlParams.get('share') === 'true';
       const searchQuery = urlParams.get('s');
-      if (searchQuery) {
+
+      if (shareMode && id) {
+        const player = document.getElementById(`player-${id}`);
+        if (player) {
+          document.querySelectorAll('.player').forEach(p => {
+            p.style.display = p === player ? 'block' : 'none';
+          });
+          document.querySelector('h1').style.display = 'none';
+          document.querySelector('.search-bar').style.display = 'none';
+          const container = document.getElementById('player-container');
+          container.style.maxWidth = 'none';
+          container.style.width = '100%';
+        } else {
+          const message = document.createElement('p');
+          message.textContent = 'Song not found';
+          message.style.color = '#ff4d4d';
+          container.appendChild(message);
+        }
+      } else if (searchQuery) {
         const cleanQuery = searchQuery.replace(/\+/g, ' ');
         searchInput.value = cleanQuery;
         const event = new Event('input');
