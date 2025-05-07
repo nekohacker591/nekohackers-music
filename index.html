@@ -121,7 +121,6 @@
   </div>
 
   <script>
-    // 🔊 Your dynamic track list
     const tracks = [
       {
         title: "Rock and Roll",
@@ -156,7 +155,6 @@
       container.appendChild(playerDiv);
     });
 
-    // 🎵 Audio Player Logic
     document.querySelectorAll('.player').forEach(player => {
       const playBtn = player.querySelector('.play-btn');
       const progress = player.querySelector('.progress-filled');
@@ -191,7 +189,6 @@
       });
     });
 
-    // 🔍 Search Functionality
     const searchInput = document.querySelector('.search-input');
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
@@ -199,6 +196,27 @@
         const title = player.querySelector('.track-title').textContent.toLowerCase();
         player.style.display = title.includes(query) ? 'block' : 'none';
       });
+
+      // ✏ Update URL param
+      const newUrl = new URL(window.location.href);
+      if (query) {
+        newUrl.searchParams.set('s', query.replace(/ /g, '+'));
+      } else {
+        newUrl.searchParams.delete('s');
+      }
+      window.history.replaceState({}, '', newUrl);
+    });
+
+    // 🧠 On page load, prefill search from URL
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('s');
+      if (searchQuery) {
+        const cleanQuery = searchQuery.replace(/\+/g, ' ');
+        searchInput.value = cleanQuery;
+        const event = new Event('input');
+        searchInput.dispatchEvent(event);
+      }
     });
   </script>
 
