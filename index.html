@@ -2,184 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Default OG Meta Tags -->
+  <meta property="og:title" content="🎧 Nekohacker591 Portfolio">
+  <meta property="og:description" content="Check out my music portfolio!">
+  <meta property="og:type" content="website">
   <title>🎧 Nekohacker591 Portfolio</title>
   <style>
     body {
-      background-color: #121212;
-      color: #eee;
-      font-family: 'Courier New', monospace;
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px;
     }
-
     h1 {
       color: #ff4d4d;
+      text-align: center;
       margin-bottom: 20px;
     }
-
     .search-bar {
       margin-bottom: 20px;
       width: 100%;
       max-width: 600px;
     }
-
     .search-input {
       width: 100%;
-      padding: 10px 15px;
+      padding: 10px;
       font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ff4d4d;
-      background-color: #1e1e1e;
+      border: 2px solid #ff4d4d;
+      border-radius: 5px;
+      background-color: #333;
       color: #fff;
-      box-shadow: 0 0 8px #ff4d4d40;
     }
-
     .scroll-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
       width: 100%;
       max-width: 600px;
     }
-
     .player {
-      background-color: #1e1e1e;
-      border: 2px solid #ff4d4d;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px #ff4d4d50;
-      position: relative;
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
     }
-
     .track-title {
-      font-size: 1.2em;
+      font-size: 18px;
       margin-bottom: 10px;
+      color: #ff4d4d;
     }
-
     .controls {
       display: flex;
       align-items: center;
+      gap: 10px;
     }
-
     .play-btn {
       background-color: #ff4d4d;
       border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-      color: black;
+      color: #fff;
+      font-size: 18px;
+      padding: 5px 10px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: 0.2s;
     }
-
-    .play-btn:hover {
-      background-color: #ff1a1a;
-    }
-
     .progress-container {
+      flex-grow: 1;
       display: flex;
       align-items: center;
-      flex-grow: 1;
-      margin-left: 10px;
+      gap: 5px;
     }
-
-    .current-time, .duration {
-      font-size: 14px;
-      min-width: 40px;
-      text-align: center;
-    }
-
     .progress {
       flex-grow: 1;
-      height: 8px;
-      background-color: #333;
-      margin: 0 5px;
-      border-radius: 4px;
+      height: 10px;
+      background-color: #444;
+      border-radius: 5px;
       overflow: hidden;
+      position: relative;
     }
-
     .progress-filled {
-      width: 0%;
       height: 100%;
       background-color: #ff4d4d;
-      transition: width 0.1s;
+      width: 0;
+      transition: width 0.1s linear;
     }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .download-link {
-      color: #aaa;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .download-link:hover {
-      color: #fff;
-    }
-
-    .share-btn {
-      background-color: #ff4d4d;
-      border: none;
-      color: black;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .share-btn:hover {
-      background-color: #ff1a1a;
-    }
-
-    .copied {
-      color: #00ff88;
+    .current-time, .duration {
       font-size: 12px;
-      display: none;
+      color: #ccc;
     }
-
-    .copied.show {
-      display: inline;
+    .actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
-
-    .volume-slider {
-      -webkit-appearance: none;
-      width: 100px;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      outline: none;
-      cursor: pointer;
-      box-shadow: 0 0 5px #ff4d4d80;
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 14px;
-      width: 14px;
-      border-radius: 50%;
-      background: #ff4d4d;
-      cursor: pointer;
+    .download-link, .share-btn {
+      background-color: #ff4d4d;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      text-decoration: none;
       border: none;
+      cursor: pointer;
+    }
+    .copied {
+      opacity: 0;
+      color: #ff4d4d;
+      font-size: 12px;
+      transition: opacity 0.3s;
+    }
+    .copied.show {
+      opacity: 1;
+    }
+    .volume-slider {
+      width: 100%;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-
   <h1>🎧 Nekohacker591 Portfolio</h1>
-
   <div class="search-bar">
     <input type="text" class="search-input" placeholder="Search for a track...">
   </div>
-
   <div class="scroll-container" id="player-container">
     <!-- Players will be injected here -->
   </div>
@@ -217,7 +166,7 @@
     tracks.forEach((track, index) => {
       const playerDiv = document.createElement("div");
       playerDiv.className = "player";
-      playerDiv.id = `player-${index}`; // Assign unique ID
+      playerDiv.id = `player-${index}`;
       playerDiv.dataset.file = track.file;
 
       playerDiv.innerHTML = `
@@ -249,7 +198,7 @@
       const durationDisplay = player.querySelector('.duration');
       const audio = new Audio(player.dataset.file);
       audio.preload = "auto";
-      player.audio = audio; // Attach audio to player for later access
+      player.audio = audio;
 
       audio.volume = parseFloat(volumeSlider.value);
 
@@ -325,23 +274,53 @@
       window.history.replaceState({}, '', newUrl);
     });
 
+    function setOgMetaTags(title, description, url) {
+      document.title = title;
+      const metaTags = [
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:url', content: url },
+        { property: 'og:type', content: 'music.song' }
+        // Add og:image if you have an image URL, e.g., { property: 'og:image', content: 'https://example.com/image.jpg' }
+      ];
+      metaTags.forEach(tag => {
+        let meta = document.querySelector(`meta[property="${tag.property}"]`);
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.setAttribute('property', tag.property);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', tag.content);
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const id = urlParams.get('id');
       const shareMode = urlParams.get('share') === 'true';
       const searchQuery = urlParams.get('s');
 
+      let title = '🎧 Nekohacker591 Portfolio';
+      let description = 'Check out my music portfolio!';
+      let url = window.location.origin + window.location.pathname;
+
       if (shareMode && id) {
-        const player = document.getElementById(`player-${id}`);
-        if (player) {
-          document.querySelectorAll('.player').forEach(p => {
-            p.style.display = p === player ? 'block' : 'none';
-          });
-          document.querySelector('h1').style.display = 'none';
-          document.querySelector('.search-bar').style.display = 'none';
-          const container = document.getElementById('player-container');
-          container.style.maxWidth = 'none';
-          container.style.width = '100%';
+        const track = tracks[id];
+        if (track) {
+          title = `🎧 ${track.title} - Nekohacker591 Portfolio`;
+          description = `Listen to "${track.title}" by Nekohacker591`;
+          url = window.location.href;
+          const player = document.getElementById(`player-${id}`);
+          if (player) {
+            document.querySelectorAll('.player').forEach(p => {
+              p.style.display = p === player ? 'block' : 'none';
+            });
+            document.querySelector('h1').style.display = 'none';
+            document.querySelector('.search-bar').style.display = 'none';
+            const container = document.getElementById('player-container');
+            container.style.maxWidth = 'none';
+            container.style.width = '100%';
+          }
         } else {
           const message = document.createElement('p');
           message.textContent = 'Song not found';
@@ -354,8 +333,9 @@
         const event = new Event('input');
         searchInput.dispatchEvent(event);
       }
+
+      setOgMetaTags(title, description, url);
     });
   </script>
-
 </body>
 </html>
