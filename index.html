@@ -96,31 +96,69 @@
       transition: width 0.1s;
     }
 
-    .actions {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .download-link, .share-btn {
+    .download-link {
       color: #aaa;
       text-decoration: none;
-      font-size: 14px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
+      display: inline-block;
+      margin-top: 10px;
     }
 
-    .share-btn:hover, .download-link:hover {
+    .download-link:hover {
       color: #fff;
     }
 
+    .volume-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      gap: 10px;
+    }
+
+    .volume-slider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 0 5px #ff4d4d80;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      background: #ff4d4d;
+      cursor: pointer;
+      border: none;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .share-btn {
+      background-color: #ff4d4d;
+      border: none;
+      color: black;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .share-btn:hover {
+      background-color: #ff1a1a;
+    }
+
     .copied {
+      color: #00ff88;
       font-size: 12px;
-      color: #6aff78;
-      margin-left: 10px;
       display: none;
     }
 
@@ -138,23 +176,14 @@
   </div>
 
   <div class="scroll-container" id="player-container">
-    <!-- Players will be injected here -->
+    <!-- Dynamic players go here -->
   </div>
 
   <script>
     const tracks = [
-      {
-        title: "Rock and Roll",
-        file: "https://files.catbox.moe/wjou7m.wav"
-      },
-      {
-        title: "Chill synth wave",
-        file: "https://files.catbox.moe/cro6xp.wav"
-      },
-      {
-        title: "not finished yet",
-        file: "https://files.catbox.moe/example3.wav"
-      }
+      { title: "Rock and Roll", file: "https://files.catbox.moe/wjou7m.wav" },
+      { title: "Chill synth wave", file: "https://files.catbox.moe/cro6xp.wav" },
+      { title: "not finished yet", file: "https://files.catbox.moe/example3.wav" }
     ];
 
     const container = document.getElementById("player-container");
@@ -170,6 +199,10 @@
           <button class="play-btn">▶</button>
           <div class="progress"><div class="progress-filled"></div></div>
         </div>
+        <div class="volume-container">
+          <label style="font-size: 14px;">🔉</label>
+          <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
         <div class="actions">
           <a class="download-link" href="${track.file}" download>⬇ Download</a>
           <button class="share-btn">🔗 Share</button>
@@ -183,8 +216,11 @@
     document.querySelectorAll('.player').forEach(player => {
       const playBtn = player.querySelector('.play-btn');
       const progress = player.querySelector('.progress-filled');
+      const volumeSlider = player.querySelector('.volume-slider');
       const audio = new Audio(player.dataset.file);
       audio.preload = "auto";
+
+      audio.volume = parseFloat(volumeSlider.value);
 
       playBtn.addEventListener('click', () => {
         document.querySelectorAll('.player').forEach(other => {
@@ -213,6 +249,10 @@
         progress.style.width = '0%';
       });
 
+      volumeSlider.addEventListener('input', () => {
+        audio.volume = parseFloat(volumeSlider.value);
+      });
+
       const shareBtn = player.querySelector('.share-btn');
       const copiedMsg = player.querySelector('.copied');
       const title = player.querySelector('.track-title').textContent;
@@ -221,7 +261,6 @@
         const query = encodeURIComponent(title.toLowerCase().replace(/ /g, '+'));
         const baseUrl = window.location.origin + window.location.pathname;
         const shareUrl = `${baseUrl}?s=${query}`;
-
         navigator.clipboard.writeText(shareUrl).then(() => {
           copiedMsg.classList.add('show');
           setTimeout(() => copiedMsg.classList.remove('show'), 1500);
