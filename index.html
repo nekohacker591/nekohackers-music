@@ -8,6 +8,7 @@
   <meta property="og:description" content="Check out my music portfolio!">
   <meta property="og:type" content="website">
   <title>🎧 Nekohacker591 Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -50,6 +51,9 @@
       padding: 15px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+    }
+    .player.playing {
+      border: 2px solid #ff4d4d;
     }
     .track-title {
       font-size: 18px;
@@ -122,12 +126,25 @@
       width: 100%;
       margin-top: 10px;
     }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #ff4d4d;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>🎧 Nekohacker591 Portfolio</h1>
+  
   <div class="search-bar">
-    <input type="text" class="search-input" placeholder="Search for a track...">
+    <input type="text" class="search-input" placeholder="Search for a track..." aria-label="Search tracks">
   </div>
   <div class="scroll-container" id="player-container">
     <!-- Players will be injected here -->
@@ -172,7 +189,7 @@
       playerDiv.innerHTML = `
         <div class="track-title">${track.title}</div>
         <div class="controls">
-          <button class="play-btn">▶</button>
+          <button class="play-btn" aria-label="Play">▶</button>
           <div class="progress-container">
             <span class="current-time">0:00</span>
             <div class="progress"><div class="progress-filled"></div></div>
@@ -181,14 +198,19 @@
         </div>
         <div class="actions">
           <a class="download-link" href="${track.file}" download>⬇ Download</a>
-          <button class="share-btn">🔗 Share</button>
-          <span class="copied">Copied!</span>
+          <button class="share-btn" aria-label="Share this track">🔗 Share</button>
+          <span class="copied" role="alert">Copied!</span>
         </div>
-        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
+        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+        <div class="error-message" style="display: none;"></div>
       `;
 
       container.appendChild(playerDiv);
     });
+
+    const players = document.querySelectorAll('.player');
+    let isPlayingAll = false;
+    let currentTrackIndex = 0;
 
     document.querySelectorAll('.player').forEach(player => {
       const playBtn = player.querySelector('.play-btn');
@@ -196,50 +218,75 @@
       const volumeSlider = player.querySelector('.volume-slider');
       const currentTimeDisplay = player.querySelector('.current-time');
       const durationDisplay = player.querySelector('.duration');
-      const audio = new Audio(player.dataset.file);
-      audio.preload = "auto";
-      player.audio = audio;
-
-      audio.volume = parseFloat(volumeSlider.value);
-
-      audio.addEventListener('loadedmetadata', () => {
-        durationDisplay.textContent = formatTime(audio.duration);
-      });
-
-      audio.addEventListener('timeupdate', () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = percent + '%';
-        currentTimeDisplay.textContent = formatTime(audio.currentTime);
-        if (!audio.paused) {
-          document.title = `🎧 ${player.querySelector('.track-title').textContent} - Nekohacker591`;
-        }
-      });
-
-      audio.addEventListener('ended', () => {
-        playBtn.textContent = '▶';
-        progress.style.width = '0%';
-        document.title = '🎧 Nekohacker591 Portfolio';
-      });
-
-      volumeSlider.addEventListener('input', () => {
-        audio.volume = parseFloat(volumeSlider.value);
-      });
+      const errorMsg = player.querySelector('.error-message');
+      let audio = null;
 
       playBtn.addEventListener('click', () => {
+        if (!audio) {
+          audio = new Audio(player.dataset.file);
+          player.audio = audio;
+          audio.volume = parseFloat(volumeSlider.value);
+          audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+          });
+          audio.addEventListener('timeupdate', () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = percent + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+            if (!audio.paused) {
+              document.title = `🎧 ${player.querySelector('.track-title').textContent} - Nekohacker591`;
+            }
+          });
+          audio.addEventListener('ended', () => {
+            playBtn.textContent = '▶';
+            progress.style.width = '0%';
+            player.classList.remove('playing');
+            document.title = '🎧 Nekohacker591 Portfolio';
+            if (isPlayingAll) {
+              currentTrackIndex++;
+              if (currentTrackIndex < players.length) {
+                playTrack(currentTrackIndex);
+              } else {
+                isPlayingAll = false;
+              }
+            }
+          });
+          audio.addEventListener('error', () => {
+            errorMsg.textContent = 'Failed to load audio';
+            errorMsg.style.display = 'block';
+          });
+        }
         if (audio.paused) {
           document.querySelectorAll('.player').forEach(other => {
             if (other !== player && other.audio && !other.audio.paused) {
               other.audio.pause();
               const otherBtn = other.querySelector('.play-btn');
               otherBtn.textContent = '▶';
+              other.classList.remove('playing');
             }
           });
-          audio.play();
+          audio.play().catch(() => {
+            errorMsg.textContent = 'Failed to play audio';
+            errorMsg.style.display = 'block';
+          });
           playBtn.textContent = '▮▮';
+          playBtn.setAttribute('aria-label', 'Pause');
+          player.classList.add('playing');
         } else {
           audio.pause();
           playBtn.textContent = '▶';
+          playBtn.setAttribute('aria-label', 'Play');
+          player.classList.remove('playing');
           document.title = '🎧 Nekohacker591 Portfolio';
+          if (isPlayingAll) {
+            isPlayingAll = false;
+          }
+        }
+      });
+
+      volumeSlider.addEventListener('input', () => {
+        if (audio) {
+          audio.volume = parseFloat(volumeSlider.value);
         }
       });
 
@@ -256,6 +303,24 @@
         });
       });
     });
+
+    const playAllBtn = document.getElementById('play-all');
+
+    playAllBtn.addEventListener('click', () => {
+      isPlayingAll = true;
+      currentTrackIndex = 0;
+      playTrack(currentTrackIndex);
+    });
+
+    function playTrack(index) {
+      if (index >= players.length) {
+        isPlayingAll = false;
+        return;
+      }
+      const player = players[index];
+      const playBtn = player.querySelector('.play-btn');
+      playBtn.click();
+    }
 
     const searchInput = document.querySelector('.search-input');
     searchInput.addEventListener('input', () => {
@@ -320,6 +385,13 @@
             const container = document.getElementById('player-container');
             container.style.maxWidth = 'none';
             container.style.width = '100%';
+            // Add back button
+            const backBtn = document.createElement('button');
+            backBtn.textContent = 'Back to all tracks';
+            backBtn.addEventListener('click', () => {
+              window.location.search = '';
+            });
+            document.body.insertBefore(backBtn, document.querySelector('h1'));
           }
         } else {
           const message = document.createElement('p');
