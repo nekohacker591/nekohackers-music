@@ -14,14 +14,14 @@
 <meta property="og:url" content="https://nekohackers-music.onrender.com/?id=0&share=true" />
 <meta property="og:title" content="🎧 Nekohacker591 Portfolio" />
 <meta property="og:description" content="welcome to nekohackers portfolio where i post my music to share to others without compression from platforms" />
-<meta property="og:image" content="https://i.imgur.com/ClMFeop.png />
+<meta property="og:image" content="https://i.imgur.com/ClMFeop.png" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content="https://nekohackers-music.onrender.com/?id=0&share=true" />
 <meta property="twitter:title" content="🎧 Nekohacker591 Portfolio" />
 <meta property="twitter:description" content="welcome to nekohackers portfolio where i post my music to share to others without compression from platforms" />
-<meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png />
+<meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png" />
 
 <!-- Meta Tags Generated with https://metatags.io -->
   <style>
@@ -366,7 +366,7 @@
           progressFilled.style.width = percent + '%';
         }
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
-        if (!audio.paused) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
+        if (!audio.paused && trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('ended', () => { /* ... (same as before, including autoplayNext logic) ... */
         playBtn.textContent = '▶'; progressFilled.style.width = '0%';
@@ -446,7 +446,7 @@
             description: 'Check out my music portfolio!',
             url: window.location.origin + window.location.pathname,
             type: 'website',
-            imageUrl: 'https://i.imgur.com/ClMFeop.png', // <<< REPLACE THIS
+            imageUrl: 'https://i.imgur.com/ClMFeop.png', // Using your specified image
             audioUrl: null,
             trackIdForEmbed: null,
             twitterCardType: 'summary_large_image',
@@ -456,7 +456,31 @@
 
         document.title = config.title;
         const head = document.head;
-        head.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]').forEach(tag => tag.remove());
+        // Remove only dynamically added tags, keep your static ones if preferred,
+        // or remove all to let JS manage them fully.
+        // For simplicity, let's assume JS manages all relevant tags for dynamic content.
+        head.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]').forEach(tag => {
+            // Keep static ones you added unless they are the ones JS will set
+            if (tag.getAttribute('property') === 'og:title' ||
+                tag.getAttribute('property') === 'og:description' ||
+                tag.getAttribute('property') === 'og:url' ||
+                tag.getAttribute('property') === 'og:type' ||
+                tag.getAttribute('property') === 'og:image' ||
+                tag.getAttribute('property') === 'og:audio' ||
+                tag.getAttribute('property') === 'og:audio:type' ||
+                tag.getAttribute('name') === 'twitter:card' ||
+                tag.getAttribute('name') === 'twitter:title' ||
+                tag.getAttribute('name') === 'twitter:description' ||
+                tag.getAttribute('name') === 'twitter:image' ||
+                tag.getAttribute('name') === 'twitter:site' ||
+                tag.getAttribute('name') === 'twitter:player' ||
+                tag.getAttribute('name') === 'twitter:player:width' ||
+                tag.getAttribute('name') === 'twitter:player:height'
+            ) {
+                tag.remove();
+            }
+        });
+
 
         const tagsToSet = [
             { property: 'og:title', content: config.title },
@@ -464,7 +488,7 @@
             { property: 'og:url', content: config.url },
             { property: 'og:type', content: config.type },
             { property: 'og:image', content: config.imageUrl },
-            { name: 'twitter:card', content: config.twitterCardType },
+            { name: 'twitter:card', content: config.twitterCardType }, // This will be overridden for player
             { name: 'twitter:title', content: config.title },
             { name: 'twitter:description', content: config.description },
             { name: 'twitter:image', content: config.imageUrl },
@@ -477,9 +501,12 @@
         if (config.trackIdForEmbed !== null) {
             const embedUrl = `${window.location.origin}${window.location.pathname}?embed=${config.trackIdForEmbed}`;
             tagsToSet.push({ name: 'twitter:player', content: embedUrl });
-            tagsToSet.push({ name: 'twitter:player:width', content: '500' }); // Adjusted width
-            tagsToSet.push({ name: 'twitter:player:height', content: '180' });// Adjusted height
-            tagsToSet.push({ name: 'twitter:card', content: 'player' }); // Override card type for player
+            tagsToSet.push({ name: 'twitter:player:width', content: '500' });
+            tagsToSet.push({ name: 'twitter:player:height', content: '180' });
+            // Override twitter:card to 'player' when twitter:player is present
+            const twitterCardIndex = tagsToSet.findIndex(tag => tag.name === 'twitter:card');
+            if (twitterCardIndex > -1) tagsToSet[twitterCardIndex].content = 'player';
+            else tagsToSet.push({ name: 'twitter:card', content: 'player' });
         }
         tagsToSet.forEach(tagInfo => {
             const meta = document.createElement('meta');
@@ -515,6 +542,7 @@
                 playerDiv.shouldAutoPlay = true;
                 if (!playerDiv.audio.src && playerDiv.dataset.src) playerDiv.audio.src = playerDiv.dataset.src;
             }
+            // No meta tags needed for the embed page itself.
             return; // Stop further processing
         }
 
@@ -527,29 +555,33 @@
             });
         }
 
-        let metaOptions = {};
+        let metaOptions = {
+            // Use your statically defined image as default if not in share mode with a specific track
+            imageUrl: document.querySelector('meta[property="og:image"]')?.content || 'https://i.imgur.com/ClMFeop.png'
+        };
         if (isShareMode && shareId !== null && tracks[shareId]) { // Share Mode
             document.body.classList.add('share-mode');
             const track = tracks[shareId];
             metaOptions = {
                 title: `🎧 ${track.title} - Nekohacker591`,
                 description: `Listen to "${track.title}" by Nekohacker591.`,
-                url: window.location.href,
+                url: window.location.href, // Use the full share URL
                 type: 'music.song',
                 audioUrl: track.file,
-                imageUrl: 'https://via.placeholder.com/600x400.png?text=Nekohacker591+Music', // <<< REPLACE
+                imageUrl: 'https://i.imgur.com/ClMFeop.png', // Your specific image
                 trackIdForEmbed: shareId, // For twitter:player
             };
             const playerToFocus = document.getElementById(`player-${shareId}`);
             if (playerToFocus) {
-              document.querySelectorAll('.player').forEach(p => p.style.display = (p === playerToFocus) ? 'block' : 'none');
+              document.querySelectorAll('.player:not(.player-embed)').forEach(p => p.style.display = (p === playerToFocus) ? 'block' : 'none');
               playerToFocus.scrollIntoView({ behavior: 'auto', block: 'start' });
             }
         } else if (searchQuery && searchInput) { // Search from URL
             searchInput.value = searchQuery.replace(/\+/g, ' ');
             searchInput.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
         }
-        setMetaTags(metaOptions); // Set meta tags for share or default
+        // Set meta tags for share page or update for default view
+        setMetaTags(metaOptions);
 
         // Keydown listener only for non-embed mode
         document.addEventListener('keydown', (e) => {
@@ -582,7 +614,7 @@
         if (searchInput) { // Search input listener only for non-embed mode
             searchInput.addEventListener('input', () => {
                 const query = searchInput.value.toLowerCase();
-                document.querySelectorAll('.player').forEach(player => {
+                document.querySelectorAll('.player:not(.player-embed)').forEach(player => {
                     const title = player.querySelector('.track-title')?.textContent.toLowerCase() ?? '';
                     const isVisible = title.includes(query);
                     player.style.display = isVisible ? 'block' : 'none';
