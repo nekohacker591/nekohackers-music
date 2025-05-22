@@ -73,8 +73,8 @@
       --icon-hamburger: ☰;
       --icon-close: ✕;
 
-      --icon-image-width: 20px; /* Base layout width for image icons */
-      --icon-image-height: 20px; /* Base layout height for image icons */
+      --icon-image-width: 20px;
+      --icon-image-height: 20px;
     }
 
     body {
@@ -93,23 +93,27 @@
 
     /* General styling for IMAGE icons */
     .icon.image-icon {
-        display: inline-block; /* Crucial for transform to work as expected */
-        width: var(--icon-image-width);  /* Original layout box width: 20px */
-        height: var(--icon-image-height); /* Original layout box height: 20px */
-        background-size: contain; /* Image scales to fit within its box */
+        display: inline-block;
+        width: var(--icon-image-width); 
+        height: var(--icon-image-height);
+        background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
-        vertical-align: middle; /* Align with text if next to it */
-        font-size: 0; /* Hide accidental text if it's an image icon */
-        transform-origin: center center; /* Scale from the center */
-        transform: scale(2); /* Default visual scale: makes 20px box look 40px */
+        vertical-align: middle;
+        font-size: 0;
+        transform-origin: center center;
+        transform: scale(2); /* Default visual scale for most (Home, Music) */
     }
 
-    /* EXCEPTION: Play/Pause and Mute/Unmute IMAGE icons - scale them 1.5x */
+    /* Specific visual scale for IMAGE icons in Play/Pause, Mute/Unmute, Download, and Share buttons */
     .play-btn .icon.image-icon,
-    .mute-btn .icon.image-icon {
-        transform: scale(1.5); /* Makes their 20px box look 30px */
+    .mute-btn .icon.image-icon,
+    .download-link .icon.image-icon, /* ADDED: Download icon scaling */
+    .share-btn .icon.image-icon {     /* ADDED: Share icon scaling */
+        transform: scale(1.5); /* Makes their 20px box look 30px visually */
     }
+    /* Note: Home and Music image icons in the sidebar will still get scale(2) from the general rule above */
+
 
     #sidebar-toggle {
       position: fixed; top: 15px; left: 15px; z-index: 1001; 
@@ -120,7 +124,7 @@
       display: flex; align-items: center; justify-content: center; 
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
-    #sidebar-toggle .icon { font-size: inherit; } /* Text icons (hamburger/close) get 20px */
+    #sidebar-toggle .icon { font-size: inherit; }
     #sidebar-toggle:hover { background-color: var(--ui-bg-hover-lighten); }
 
     #sidebar {
@@ -151,11 +155,10 @@
     #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
     
     #sidebar nav a.nav-link .icon {
-        margin-right: 10px; /* Space between icon's original box and text */
-        min-width: var(--icon-image-width); /* Icon element's layout width is 20px */
+        margin-right: 10px;
+        min-width: var(--icon-image-width);
         text-align: center;
-        /* Image icons here get transform: scale(2) by default */
-        /* Text icons here are 16px (from nav-link font-size) */
+        /* Image icons for Home/Music get scale(2) */
     }
 
     #sidebar nav a.nav-link:hover { background-color: var(--ui-bg-hover-lighten); }
@@ -246,8 +249,8 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1); 
       padding: 0; 
     }
-    .play-btn .icon { font-size: 20px; /* For TEXT play icon (▶) */ }
-    /* Image icons in .play-btn get transform: scale(1.5) from the specific rule */
+    .play-btn .icon { font-size: 20px; }
+    /* .play-btn .icon.image-icon gets scale(1.5) */
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
@@ -256,21 +259,21 @@
     .current-time, .duration { font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center; }
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+    /* MODIFIED: Download and Share buttons RESTORED to original size */
     .download-link, .share-btn { 
       background-color: var(--ui-bg-button-secondary); 
       border: 1px solid var(--border-color-ui); 
-      color: var(--text-color); padding: 8px 16px; 
+      color: var(--text-color); 
+      padding: 8px 16px; /* Restored from 4px 8px */
       border-radius: var(--border-radius); text-decoration: none; cursor: pointer; 
-      font-size: 14px; font-weight: 500; 
+      font-size: 14px; /* Restored from 12px */
+      font-weight: 500; 
       transition: background-color var(--transition-speed), border-color var(--transition-speed); 
-      display: inline-flex; align-items: center; gap: 6px; /* Gap is from icon's original box edge */
+      display: inline-flex; align-items: center; 
+      gap: 6px; /* Restored from 3px */
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
     }
-    .download-link .icon, .share-btn .icon {
-        /* Image icons get transform: scale(2) by default */
-        /* Text icons here are 14px (from button font-size) */
-        /* The margin-right: 4px was here, but gap: 6px on parent is better */
-    }
+    /* .download-link .icon.image-icon and .share-btn .icon.image-icon get scale(1.5) from specific rule above */
     .download-link:hover, .share-btn:hover { background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5); }
     .copied { opacity: 0; color: var(--primary-color); font-size: 13px; transition: opacity 0.3s var(--transition-speed); margin-left: 5px; }
     .copied.show { opacity: 1; }
@@ -284,8 +287,8 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
       transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0; 
     }
-    .mute-btn .icon { font-size: 18px; /* For TEXT mute/unmute icons if used */ }
-    /* Image icons in .mute-btn get transform: scale(1.5) from the specific rule */
+    .mute-btn .icon { font-size: 18px; }
+    /* .mute-btn .icon.image-icon gets scale(1.5) */
     .mute-btn:hover { background-color: var(--button-bg-hover); border-color: rgba(120,140,160,0.5); }
 
     .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(100, 120, 140, 0.3); outline: none; border-radius: 3px; cursor: pointer; }
