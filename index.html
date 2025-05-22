@@ -19,67 +19,52 @@
 
   <style>
     :root {
-      --primary-color: #007bff; /* Main accent color */
+      --primary-color: #007bff;
       --primary-color-hover: #0056b3;
-
-      /* --- PAGE BACKGROUND --- */
       --page-background: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/background.jpg');
       --page-background-size: cover;
       --page-background-position: center center;
       --page-background-repeat: no-repeat;
-
-      /* --- NEW SEMI-TRANSPARENT UI STYLES --- */
-      --ui-bg-panel: rgba(30, 30, 40, 0.6);          /* Darker, more opaque for main panels */
-      --ui-bg-element: rgba(45, 45, 55, 0.75);       /* Slightly lighter for items/inputs */
-      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7); /* For secondary buttons */
-      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8);  /* Lighter hover for dark elements */
-
-      --text-color-main: #f0f5fa;                     /* Main text - light, slightly cool white */
-      --text-color-secondary: #b0c0d0;               /* Secondary text - softer light gray-blue */
-      --text-link-color-main: #87CEFA;                /* Links - LightSkyBlue, stands out */
+      --ui-bg-panel: rgba(30, 30, 40, 0.6);
+      --ui-bg-element: rgba(45, 45, 55, 0.75);
+      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7);
+      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8);
+      --text-color-main: #f0f5fa;
+      --text-color-secondary: #b0c0d0;
+      --text-link-color-main: #87CEFA;
       --text-shadow-strong: 1px 1px 3px rgba(0,0,0,0.7);
       --text-shadow-soft: 1px 1px 2px rgba(0,0,0,0.5);
-
-      --border-color-ui: rgba(100, 120, 140, 0.4);    /* Subtle border for UI elements */
-      --box-shadow-ui: 0 2px 6px rgba(0,0,0,0.35);    /* General box shadow for depth */
+      --border-color-ui: rgba(100, 120, 140, 0.4);
+      --box-shadow-ui: 0 2px 6px rgba(0,0,0,0.35);
       --box-shadow-inset-ui: inset 0 1px 2px rgba(0,0,0,0.2);
-
-      /* --- APPLYING NEW STYLES TO EXISTING VARS --- */
       --sidebar-background: var(--ui-bg-panel);
       --sidebar-background-size: auto;
       --sidebar-background-position: center;
       --sidebar-background-repeat: repeat;
-
       --home-content-background: var(--ui-bg-panel);
       --home-content-background-size: cover;
       --home-content-background-position: center;
       --home-content-background-repeat: no-repeat;
-      
       --player-background: var(--ui-bg-panel);
       --player-background-size: cover;
       --player-background-position: center;
       --player-background-repeat: no-repeat;
-      
       --content-bg-fallback: var(--ui-bg-element); 
-      --surface-highlight: var(--border-color-ui); /* Used for less prominent borders, progress track */
-      
+      --surface-highlight: var(--border-color-ui);
       --text-color: var(--text-color-main);
       --text-secondary-color: var(--text-color-secondary);
       --text-link-color: var(--text-link-color-main);
-      
       --button-bg: rgba(0, 123, 255, 0.75); 
       --button-bg-hover: rgba(0, 100, 205, 0.9);
       --button-text-color: #ffffff; 
-      
       --border-radius: 6px;
       --transition-speed: 0.2s ease-in-out;
       --sidebar-width: 260px;
       --header-height: 60px;
 
-      /* --- ICON DEFINITIONS --- */
       --icon-home: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/home_icon.webp');
       --icon-music: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/music_display.webp');
-      --icon-play: ▶;
+      --icon-play: ▶; 
       --icon-pause: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/pause.webp');
       --icon-download: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/download_icon.png');
       --icon-share: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/share_icon.png');
@@ -88,8 +73,8 @@
       --icon-hamburger: ☰;
       --icon-close: ✕;
 
-      --icon-image-width: 20px;
-      --icon-image-height: 20px;
+      --icon-image-width: 20px; /* Base layout width for image icons */
+      --icon-image-height: 20px; /* Base layout height for image icons */
     }
 
     body {
@@ -106,35 +91,37 @@
       overflow-x: hidden;
     }
 
+    /* General styling for IMAGE icons */
     .icon.image-icon {
-        display: inline-block;
-        width: var(--icon-image-width);
-        height: var(--icon-image-height);
-        background-size: contain;
+        display: inline-block; /* Crucial for transform to work as expected */
+        width: var(--icon-image-width);  /* Original layout box width: 20px */
+        height: var(--icon-image-height); /* Original layout box height: 20px */
+        background-size: contain; /* Image scales to fit within its box */
         background-repeat: no-repeat;
         background-position: center;
-        vertical-align: middle;
-        font-size: 0; 
+        vertical-align: middle; /* Align with text if next to it */
+        font-size: 0; /* Hide accidental text if it's an image icon */
+        transform-origin: center center; /* Scale from the center */
+        transform: scale(2); /* Default visual scale: makes 20px box look 40px */
     }
+
+    /* EXCEPTION: Play/Pause and Mute/Unmute IMAGE icons - scale them 1.5x */
     .play-btn .icon.image-icon,
     .mute-btn .icon.image-icon {
-        width: 150%; 
-        height: 150%;
+        transform: scale(1.5); /* Makes their 20px box look 30px */
     }
 
     #sidebar-toggle {
       position: fixed; top: 15px; left: 15px; z-index: 1001; 
       background: var(--ui-bg-element);
       border: 1px solid var(--border-color-ui); 
-      color: var(--text-color); font-size: 20px;
+      color: var(--text-color); font-size: 20px; 
       width: 40px; height: 40px; border-radius: var(--border-radius); cursor: pointer;
       display: flex; align-items: center; justify-content: center; 
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
-    #sidebar-toggle .icon { font-size: inherit; }
-    #sidebar-toggle:hover { 
-      background-color: var(--ui-bg-hover-lighten); 
-    }
+    #sidebar-toggle .icon { font-size: inherit; } /* Text icons (hamburger/close) get 20px */
+    #sidebar-toggle:hover { background-color: var(--ui-bg-hover-lighten); }
 
     #sidebar {
       width: var(--sidebar-width); 
@@ -162,14 +149,17 @@
       text-shadow: var(--text-shadow-soft);
     }
     #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
-    #sidebar nav a.nav-link .icon { margin-right: 10px; min-width: var(--icon-image-width); text-align: center; }
-    #sidebar nav a.nav-link:hover { 
-      background-color: var(--ui-bg-hover-lighten); 
+    
+    #sidebar nav a.nav-link .icon {
+        margin-right: 10px; /* Space between icon's original box and text */
+        min-width: var(--icon-image-width); /* Icon element's layout width is 20px */
+        text-align: center;
+        /* Image icons here get transform: scale(2) by default */
+        /* Text icons here are 16px (from nav-link font-size) */
     }
-    #sidebar nav a.nav-link.active { 
-      background-color: var(--button-bg); 
-      color: var(--button-text-color); font-weight: 600; 
-    }
+
+    #sidebar nav a.nav-link:hover { background-color: var(--ui-bg-hover-lighten); }
+    #sidebar nav a.nav-link.active { background-color: var(--button-bg); color: var(--button-text-color); font-weight: 600; }
     #sidebar nav a.nav-link.active .icon { color: var(--button-text-color); }
 
     .sidebar-controls { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color-ui); }
@@ -186,13 +176,7 @@
     }
     .tab-content { display: none; width: 100%; max-width: 750px; margin: 0 auto; }
     .tab-content.active { display: block; }
-    /* Specific display for player view container when active for flex layout */
-    #player-view-content.active {
-        display: flex;
-        flex-direction: column;
-        gap: 20px; /* Space between player and up-next list */
-    }
-
+    #player-view-content.active { display: flex; flex-direction: column; gap: 20px; }
 
     #home-content { 
       padding: 20px; 
@@ -205,10 +189,7 @@
       border: 1px solid var(--border-color-ui); 
     }
     #home-content p, #home-content ul { margin-bottom: 1em; color: var(--text-secondary-color); line-height: 1.6; }
-    #home-content h2 { 
-      color: var(--text-color); margin-top: 0; 
-      text-shadow: var(--text-shadow-soft);
-    }
+    #home-content h2 { color: var(--text-color); margin-top: 0; text-shadow: var(--text-shadow-soft); }
     #home-content li { margin-bottom: 0.5em;}
 
     .search-bar { margin-bottom: 20px; width: 100%; }
@@ -221,31 +202,20 @@
       box-shadow: var(--box-shadow-inset-ui); 
       transition: border-color var(--transition-speed), box-shadow var(--transition-speed); 
     }
-    .search-input::placeholder {
-      color: var(--text-secondary-color);
-      opacity: 0.7;
-    }
-    .search-input:focus { 
-      outline: none; border-color: var(--primary-color); 
-      box-shadow: var(--box-shadow-inset-ui), 0 0 0 3px rgba(0,123,255,0.3); 
-    }
+    .search-input::placeholder { color: var(--text-secondary-color); opacity: 0.7; }
+    .search-input:focus { outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-inset-ui), 0 0 0 3px rgba(0,123,255,0.3); }
 
     #song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
     .song-item a { 
       display: block; padding: 12px 15px; 
-      background-color: var(--content-bg-fallback); /* ui-bg-element */
+      background-color: var(--content-bg-fallback); 
       color: var(--text-link-color); 
       text-decoration: none; border-radius: var(--border-radius); 
       border: 1px solid var(--border-color-ui); 
-      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out; /* ADDED TRANSFORM */
+      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out; 
       font-size: 16px; font-weight: 500; 
     }
-    .song-item a:hover { 
-      background-color: var(--ui-bg-hover-lighten);
-      border-color: var(--primary-color); 
-      box-shadow: 0 2px 8px rgba(0,123,255,0.25); /* Enhanced shadow */
-      transform: scale(1.02) translateX(5px); /* Pop out and slight shift */
-    }
+    .song-item a:hover { background-color: var(--ui-bg-hover-lighten); border-color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,123,255,0.25); transform: scale(1.02) translateX(5px); }
     .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; background-color: var(--ui-bg-element); border-radius: var(--border-radius); }
 
     .player { 
@@ -257,22 +227,13 @@
       box-shadow: var(--box-shadow-ui); 
       border: 1px solid var(--border-color-ui); 
       width: 100%; box-sizing: border-box; 
-      /* Removed margin-top: 20px; as player-view-content will handle gap */
-      /* Animation styles for player pop-in */
       opacity: 1;
       transform: translateY(0) scale(1);
       transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    .player.player-loading { /* State before animation */
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
+    .player.player-loading { opacity: 0; transform: translateY(30px) scale(0.95); }
     .player.player-playing { border-color: var(--primary-color); }
-    .track-title { 
-      font-size: 20px; margin-bottom: 15px; 
-      color: var(--text-color); font-weight: 600; text-align: center; 
-      text-shadow: var(--text-shadow-soft);
-    }
+    .track-title { font-size: 20px; margin-bottom: 15px; color: var(--text-color); font-weight: 600; text-align: center; text-shadow: var(--text-shadow-soft); }
     .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
     
     .play-btn { 
@@ -285,7 +246,8 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1); 
       padding: 0; 
     }
-    .play-btn .icon { font-size: 20px; }
+    .play-btn .icon { font-size: 20px; /* For TEXT play icon (▶) */ }
+    /* Image icons in .play-btn get transform: scale(1.5) from the specific rule */
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
@@ -301,48 +263,34 @@
       border-radius: var(--border-radius); text-decoration: none; cursor: pointer; 
       font-size: 14px; font-weight: 500; 
       transition: background-color var(--transition-speed), border-color var(--transition-speed); 
-      display: inline-flex; align-items: center; gap: 6px; 
+      display: inline-flex; align-items: center; gap: 6px; /* Gap is from icon's original box edge */
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
     }
-    .download-link .icon, .share-btn .icon { margin-right: 4px; }
-    .download-link:hover, .share-btn:hover { 
-      background-color: var(--ui-bg-hover-lighten); 
-      border-color: rgba(120,140,160,0.5); 
+    .download-link .icon, .share-btn .icon {
+        /* Image icons get transform: scale(2) by default */
+        /* Text icons here are 14px (from button font-size) */
+        /* The margin-right: 4px was here, but gap: 6px on parent is better */
     }
+    .download-link:hover, .share-btn:hover { background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5); }
     .copied { opacity: 0; color: var(--primary-color); font-size: 13px; transition: opacity 0.3s var(--transition-speed); margin-left: 5px; }
     .copied.show { opacity: 1; }
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
     .mute-btn { 
-      background-color: var(--button-bg); /* THIS IS THE CHANGED LINE */
-      /* color: var(--button-text-color); /* Optional: change text color to match play button too for contrast */
+      background-color: var(--button-bg);
       border: 1px solid var(--border-color-ui); 
       color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; 
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
       transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0; 
     }
-    .mute-btn .icon { font-size: 18px; }
-    .mute-btn:hover { 
-      background-color: var(--button-bg-hover); /* THIS IS THE OTHER CHANGED LINE */
-      border-color: rgba(120,140,160,0.5); 
-    }
+    .mute-btn .icon { font-size: 18px; /* For TEXT mute/unmute icons if used */ }
+    /* Image icons in .mute-btn get transform: scale(1.5) from the specific rule */
+    .mute-btn:hover { background-color: var(--button-bg-hover); border-color: rgba(120,140,160,0.5); }
 
     .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(100, 120, 140, 0.3); outline: none; border-radius: 3px; cursor: pointer; }
-    .volume-slider::-webkit-slider-thumb { 
-      -webkit-appearance: none; appearance: none; width: 16px; height: 16px; 
-      background: var(--text-link-color); 
-      border-radius: 50%; cursor: pointer; 
-      border: 2px solid var(--ui-bg-panel);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
-    }
-    .volume-slider::-moz-range-thumb { 
-      width: 16px; height: 16px; 
-      background: var(--text-link-color); 
-      border-radius: 50%; cursor: pointer; 
-      border: 2px solid var(--ui-bg-panel); 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
-    }
+    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .volume-slider::-moz-range-thumb { width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
     body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--page-background-repeat); }
     .player-embed { width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0; box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column; justify-content: center; background: transparent; }
@@ -351,57 +299,12 @@
     .player-embed .volume-container { margin-top: 12px; }
     .player-embed .actions { display: none; }
 
-    /* --- UP NEXT LIST STYLES --- */
-    #up-next-list-container {
-        padding: 15px;
-        background-color: var(--ui-bg-panel); /* Consistent with player panel */
-        border-radius: var(--border-radius);
-        border: 1px solid var(--border-color-ui);
-        box-shadow: var(--box-shadow-ui);
-        width: 100%;
-        box-sizing: border-box;
-    }
-    #up-next-list-container h2 {
-        font-size: 1.2em;
-        color: var(--text-color);
-        margin-top: 0;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid var(--border-color-ui);
-        text-shadow: var(--text-shadow-soft);
-    }
-    #up-next-song-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .up-next-item {
-        display: block;
-        padding: 10px 12px;
-        background-color: var(--ui-bg-element); 
-        color: var(--text-link-color);
-        text-decoration: none;
-        border-radius: var(--border-radius);
-        border: 1px solid transparent; /* For hover consistency */
-        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color var(--transition-speed), border-color var(--transition-speed);
-        font-size: 15px;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    .up-next-item:hover {
-        transform: scale(1.02) translateX(5px); /* Pop out and slight shift */
-        background-color: var(--ui-bg-hover-lighten);
-        border-color: var(--primary-color);
-        box-shadow: 0 2px 6px rgba(0,123,255,0.25);
-    }
-    .up-next-item.playing-next { /* Optional: highlight the very next song */
-        border-left: 3px solid var(--primary-color);
-        padding-left: 9px; 
-        font-weight: 600;
-    }
+    #up-next-list-container { padding: 15px; background-color: var(--ui-bg-panel); border-radius: var(--border-radius); border: 1px solid var(--border-color-ui); box-shadow: var(--box-shadow-ui); width: 100%; box-sizing: border-box; }
+    #up-next-list-container h2 { font-size: 1.2em; color: var(--text-color); margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color-ui); text-shadow: var(--text-shadow-soft); }
+    #up-next-song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .up-next-item { display: block; padding: 10px 12px; background-color: var(--ui-bg-element); color: var(--text-link-color); text-decoration: none; border-radius: var(--border-radius); border: 1px solid transparent; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color var(--transition-speed), border-color var(--transition-speed); font-size: 15px; font-weight: 500; cursor: pointer; }
+    .up-next-item:hover { transform: scale(1.02) translateX(5px); background-color: var(--ui-bg-hover-lighten); border-color: var(--primary-color); box-shadow: 0 2px 6px rgba(0,123,255,0.25); }
+    .up-next-item.playing-next { border-left: 3px solid var(--primary-color); padding-left: 9px; font-weight: 600; }
 
   </style>
 </head>
@@ -494,16 +397,16 @@
     const homeContent = document.getElementById('home-content');
     const musicContent = document.getElementById('music-content');
     const pageTitleElement = document.getElementById('page-title');
-    let iconMap = {};
+    let iconMap = {}; 
 
     function getAndApplyIcon(element, cssVarName) {
         if (!element) return;
         const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
-        iconMap[cssVarName] = iconValue;
+        iconMap[cssVarName] = iconValue; 
 
         element.classList.remove('image-icon');
         element.style.backgroundImage = '';
-        element.textContent = '';
+        element.textContent = ''; 
 
         if (iconValue.toLowerCase().startsWith('url(')) {
             element.classList.add('image-icon');
@@ -572,8 +475,9 @@
             </div>
         `;
 
-        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play');
+        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play'); 
         getAndApplyIcon(playerDiv.querySelector('.mute-btn .icon'), globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
+        
         if (!isEmbedStyle) {
             getAndApplyIcon(playerDiv.querySelector('.download-link .icon'), '--icon-download');
             getAndApplyIcon(playerDiv.querySelector('.share-btn .icon'), '--icon-share');
@@ -599,7 +503,7 @@
       if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
       
       const audio = new Audio();
-      audio.preload = "metadata"; // Important: set to metadata so duration is available but doesn't load entire file
+      audio.preload = "metadata";
       playerDiv.audio = audio;
       playerDiv.audioInitialized = true;
 
@@ -618,43 +522,35 @@
       volumeSlider.value = globalPlayerState.lastVolume;
       getAndApplyIcon(muteBtnIconElement, globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
       volumeSlider.disabled = globalPlayerState.isMuted;
-      getAndApplyIcon(playBtnIconElement, '--icon-play');
 
       audio.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(audio.duration);
-        if (autoPlay) { // This 'autoPlay' is true ONLY for "autoplay next"
-            audio.play().catch(e => console.warn("Autoplay prevented:", e));
-        }
+        if (autoPlay) { audio.play().catch(e => console.warn("Autoplay prevented:", e)); }
       });
       audio.addEventListener('play', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-pause');
+        getAndApplyIcon(playBtnIconElement, '--icon-pause'); 
         playerDiv.classList.add('player-playing');
         globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
         if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('pause', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        getAndApplyIcon(playBtnIconElement, '--icon-play'); 
         playerDiv.classList.remove('player-playing');
-        if (globalPlayerState.currentPlayingAudio === audio && audio.ended) {
-             document.title = '🎧 Nekohacker591 Portfolio';
-        }
+        if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = '🎧 Nekohacker591 Portfolio'; }
       });
       audio.addEventListener('timeupdate', () => {
         if (audio.duration) { const percent = (audio.currentTime / audio.duration) * 100; progressFilled.style.width = percent + '%'; }
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
       });
       audio.addEventListener('ended', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        getAndApplyIcon(playBtnIconElement, '--icon-play'); 
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing'); document.title = '🎧 Nekohacker591 Portfolio';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
         if (globalPlayerState.autoplayNext) {
             const currentView = new URLSearchParams(window.location.search).get('view');
-            if (currentView === 'player' && songIndex < songsData.length - 1) {
-                navigateToPlayerView(songIndex + 1, true); // true here means "autoplay this next song"
-            } else if (currentView === 'player' && songIndex === songsData.length - 1) { // Loop to first song
-                navigateToPlayerView(0, true); // true here means "autoplay this next song"
-            }
+            if (currentView === 'player' && songIndex < songsData.length - 1) { navigateToPlayerView(songIndex + 1, true); }
+            else if (currentView === 'player' && songIndex === songsData.length - 1) { navigateToPlayerView(0, true); }
         }
       });
       audio.addEventListener('volumechange', () => {
@@ -669,7 +565,7 @@
       
       playerDiv.querySelector('.mute-btn').addEventListener('click', () => { audio.muted = !audio.muted; });
       playerDiv.querySelector('.play-btn').addEventListener('click', () => {
-        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src; // Load src if not already set
+        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
         if (audio.paused) {
           if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
             globalPlayerState.currentPlayingAudio.pause(); 
@@ -687,7 +583,7 @@
         audio.currentTime = newTime;
         if (audio.paused) { progressFilled.style.width = ((newTime / audio.duration) * 100) + '%'; currentTimeDisplay.textContent = formatTime(newTime); }
       });
-      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src; // Ensure src is set on initialization if not autoplaying
+      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
     }
 
     function populateUpNextList(currentSongId, mainContainer) {
@@ -698,79 +594,44 @@
             upNextContainer.innerHTML = `<h2>Up Next</h2><ul id="up-next-song-list"></ul>`;
             mainContainer.appendChild(upNextContainer);
         }
-
         const ul = upNextContainer.querySelector('#up-next-song-list');
         ul.innerHTML = ''; 
-
-        if (songsData.length <= 1) {
-            upNextContainer.style.display = 'none';
-            return;
-        }
+        if (songsData.length <= 1) { upNextContainer.style.display = 'none'; return; }
         upNextContainer.style.display = 'block';
-
         const numUpNext = 5; 
         let songsToShow = [];
-
         for (let i = 1; i <= songsData.length -1 ; i++) { 
             if (songsToShow.length >= numUpNext) break;
             const nextIndex = (currentSongId + i) % songsData.length;
             if (nextIndex === currentSongId) continue; 
-            if (!songsToShow.find(s => s.originalIndex === nextIndex)) {
-                songsToShow.push({track: songsData[nextIndex], originalIndex: nextIndex});
-            }
+            if (!songsToShow.find(s => s.originalIndex === nextIndex)) { songsToShow.push({track: songsData[nextIndex], originalIndex: nextIndex}); }
         }
-        
-        if (songsToShow.length === 0) {
-             ul.innerHTML = '<li class="song-item-empty">No other songs available.</li>';
-             return;
-        }
-
+        if (songsToShow.length === 0) { ul.innerHTML = '<li class="song-item-empty">No other songs available.</li>'; return; }
         songsToShow.forEach(item => {
             const li = document.createElement('li');
             li.className = 'up-next-item';
             li.textContent = item.track.title;
             li.dataset.songId = item.originalIndex;
-            if (globalPlayerState.autoplayNext && item.originalIndex === (currentSongId + 1) % songsData.length) {
-                li.classList.add('playing-next');
-            }
-            li.addEventListener('click', () => {
-                // MODIFIED: Pass false for playNow, so it doesn't autoplay on click
-                navigateToPlayerView(item.originalIndex, false); 
-            });
+            if (globalPlayerState.autoplayNext && item.originalIndex === (currentSongId + 1) % songsData.length) { li.classList.add('playing-next'); }
+            li.addEventListener('click', () => { navigateToPlayerView(item.originalIndex, false); });
             ul.appendChild(li);
         });
     }
     
     function setMetaTags(options = {}) {
-        const defaults = {
-            title: '🎧 Nekohacker591 Portfolio',
-            description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.',
-            url: window.location.origin + window.location.pathname, type: 'website', imageUrl: defaultArtwork,
-            audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image'
-        };
+        const defaults = { title: '🎧 Nekohacker591 Portfolio', description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.', url: window.location.origin + window.location.pathname, type: 'website', imageUrl: defaultArtwork, audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image' };
         const config = { ...defaults, ...options }; document.title = config.title;
         const head = document.head; head.querySelectorAll('meta[data-dynamic-meta]').forEach(tag => tag.remove());
-        const tagsToSet = [
-            { property: 'og:title', content: config.title }, { property: 'og:description', content: config.description },
-            { property: 'og:url', content: config.url }, { property: 'og:type', content: config.type },
-            { property: 'og:image', content: config.imageUrl }, { name: 'twitter:card', content: config.twitterCardType },
-            { name: 'twitter:title', content: config.title }, { name: 'twitter:description', content: config.description },
-            { name: 'twitter:image', content: config.imageUrl },
-        ];
+        const tagsToSet = [ { property: 'og:title', content: config.title }, { property: 'og:description', content: config.description }, { property: 'og:url', content: config.url }, { property: 'og:type', content: config.type }, { property: 'og:image', content: config.imageUrl }, { name: 'twitter:card', content: config.twitterCardType }, { name: 'twitter:title', content: config.title }, { name: 'twitter:description', content: config.description }, { name: 'twitter:image', content: config.imageUrl }, ];
         if (config.audioUrl) { tagsToSet.push({ property: 'og:audio', content: config.audioUrl }); tagsToSet.push({ property: 'og:audio:type', content: 'audio/wav' }); }
         if (config.trackIdForEmbed !== null && songsData[config.trackIdForEmbed]) {
             const embedUrl = new URL(window.location.origin + window.location.pathname);
             embedUrl.searchParams.set('embed', config.trackIdForEmbed.toString());
-            tagsToSet.push({ name: 'twitter:player', content: embedUrl.href });
-            tagsToSet.push({ name: 'twitter:player:width', content: '500' }); tagsToSet.push({ name: 'twitter:player:height', content: '180' });
+            tagsToSet.push({ name: 'twitter:player', content: embedUrl.href }); tagsToSet.push({ name: 'twitter:player:width', content: '500' }); tagsToSet.push({ name: 'twitter:player:height', content: '180' });
             const twitterCardIndex = tagsToSet.findIndex(tag => tag.name === 'twitter:card');
             if (twitterCardIndex > -1) tagsToSet[twitterCardIndex].content = 'player'; else tagsToSet.push({ name: 'twitter:card', content: 'player' });
         }
-        tagsToSet.forEach(tagInfo => {
-            const meta = document.createElement('meta'); meta.setAttribute('data-dynamic-meta', 'true');
-            if (tagInfo.property) meta.setAttribute('property', tagInfo.property); if (tagInfo.name) meta.setAttribute('name', tagInfo.name);
-            meta.setAttribute('content', tagInfo.content); head.appendChild(meta);
-        });
+        tagsToSet.forEach(tagInfo => { const meta = document.createElement('meta'); meta.setAttribute('data-dynamic-meta', 'true'); if (tagInfo.property) meta.setAttribute('property', tagInfo.property); if (tagInfo.name) meta.setAttribute('name', tagInfo.name); meta.setAttribute('content', tagInfo.content); head.appendChild(meta); });
     }
 
     function populateSongList(filteredSongs = songsData) {
@@ -781,31 +642,21 @@
         const li = document.createElement('li'); li.className = 'song-item';
         const link = document.createElement('a'); link.href = `?view=player&songId=${actualIndex}`;
         link.textContent = track.title;
-        link.addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            // MODIFIED: Pass false for playNow, so it doesn't autoplay on click
-            navigateToPlayerView(actualIndex, false); 
-        });
+        link.addEventListener('click', (e) => { e.preventDefault(); navigateToPlayerView(actualIndex, false); });
         li.appendChild(link); songListUl.appendChild(li);
       });
     }
 
-    // playNow parameter determines if the song should attempt to play immediately after loading its view.
-    // This should be true ONLY for the "autoplay next song" feature.
     function navigateToPlayerView(songId, playNow = false) {
         const url = new URL(window.location);
-        url.searchParams.set('view', 'player');
-        url.searchParams.set('songId', songId.toString());
+        url.searchParams.set('view', 'player'); url.searchParams.set('songId', songId.toString());
         url.searchParams.delete('s'); url.searchParams.delete('id'); url.searchParams.delete('share');
         window.history.pushState({ view: 'player', songId: songId }, '', url);
-        // Pass playNow (as triggeredByAutoplayNext) to renderView
         renderView({ triggeredByAutoplayNext: playNow });
     }
 
-    // options can include { triggeredByAutoplayNext: boolean }
     function renderView(options = {}) {
         const { triggeredByAutoplayNext = false } = options; 
-
         const urlParams = new URLSearchParams(window.location.search);
         let view = urlParams.get('view');
         const songIdParam = urlParams.get('songId');
@@ -814,110 +665,68 @@
         const isLegacyShareMode = urlParams.get('share') === 'true';
         const searchQuery = urlParams.get('s');
 
-        if (globalPlayerState.currentPlayingAudio && (!songIdParam || globalPlayerState.currentPlayingPlayerDiv?.dataset.index !== songIdParam)) {
-            globalPlayerState.currentPlayingAudio.pause();
-        }
+        if (globalPlayerState.currentPlayingAudio && (!songIdParam || globalPlayerState.currentPlayingPlayerDiv?.dataset.index !== songIdParam)) { globalPlayerState.currentPlayingAudio.pause(); }
 
         if (embedIdParam !== null && songsData[embedIdParam]) {
             document.body.innerHTML = ''; document.body.className = 'embed-mode';
             const track = songsData[embedIdParam]; const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
-            document.body.appendChild(playerDiv);
-            initializeAudioForPlayer(playerDiv, false); // Embeds never autoplay initially
-            return;
+            document.body.appendChild(playerDiv); initializeAudioForPlayer(playerDiv, false); return;
         }
         document.body.classList.remove('embed-mode');
-        // For legacy share, navigate to player view, but don't autoplay initially
         if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam), false); return; } 
         if (!view && !songIdParam) view = 'home';
 
         tabContents.forEach(tc => tc.classList.remove('active'));
         navLinks.forEach(link => link.classList.remove('active'));
         pageTitleElement.style.display = 'block'; 
-
-        if (view !== 'player' && playerViewContainer.classList.contains('active')) {
-            playerViewContainer.innerHTML = ''; 
-        }
+        if (view !== 'player' && playerViewContainer.classList.contains('active')) { playerViewContainer.innerHTML = ''; }
 
         if (view === 'player' && songIdParam !== null && songsData[songIdParam]) {
-            playerViewContainer.classList.add('active');
-            const songId = parseInt(songIdParam);
-            const track = songsData[songId];
-
-            const oldPlayer = playerViewContainer.querySelector('.player');
-            if (oldPlayer) oldPlayer.remove();
-            const oldUpNext = playerViewContainer.querySelector('#up-next-list-container');
-            if (oldUpNext) oldUpNext.remove();
-
-            const playerDiv = createPlayerElement(track, songId, false);
-            playerDiv.classList.add('player-loading'); 
-
+            playerViewContainer.classList.add('active'); const songId = parseInt(songIdParam); const track = songsData[songId];
+            const oldPlayer = playerViewContainer.querySelector('.player'); if (oldPlayer) oldPlayer.remove();
+            const oldUpNext = playerViewContainer.querySelector('#up-next-list-container'); if (oldUpNext) oldUpNext.remove();
+            const playerDiv = createPlayerElement(track, songId, false); playerDiv.classList.add('player-loading'); 
             playerViewContainer.insertBefore(playerDiv, playerViewContainer.firstChild);
-            
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => { 
-                    playerDiv.classList.remove('player-loading');
-                });
-            });
-            
-            // Pass triggeredByAutoplayNext to initializeAudioForPlayer
-            // This will be true if navigating due to song ending, false otherwise (e.g. direct load, click)
+            requestAnimationFrame(() => { requestAnimationFrame(() => { playerDiv.classList.remove('player-loading'); }); });
             initializeAudioForPlayer(playerDiv, triggeredByAutoplayNext);
             setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
             pageTitleElement.style.display = 'none';
-
             populateUpNextList(songId, playerViewContainer);
-
         } else if (view === 'music') {
             musicContent.classList.add('active'); document.querySelector('.nav-link[data-view="music"]').classList.add('active');
-            const currentSearch = searchQuery || '';
-            musicSearchInput.value = currentSearch.replace(/\+/g, ' ');
+            const currentSearch = searchQuery || ''; musicSearchInput.value = currentSearch.replace(/\+/g, ' ');
             const filtered = songsData.filter(t => t.title.toLowerCase().includes(currentSearch.toLowerCase()));
-            populateSongList(filtered);
-            setMetaTags({ title: 'Music - Nekohacker591 Portfolio' });
-        } else { // home
-            homeContent.classList.add('active'); document.querySelector('.nav-link[data-view="home"]').classList.add('active');
-            setMetaTags();
-        }
+            populateSongList(filtered); setMetaTags({ title: 'Music - Nekohacker591 Portfolio' });
+        } else { homeContent.classList.add('active'); document.querySelector('.nav-link[data-view="home"]').classList.add('active'); setMetaTags(); }
     }
     
-    sidebarToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('sidebar-open');
-        updateSidebarToggleIcon();
-    });
+    sidebarToggleBtn.addEventListener('click', () => { document.body.classList.toggle('sidebar-open'); updateSidebarToggleIcon(); });
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault(); const targetView = link.dataset.view; const url = new URL(window.location);
         const currentParams = new URLSearchParams(url.search); const currentView = currentParams.get('view') || 'home';
         if (targetView === currentView && !(targetView === 'player' && currentParams.get('songId') !== link.dataset.songId)) {
-             if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
-            return;
+             if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); } return;
         }
         if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
         else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
-        window.history.pushState({ view: targetView }, '', url); 
-        renderView(); // Default call, so triggeredByAutoplayNext will be false
+        window.history.pushState({ view: targetView }, '', url); renderView();
         if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
       });
     });
     if (musicSearchInput) {
         musicSearchInput.addEventListener('input', () => {
-            const query = musicSearchInput.value.toLowerCase();
-            const url = new URL(window.location);
+            const query = musicSearchInput.value.toLowerCase(); const url = new URL(window.location);
             if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
-            if (document.getElementById('music-content').classList.contains('active')) {
-                 window.history.replaceState({ view: 'music', s: query }, '', url);
-                 renderView();  // Default call
-            }
+            if (document.getElementById('music-content').classList.contains('active')) { window.history.replaceState({ view: 'music', s: query }, '', url); renderView(); }
         });
     }
     document.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         let activeAudio = globalPlayerState.currentPlayingAudio; let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
         if (!activeAudio && playerViewContainer.classList.contains('active')) { activePlayerDiv = playerViewContainer.querySelector('.player'); if (activePlayerDiv && activePlayerDiv.audio) activeAudio = activePlayerDiv.audio; }
-        
         const playButton = activePlayerDiv ? activePlayerDiv.querySelector('.play-btn') : null;
         const muteButton = activePlayerDiv ? activePlayerDiv.querySelector('.mute-btn') : null;
-
         if (e.code === 'Space') { e.preventDefault(); if (playButton) playButton.click(); }
         else if (e.code === 'KeyM') { e.preventDefault(); if (muteButton) muteButton.click(); }
         else if (activeAudio && activePlayerDiv) {
@@ -929,24 +738,19 @@
             if(handled)e.preventDefault();
         }
     });
-    window.addEventListener('popstate', (event) => { 
-        renderView(); // Default call
-    });
+    window.addEventListener('popstate', (event) => { renderView(); });
     document.addEventListener('DOMContentLoaded', () => {
-        setupIcons();
+        setupIcons(); 
         if (autoplayCheckboxSidebar) {
             const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
             autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
             autoplayCheckboxSidebar.addEventListener('change', (e) => { 
                 globalPlayerState.autoplayNext = e.target.checked; 
-                // Update "playing-next" class on current up-next list if visible
                 const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
-                if (playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
-                    populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
-                }
+                if (playerViewContainer.classList.contains('active') && currentSongIdParam !== null) { populateUpNextList(parseInt(currentSongIdParam), playerViewContainer); }
             });
         }
-        renderView(); // Default call
+        renderView();
     });
   </script>
 </body>
