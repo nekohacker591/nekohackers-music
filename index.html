@@ -29,19 +29,19 @@
       --page-background-repeat: no-repeat;
 
       /* --- NEW SEMI-TRANSPARENT UI STYLES --- */
-      --ui-bg-panel: rgba(30, 30, 40, 0.6);          /* Darker, more opaque for main panels */
-      --ui-bg-element: rgba(45, 45, 55, 0.75);       /* Slightly lighter for items/inputs */
-      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7); /* For secondary buttons */
-      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8);  /* Lighter hover for dark elements */
+      --ui-bg-panel: rgba(30, 30, 40, 0.6);
+      --ui-bg-element: rgba(45, 45, 55, 0.75);
+      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7);
+      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8);
 
-      --text-color-main: #f0f5fa;                     /* Main text - light, slightly cool white */
-      --text-color-secondary: #b0c0d0;               /* Secondary text - softer light gray-blue */
-      --text-link-color-main: #87CEFA;                /* Links - LightSkyBlue, stands out */
+      --text-color-main: #f0f5fa;
+      --text-color-secondary: #b0c0d0;
+      --text-link-color-main: #87CEFA;
       --text-shadow-strong: 1px 1px 3px rgba(0,0,0,0.7);
       --text-shadow-soft: 1px 1px 2px rgba(0,0,0,0.5);
 
-      --border-color-ui: rgba(100, 120, 140, 0.4);    /* Subtle border for UI elements */
-      --box-shadow-ui: 0 2px 6px rgba(0,0,0,0.35);    /* General box shadow for depth */
+      --border-color-ui: rgba(100, 120, 140, 0.4);
+      --box-shadow-ui: 0 2px 6px rgba(0,0,0,0.35);
       --box-shadow-inset-ui: inset 0 1px 2px rgba(0,0,0,0.2);
 
       /* --- APPLYING NEW STYLES TO EXISTING VARS --- */
@@ -61,7 +61,7 @@
       --player-background-repeat: no-repeat;
       
       --content-bg-fallback: var(--ui-bg-element); 
-      --surface-highlight: var(--border-color-ui); /* Used for less prominent borders, progress track */
+      --surface-highlight: var(--border-color-ui);
       
       --text-color: var(--text-color-main);
       --text-secondary-color: var(--text-color-secondary);
@@ -79,15 +79,16 @@
       /* --- ICON DEFINITIONS --- */
       --icon-home: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/home_icon.webp');
       --icon-music: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/music_display.webp');
-      --icon-play: ▶;
+      --icon-play: ▶; /* Text icon */
       --icon-pause: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/pause.webp');
       --icon-download: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/download_icon.png');
       --icon-share: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/share_icon.png');
       --icon-mute: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/mute.webp');
       --icon-unmute: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/unmute.webp');
-      --icon-hamburger: ☰;
-      --icon-close: ✕;
+      --icon-hamburger: ☰; /* Text icon */
+      --icon-close: ✕;   /* Text icon */
 
+      /* Base dimensions for image icons (used in calc()) */
       --icon-image-width: 20px;
       --icon-image-height: 20px;
     }
@@ -106,32 +107,40 @@
       overflow-x: hidden;
     }
 
+    /* General styling for IMAGE icons - make them double size */
     .icon.image-icon {
         display: inline-block;
-        width: var(--icon-image-width);
-        height: var(--icon-image-height);
+        width: calc(var(--icon-image-width) * 2);  /* e.g., 20px * 2 = 40px */
+        height: calc(var(--icon-image-height) * 2); /* e.g., 20px * 2 = 40px */
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
         vertical-align: middle;
-        font-size: 0; 
+        font-size: 0; /* Hides any accidental text if it's an image icon */
     }
+
+    /* EXCEPTION: Play/Pause and Mute/Unmute IMAGE icons - keep them at 1.5x base size */
     .play-btn .icon.image-icon,
     .mute-btn .icon.image-icon {
-        width: 150%; 
-        height: 150%;
+        width: calc(var(--icon-image-width) * 1.5); /* e.g., 20px * 1.5 = 30px */
+        height: calc(var(--icon-image-height) * 1.5);/* e.g., 20px * 1.5 = 30px */
     }
+
+    /* Styling for TEXT icons (like hamburger, play symbol, close symbol) */
+    /* These are generally controlled by font-size of their parent or specific rules */
 
     #sidebar-toggle {
       position: fixed; top: 15px; left: 15px; z-index: 1001; 
       background: var(--ui-bg-element);
       border: 1px solid var(--border-color-ui); 
-      color: var(--text-color); font-size: 20px;
+      color: var(--text-color); font-size: 20px; /* This sets font-size for text icons inside if they inherit */
       width: 40px; height: 40px; border-radius: var(--border-radius); cursor: pointer;
       display: flex; align-items: center; justify-content: center; 
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
-    #sidebar-toggle .icon { font-size: inherit; }
+    #sidebar-toggle .icon {
+        font-size: inherit; /* Text icons (hamburger/close) will be 20px */
+    }
     #sidebar-toggle:hover { 
       background-color: var(--ui-bg-hover-lighten); 
     }
@@ -162,7 +171,15 @@
       text-shadow: var(--text-shadow-soft);
     }
     #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
-    #sidebar nav a.nav-link .icon { margin-right: 10px; min-width: var(--icon-image-width); text-align: center; }
+    
+    #sidebar nav a.nav-link .icon {
+        margin-right: 10px;
+        /* min-width ensures space for larger image icons (40px) if used here */
+        min-width: calc(var(--icon-image-width) * 2); 
+        text-align: center;
+        /* Text icons here will inherit font-size from .nav-link (16px) */
+    }
+
     #sidebar nav a.nav-link:hover { 
       background-color: var(--ui-bg-hover-lighten); 
     }
@@ -186,13 +203,11 @@
     }
     .tab-content { display: none; width: 100%; max-width: 750px; margin: 0 auto; }
     .tab-content.active { display: block; }
-    /* Specific display for player view container when active for flex layout */
     #player-view-content.active {
         display: flex;
         flex-direction: column;
-        gap: 20px; /* Space between player and up-next list */
+        gap: 20px; 
     }
-
 
     #home-content { 
       padding: 20px; 
@@ -233,18 +248,18 @@
     #song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
     .song-item a { 
       display: block; padding: 12px 15px; 
-      background-color: var(--content-bg-fallback); /* ui-bg-element */
+      background-color: var(--content-bg-fallback); 
       color: var(--text-link-color); 
       text-decoration: none; border-radius: var(--border-radius); 
       border: 1px solid var(--border-color-ui); 
-      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out; /* ADDED TRANSFORM */
+      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out; 
       font-size: 16px; font-weight: 500; 
     }
     .song-item a:hover { 
       background-color: var(--ui-bg-hover-lighten);
       border-color: var(--primary-color); 
-      box-shadow: 0 2px 8px rgba(0,123,255,0.25); /* Enhanced shadow */
-      transform: scale(1.02) translateX(5px); /* Pop out and slight shift */
+      box-shadow: 0 2px 8px rgba(0,123,255,0.25); 
+      transform: scale(1.02) translateX(5px); 
     }
     .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; background-color: var(--ui-bg-element); border-radius: var(--border-radius); }
 
@@ -257,13 +272,11 @@
       box-shadow: var(--box-shadow-ui); 
       border: 1px solid var(--border-color-ui); 
       width: 100%; box-sizing: border-box; 
-      /* Removed margin-top: 20px; as player-view-content will handle gap */
-      /* Animation styles for player pop-in */
       opacity: 1;
       transform: translateY(0) scale(1);
       transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    .player.player-loading { /* State before animation */
+    .player.player-loading { 
         opacity: 0;
         transform: translateY(30px) scale(0.95);
     }
@@ -285,7 +298,9 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1); 
       padding: 0; 
     }
-    .play-btn .icon { font-size: 20px; }
+    .play-btn .icon {
+        font-size: 20px; /* For TEXT play icon (▶) */
+    }
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
@@ -304,7 +319,9 @@
       display: inline-flex; align-items: center; gap: 6px; 
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
     }
-    .download-link .icon, .share-btn .icon { margin-right: 4px; }
+    .download-link .icon, .share-btn .icon {
+        margin-right: 4px; /* Text icons here will inherit font-size from button (14px) */
+    }
     .download-link:hover, .share-btn:hover { 
       background-color: var(--ui-bg-hover-lighten); 
       border-color: rgba(120,140,160,0.5); 
@@ -314,17 +331,18 @@
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
     .mute-btn { 
-      background-color: var(--button-bg); /* THIS IS THE CHANGED LINE */
-      /* color: var(--button-text-color); /* Optional: change text color to match play button too for contrast */
+      background-color: var(--button-bg);
       border: 1px solid var(--border-color-ui); 
       color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; 
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
       transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0; 
     }
-    .mute-btn .icon { font-size: 18px; }
+    .mute-btn .icon {
+        font-size: 18px; /* For TEXT mute/unmute icons if they were used */
+    }
     .mute-btn:hover { 
-      background-color: var(--button-bg-hover); /* THIS IS THE OTHER CHANGED LINE */
+      background-color: var(--button-bg-hover);
       border-color: rgba(120,140,160,0.5); 
     }
 
@@ -351,10 +369,9 @@
     .player-embed .volume-container { margin-top: 12px; }
     .player-embed .actions { display: none; }
 
-    /* --- UP NEXT LIST STYLES --- */
     #up-next-list-container {
         padding: 15px;
-        background-color: var(--ui-bg-panel); /* Consistent with player panel */
+        background-color: var(--ui-bg-panel);
         border-radius: var(--border-radius);
         border: 1px solid var(--border-color-ui);
         box-shadow: var(--box-shadow-ui);
@@ -385,19 +402,19 @@
         color: var(--text-link-color);
         text-decoration: none;
         border-radius: var(--border-radius);
-        border: 1px solid transparent; /* For hover consistency */
+        border: 1px solid transparent;
         transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color var(--transition-speed), border-color var(--transition-speed);
         font-size: 15px;
         font-weight: 500;
         cursor: pointer;
     }
     .up-next-item:hover {
-        transform: scale(1.02) translateX(5px); /* Pop out and slight shift */
+        transform: scale(1.02) translateX(5px);
         background-color: var(--ui-bg-hover-lighten);
         border-color: var(--primary-color);
         box-shadow: 0 2px 6px rgba(0,123,255,0.25);
     }
-    .up-next-item.playing-next { /* Optional: highlight the very next song */
+    .up-next-item.playing-next {
         border-left: 3px solid var(--primary-color);
         padding-left: 9px; 
         font-weight: 600;
@@ -407,13 +424,14 @@
 </head>
 <body>
   <button id="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false">
-    <span class="icon"></span>
+    <span class="icon"></span> <!-- Text icon (hamburger/close), size controlled by #sidebar-toggle font-size -->
   </button>
   <aside id="sidebar">
     <div class="sidebar-header">
       <h2>Navigation</h2>
     </div>
     <nav>
+      <!-- Image icons (home, music) will be 40px. Text icons would be 16px. -->
       <a href="#" class="nav-link" data-view="home"><span class="icon"></span> Home</a>
       <a href="#" class="nav-link" data-view="music"><span class="icon"></span> Music</a>
     </nav>
@@ -494,22 +512,27 @@
     const homeContent = document.getElementById('home-content');
     const musicContent = document.getElementById('music-content');
     const pageTitleElement = document.getElementById('page-title');
-    let iconMap = {};
+    let iconMap = {}; // To cache icon values
 
     function getAndApplyIcon(element, cssVarName) {
         if (!element) return;
+        // Get icon value from CSS variable (or cache)
         const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
-        iconMap[cssVarName] = iconValue;
+        iconMap[cssVarName] = iconValue; // Cache it
 
+        // Clear previous state
         element.classList.remove('image-icon');
         element.style.backgroundImage = '';
-        element.textContent = '';
+        element.textContent = ''; // Clear text content
 
         if (iconValue.toLowerCase().startsWith('url(')) {
             element.classList.add('image-icon');
             element.style.backgroundImage = iconValue;
+            // Size is now controlled by CSS rules for .icon.image-icon
         } else {
+            // It's a text icon
             element.textContent = iconValue;
+            // Size is controlled by font-size of .icon or its parent
         }
     }
 
@@ -522,10 +545,12 @@
     }
     
     function setupIcons() {
+        // Pre-cache all icon CSS variable values
         ['--icon-home', '--icon-music', '--icon-play', '--icon-pause', '--icon-download', '--icon-share', '--icon-mute', '--icon-unmute', '--icon-hamburger', '--icon-close'].forEach(varName => {
             iconMap[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
         });
-        updateSidebarToggleIcon();
+        updateSidebarToggleIcon(); // Setup initial hamburger/close icon
+        // Apply icons to nav links
         getAndApplyIcon(document.querySelector('.nav-link[data-view="home"] .icon'), '--icon-home');
         getAndApplyIcon(document.querySelector('.nav-link[data-view="music"] .icon'), '--icon-music');
     }
@@ -572,8 +597,10 @@
             </div>
         `;
 
-        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play');
+        // Apply icons using the getAndApplyIcon function
+        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play'); // Initially play
         getAndApplyIcon(playerDiv.querySelector('.mute-btn .icon'), globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
+        
         if (!isEmbedStyle) {
             getAndApplyIcon(playerDiv.querySelector('.download-link .icon'), '--icon-download');
             getAndApplyIcon(playerDiv.querySelector('.share-btn .icon'), '--icon-share');
@@ -599,7 +626,7 @@
       if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
       
       const audio = new Audio();
-      audio.preload = "metadata"; // Important: set to metadata so duration is available but doesn't load entire file
+      audio.preload = "metadata";
       playerDiv.audio = audio;
       playerDiv.audioInitialized = true;
 
@@ -618,22 +645,22 @@
       volumeSlider.value = globalPlayerState.lastVolume;
       getAndApplyIcon(muteBtnIconElement, globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
       volumeSlider.disabled = globalPlayerState.isMuted;
-      getAndApplyIcon(playBtnIconElement, '--icon-play');
+      // Initial play icon is already set by createPlayerElement
 
       audio.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(audio.duration);
-        if (autoPlay) { // This 'autoPlay' is true ONLY for "autoplay next"
+        if (autoPlay) {
             audio.play().catch(e => console.warn("Autoplay prevented:", e));
         }
       });
       audio.addEventListener('play', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-pause');
+        getAndApplyIcon(playBtnIconElement, '--icon-pause'); // Change to pause icon
         playerDiv.classList.add('player-playing');
         globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
         if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('pause', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        getAndApplyIcon(playBtnIconElement, '--icon-play'); // Change to play icon
         playerDiv.classList.remove('player-playing');
         if (globalPlayerState.currentPlayingAudio === audio && audio.ended) {
              document.title = '🎧 Nekohacker591 Portfolio';
@@ -644,16 +671,16 @@
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
       });
       audio.addEventListener('ended', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        getAndApplyIcon(playBtnIconElement, '--icon-play'); // Ensure play icon
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing'); document.title = '🎧 Nekohacker591 Portfolio';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
         if (globalPlayerState.autoplayNext) {
             const currentView = new URLSearchParams(window.location.search).get('view');
             if (currentView === 'player' && songIndex < songsData.length - 1) {
-                navigateToPlayerView(songIndex + 1, true); // true here means "autoplay this next song"
-            } else if (currentView === 'player' && songIndex === songsData.length - 1) { // Loop to first song
-                navigateToPlayerView(0, true); // true here means "autoplay this next song"
+                navigateToPlayerView(songIndex + 1, true);
+            } else if (currentView === 'player' && songIndex === songsData.length - 1) {
+                navigateToPlayerView(0, true);
             }
         }
       });
@@ -669,7 +696,7 @@
       
       playerDiv.querySelector('.mute-btn').addEventListener('click', () => { audio.muted = !audio.muted; });
       playerDiv.querySelector('.play-btn').addEventListener('click', () => {
-        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src; // Load src if not already set
+        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
         if (audio.paused) {
           if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
             globalPlayerState.currentPlayingAudio.pause(); 
@@ -687,7 +714,7 @@
         audio.currentTime = newTime;
         if (audio.paused) { progressFilled.style.width = ((newTime / audio.duration) * 100) + '%'; currentTimeDisplay.textContent = formatTime(newTime); }
       });
-      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src; // Ensure src is set on initialization if not autoplaying
+      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
     }
 
     function populateUpNextList(currentSongId, mainContainer) {
@@ -734,7 +761,6 @@
                 li.classList.add('playing-next');
             }
             li.addEventListener('click', () => {
-                // MODIFIED: Pass false for playNow, so it doesn't autoplay on click
                 navigateToPlayerView(item.originalIndex, false); 
             });
             ul.appendChild(li);
@@ -783,26 +809,21 @@
         link.textContent = track.title;
         link.addEventListener('click', (e) => { 
             e.preventDefault(); 
-            // MODIFIED: Pass false for playNow, so it doesn't autoplay on click
             navigateToPlayerView(actualIndex, false); 
         });
         li.appendChild(link); songListUl.appendChild(li);
       });
     }
 
-    // playNow parameter determines if the song should attempt to play immediately after loading its view.
-    // This should be true ONLY for the "autoplay next song" feature.
     function navigateToPlayerView(songId, playNow = false) {
         const url = new URL(window.location);
         url.searchParams.set('view', 'player');
         url.searchParams.set('songId', songId.toString());
         url.searchParams.delete('s'); url.searchParams.delete('id'); url.searchParams.delete('share');
         window.history.pushState({ view: 'player', songId: songId }, '', url);
-        // Pass playNow (as triggeredByAutoplayNext) to renderView
         renderView({ triggeredByAutoplayNext: playNow });
     }
 
-    // options can include { triggeredByAutoplayNext: boolean }
     function renderView(options = {}) {
         const { triggeredByAutoplayNext = false } = options; 
 
@@ -822,11 +843,10 @@
             document.body.innerHTML = ''; document.body.className = 'embed-mode';
             const track = songsData[embedIdParam]; const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
             document.body.appendChild(playerDiv);
-            initializeAudioForPlayer(playerDiv, false); // Embeds never autoplay initially
+            initializeAudioForPlayer(playerDiv, false);
             return;
         }
         document.body.classList.remove('embed-mode');
-        // For legacy share, navigate to player view, but don't autoplay initially
         if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam), false); return; } 
         if (!view && !songIdParam) view = 'home';
 
@@ -859,8 +879,6 @@
                 });
             });
             
-            // Pass triggeredByAutoplayNext to initializeAudioForPlayer
-            // This will be true if navigating due to song ending, false otherwise (e.g. direct load, click)
             initializeAudioForPlayer(playerDiv, triggeredByAutoplayNext);
             setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
             pageTitleElement.style.display = 'none';
@@ -895,7 +913,7 @@
         if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
         else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
         window.history.pushState({ view: targetView }, '', url); 
-        renderView(); // Default call, so triggeredByAutoplayNext will be false
+        renderView();
         if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
       });
     });
@@ -906,7 +924,7 @@
             if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
             if (document.getElementById('music-content').classList.contains('active')) {
                  window.history.replaceState({ view: 'music', s: query }, '', url);
-                 renderView();  // Default call
+                 renderView();
             }
         });
     }
@@ -930,23 +948,22 @@
         }
     });
     window.addEventListener('popstate', (event) => { 
-        renderView(); // Default call
+        renderView();
     });
     document.addEventListener('DOMContentLoaded', () => {
-        setupIcons();
+        setupIcons(); // Call this early to set up all icons
         if (autoplayCheckboxSidebar) {
             const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
             autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
             autoplayCheckboxSidebar.addEventListener('change', (e) => { 
                 globalPlayerState.autoplayNext = e.target.checked; 
-                // Update "playing-next" class on current up-next list if visible
                 const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
                 if (playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
                     populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
                 }
             });
         }
-        renderView(); // Default call
+        renderView();
     });
   </script>
 </body>
