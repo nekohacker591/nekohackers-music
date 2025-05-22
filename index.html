@@ -4,42 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Default meta tags, will be dynamically overridden -->
-<!-- Primary Meta Tags -->
-<title>🎧 Nekohacker591 Portfolio</title>
-<meta name="title" content="🎧 Nekohacker591 Portfolio" />
-<meta name="description" content="welcome to nekohackers portfolio where i post my music to share to others without compression from platforms" />
+  <title>🎧 Nekohacker591 Portfolio</title>
+  <meta name="title" content="🎧 Nekohacker591 Portfolio" />
+  <meta name="description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nekohackers-music.onrender.com/" /> <!-- Base URL -->
+  <meta property="og:title" content="🎧 Nekohacker591 Portfolio" />
+  <meta property="og:description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
+  <meta property="og:image" content="https://i.imgur.com/ClMFeop.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://nekohackers-music.onrender.com/" /> <!-- Base URL -->
+  <meta property="twitter:title" content="🎧 Nekohacker591 Portfolio" />
+  <meta property="twitter:description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
+  <meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png" />
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://nekohackers-music.onrender.com/?id=0&share=true" />
-<meta property="og:title" content="🎧 Nekohacker591 Portfolio" />
-<meta property="og:description" content="welcome to nekohackers portfolio where i post my music to share to others without compression from platforms" />
-<meta property="og:image" content="https://i.imgur.com/ClMFeop.png" />
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content="https://nekohackers-music.onrender.com/?id=0&share=true" />
-<meta property="twitter:title" content="🎧 Nekohacker591 Portfolio" />
-<meta property="twitter:description" content="welcome to nekohackers portfolio where i post my music to share to others without compression from platforms" />
-<meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png" />
-
-<!-- Meta Tags Generated with https://metatags.io -->
   <style>
     :root {
-      --primary-color: #ff4d4d;
-      --primary-color-hover: #ff6666;
-      --background-color: #121212;
-      --surface-color: #1e1e1e;
-      --surface-highlight: #2a2a2a;
-      --text-color: #e0e0e0;
-      --text-secondary-color: #b3b3b3;
+      /* Uplifting Theme - Example: Light Blue & White */
+      --primary-color: #007bff; /* Bright Blue */
+      --primary-color-hover: #0056b3; /* Darker Blue for hover */
+      --background-color: #f8f9fa; /* Light Grayish White */
+      --surface-color: #ffffff;   /* White */
+      --surface-highlight: #e9ecef; /* Light Gray for borders/accents */
+      --text-color: #212529;      /* Dark Gray for text */
+      --text-secondary-color: #6c757d; /* Medium Gray for secondary text */
       --border-radius: 8px;
       --transition-speed: 0.2s ease-in-out;
+
+      /* Button image placeholders - replace with your actual image URLs */
+      --play-icon-url: "▶"; /* Placeholder, use url('path/to/play.svg') */
+      --pause-icon-url: "▮▮"; /* Placeholder, use url('path/to/pause.svg') */
+      --download-icon-url: "⬇"; /* Placeholder, use url('path/to/download.svg') */
+      --share-icon-url: "🔗"; /* Placeholder, use url('path/to/share.svg') */
+      --mute-icon-url: "🔇"; /* Placeholder */
+      --unmute-icon-url: "🔊"; /* Placeholder */
     }
 
     body {
       font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       background-color: var(--background-color);
+      /* Uncomment and replace with your image URL for a background image */
+      /* background-image: url('https://example.com/your-uplifting-background.jpg'); */
+      /* background-size: cover; */
+      /* background-position: center center; */
+      /* background-attachment: fixed; */
       color: var(--text-color);
       margin: 0;
       padding: 20px;
@@ -50,118 +58,194 @@
       box-sizing: border-box;
     }
 
+    .site-header {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 20px;
+    }
+
     h1 {
       color: var(--primary-color);
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       font-weight: 600;
       letter-spacing: 0.5px;
     }
 
-    .search-bar { margin-bottom: 20px; width: 100%; max-width: 650px; }
+    .global-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        color: var(--text-secondary-color);
+        font-size: 14px;
+    }
+    .global-controls label { cursor: pointer; }
+    .global-controls input[type="checkbox"] {
+        accent-color: var(--primary-color);
+        cursor: pointer;
+        transform: scale(1.1);
+        margin-right: 5px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid var(--surface-highlight);
+    }
+    .tab-button {
+      padding: 12px 25px;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-secondary-color);
+      transition: color var(--transition-speed), border-bottom-color var(--transition-speed);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px; /* Align with parent border */
+    }
+    .tab-button:hover { color: var(--primary-color); }
+    .tab-button.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+
+    .tab-content { display: none; width: 100%; max-width: 700px; }
+    .tab-content.active { display: block; }
+
+    #home-content { padding: 15px; background-color: var(--surface-color); border-radius: var(--border-radius); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    #home-content p { margin-bottom: 1em; }
+
+    .search-bar { margin-bottom: 20px; width: 100%; }
     .search-input {
       width: 100%; padding: 12px 15px; font-size: 16px;
       border: 1px solid var(--surface-highlight); border-radius: var(--border-radius);
       background-color: var(--surface-color); color: var(--text-color);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
     }
     .search-input:focus {
       outline: none; border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.3);
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
     }
     .search-input::placeholder { color: var(--text-secondary-color); }
 
-    .controls-header {
-      display: flex; justify-content: flex-end; align-items: center;
-      width: 100%; max-width: 650px; margin-bottom: 15px; color: var(--text-secondary-color);
+    #song-list {
+        list-style: none; padding: 0; margin: 0;
+        display: flex; flex-direction: column; gap: 10px;
     }
-    .controls-header label { margin-right: 8px; font-size: 14px; cursor: pointer; }
-    .controls-header input[type="checkbox"] {
-      accent-color: var(--primary-color); cursor: pointer; transform: scale(1.1); margin-right: 5px;
+    .song-item a {
+        display: block; padding: 15px 20px;
+        background-color: var(--surface-color);
+        color: var(--text-color);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--surface-highlight);
+        transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+        font-size: 17px;
+    }
+    .song-item a:hover {
+        background-color: var(--surface-highlight);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+        color: var(--primary-color);
     }
 
-    .scroll-container { display: flex; flex-direction: column; gap: 25px; width: 100%; max-width: 650px; }
+    /* Player Styles (for single player view and embed) */
     .player {
-      background-color: var(--surface-color); padding: 20px; border-radius: var(--border-radius);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); border: 1px solid var(--surface-color);
+      background-color: var(--surface-color); padding: 25px; border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid var(--surface-highlight);
       transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
+      width: 100%; /* For dedicated player view */
+      box-sizing: border-box;
     }
-    .player:not(.player-embed):hover { transform: translateY(-4px); box-shadow: 0 7px 18px rgba(0,0,0,0.3); }
     .player.player-playing {
       border-color: var(--primary-color);
-      box-shadow: 0 0 12px rgba(255, 77, 77, 0.3), 0 4px 12px rgba(0,0,0,0.25);
+      box-shadow: 0 0 12px rgba(0, 123, 255, 0.25), 0 5px 15px rgba(0,0,0,0.1);
     }
-    .track-title { font-size: 20px; margin-bottom: 15px; color: var(--text-color); font-weight: 500; }
-    .controls { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+    .track-title { font-size: 22px; margin-bottom: 18px; color: var(--text-color); font-weight: 500; text-align: center; }
+    .controls { display: flex; align-items: center; gap: 15px; margin-bottom: 18px; }
+    
     .play-btn {
-      background-color: var(--primary-color); border: none; color: #fff; font-size: 20px;
-      width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
+      background-color: var(--primary-color); /* Fallback */
+      /* background-image: var(--play-icon-url); for image buttons */
+      /* background-size: 24px 24px; background-repeat: no-repeat; background-position: center; */
+      border: none; color: #fff; font-size: 22px; /* Adjust if using image */
+      width: 52px; height: 52px; border-radius: 50%; cursor: pointer;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
       transition: background-color var(--transition-speed), transform var(--transition-speed);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
     .play-btn:hover { background-color: var(--primary-color-hover); transform: scale(1.05); }
     .play-btn:active { transform: scale(0.98); }
 
-    .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
+    .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 12px; }
     .progress {
-      flex-grow: 1; height: 8px; background-color: var(--surface-highlight);
-      border-radius: 4px; overflow: hidden; position: relative; cursor: pointer;
+      flex-grow: 1; height: 10px; background-color: var(--surface-highlight);
+      border-radius: 5px; overflow: hidden; position: relative; cursor: pointer;
     }
     .progress-filled {
-      height: 100%; background-color: var(--primary-color); width: 0; border-radius: 4px;
+      height: 100%; background-color: var(--primary-color); width: 0; border-radius: 5px;
       transition: width 0.1s linear;
     }
     .current-time, .duration {
-      font-size: 13px; color: var(--text-secondary-color);
-      min-width: 38px; text-align: center; flex-shrink: 0;
+      font-size: 14px; color: var(--text-secondary-color);
+      min-width: 42px; text-align: center; flex-shrink: 0;
     }
 
     .actions {
-      margin-top: 15px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      margin-top: 18px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; justify-content: center;
     }
     .download-link, .share-btn {
       background-color: var(--surface-highlight); color: var(--text-secondary-color);
-      padding: 8px 15px; border-radius: var(--border-radius); text-decoration: none;
-      border: none; cursor: pointer; font-size: 13px; font-weight: 500;
+      padding: 10px 18px; border-radius: var(--border-radius); text-decoration: none;
+      border: none; cursor: pointer; font-size: 14px; font-weight: 500;
       transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 8px;
     }
     .download-link:hover, .share-btn:hover {
       background-color: var(--primary-color); color: #fff; transform: translateY(-1px);
     }
+    /* For image buttons, you'd style them similarly to .play-btn, using their specific icon vars */
+    /* .download-link::before { content: var(--download-icon-url); font-size: 16px; } */
+    /* .share-btn::before { content: var(--share-icon-url); font-size: 16px; } */
+
     .copied {
       opacity: 0; color: var(--primary-color); font-size: 13px;
-      transition: opacity 0.3s var(--transition-speed); margin-left: 5px;
+      transition: opacity 0.3s var(--transition-speed); margin-left: 8px;
     }
     .copied.show { opacity: 1; }
 
-    .volume-container { display: flex; align-items: center; gap: 12px; margin-top: 15px; }
+    .volume-container { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
     .mute-btn {
-      background-color: transparent; border: 1px solid var(--text-secondary-color);
-      color: var(--text-secondary-color); font-size: 18px;
-      width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+      background-color: transparent;
+      /* background-image: var(--mute-icon-url); for image buttons */
+      border: 1px solid var(--text-secondary-color);
+      color: var(--text-secondary-color); font-size: 20px; /* Adjust if using image */
+      width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
       transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
     }
     .mute-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
 
     .volume-slider {
-      flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
-      background: var(--surface-highlight); outline: none; border-radius: 3px; cursor: pointer;
+      flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+      background: var(--surface-highlight); outline: none; border-radius: 4px; cursor: pointer;
       transition: opacity var(--transition-speed);
     }
     .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
+      -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
       background: var(--primary-color); border-radius: 50%; cursor: pointer;
       border: 3px solid var(--surface-color);
-      transition: background-color var(--transition-speed); box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: background-color var(--transition-speed); box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .volume-slider::-moz-range-thumb {
-      width: 16px; height: 16px; background: var(--primary-color); border-radius: 50%;
+      width: 18px; height: 18px; background: var(--primary-color); border-radius: 50%;
       cursor: pointer; border: 3px solid var(--surface-color);
-      transition: background-color var(--transition-speed); box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: background-color var(--transition-speed); box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .volume-slider:hover::-webkit-slider-thumb { background: var(--primary-color-hover); }
     .volume-slider:hover::-moz-range-thumb { background: var(--primary-color-hover); }
@@ -169,68 +253,79 @@
     .volume-slider:disabled::-webkit-slider-thumb { background: var(--text-secondary-color); }
     .volume-slider:disabled::-moz-range-thumb { background: var(--text-secondary-color); }
 
-    @media (max-width: 680px) {
-      body:not(.embed-mode) { padding: 15px; }
-      h1 { font-size: 1.8em; margin-bottom: 25px; }
-      .player:not(.player-embed) { padding: 15px; }
-      .track-title { font-size: 18px; }
-      .controls { gap: 10px; margin-bottom: 12px; }
-      .play-btn { width: 44px; height: 44px; font-size: 18px; }
-      .current-time, .duration { font-size: 12px; min-width: 32px; }
-      .actions, .volume-container { margin-top: 12px; }
-      .download-link, .share-btn { padding: 7px 12px; font-size: 12px; }
-      .mute-btn { width: 34px; height: 34px; font-size: 16px; }
-      .volume-slider::-webkit-slider-thumb { width: 14px; height: 14px; border-width: 2px; }
-      .volume-slider::-moz-range-thumb { width: 14px; height: 14px; border-width: 2px; }
-    }
-
-    /* --- Share Mode Specific Styles --- */
-    body.share-mode .scroll-container { max-width: 700px; }
-    body.share-mode h1,
-    body.share-mode .search-bar,
-    body.share-mode .controls-header { display: none; }
-    body.share-mode .player { margin-top: 20px; }
-
-    /* --- Embed Mode Specific Styles --- */
+    /* Embed Mode Specific Styles */
     body.embed-mode {
       padding: 0; margin: 0; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
-      height: 100vh; background-color: var(--surface-color); /* Match player background */
+      height: 100vh; background-color: var(--surface-color);
     }
-    .player-embed { /* Styles for the player when in embed mode */
-      width: 100%; height: 100%;
-      box-sizing: border-box; margin: 0;
-      border-radius: 0; /* No rounded corners, fill the iframe */
-      box-shadow: none; /* No shadow in embed */
-      border: none; /* No border in embed */
-      padding: 15px; /* Consistent padding */
-      display: flex;
-      flex-direction: column;
-      justify-content: center; /* Vertically center content within the player */
+    .player-embed {
+      width: 100%; height: 100%; box-sizing: border-box; margin: 0;
+      border-radius: 0; box-shadow: none; border: none; padding: 15px;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .player-embed .track-title { font-size: 16px; margin-bottom: 10px; text-align: center; }
-    .player-embed .controls { margin-bottom: 10px; }
-    .player-embed .volume-container { margin-top: 10px; }
-    /* Hide unnecessary elements in embed */
+    .player-embed .track-title { font-size: 18px; margin-bottom: 12px; }
+    .player-embed .controls { margin-bottom: 12px; }
+    .player-embed .volume-container { margin-top: 12px; }
     .player-embed .actions { display: none; }
 
+    @media (max-width: 680px) {
+      body:not(.embed-mode) { padding: 10px; }
+      h1 { font-size: 1.8em; }
+      .tabs { margin-bottom: 15px;}
+      .tab-button { padding: 10px 15px; font-size: 16px; }
+      .player:not(.player-embed) { padding: 15px; }
+      .track-title { font-size: 18px; }
+      .controls { gap: 10px; margin-bottom: 12px; }
+      .play-btn { width: 46px; height: 46px; font-size: 20px; }
+      .current-time, .duration { font-size: 12px; min-width: 35px; }
+      .actions, .volume-container { margin-top: 12px; }
+      .download-link, .share-btn { padding: 8px 12px; font-size: 13px; }
+      .mute-btn { width: 38px; height: 38px; font-size: 18px; }
+      .volume-slider::-webkit-slider-thumb { width: 16px; height: 16px; border-width: 2px; }
+      .volume-slider::-moz-range-thumb { width: 16px; height: 16px; border-width: 2px; }
+    }
   </style>
 </head>
 <body>
-  <!-- Content will be dynamically generated or replaced by JavaScript -->
-  <h1>🎧 Nekohacker591 Portfolio</h1>
-
-  <div class="search-bar">
-    <input type="text" class="search-input" placeholder="Search for a track...">
+  <div class="site-header">
+    <h1>🎧 Nekohacker591 Portfolio</h1>
+    <div class="global-controls">
+        <input type="checkbox" id="autoplay-next">
+        <label for="autoplay-next">Autoplay Next</label>
+    </div>
   </div>
 
-  <div class="controls-header">
-    <input type="checkbox" id="autoplay-next">
-    <label for="autoplay-next">Autoplay Next</label>
+  <div class="tabs">
+    <button class="tab-button active" data-tab="home">Home</button>
+    <button class="tab-button" data-tab="music">Music</button>
   </div>
 
-  <div class="scroll-container" id="player-container">
-    <!-- Players will be injected here -->
+  <div id="home-content" class="tab-content active">
+    <h2>Welcome!</h2>
+    <p>Hey there, welcome to my little corner of the internet! This is where I stash all my musical creations. I got tired of platforms squashing the life out of my audio, so I built this place to share my tracks in their full, uncompressed glory.</p>
+    <p>Here you can:</p>
+    <ul>
+        <li>Browse my latest tunes in the "Music" tab.</li>
+        <li>Listen to high-quality WAV files.</li>
+        <li>Download anything you like.</li>
+        <li>Share your favorites with your pals.</li>
+    </ul>
+    <p>Thanks for stopping by and having a listen. Hope you find something that makes your ears happy!</p>
+    <p><em>- Nekohacker591</em></p>
+  </div>
+
+  <div id="music-content" class="tab-content">
+    <div class="search-bar">
+      <input type="text" id="music-search-input" class="search-input" placeholder="Search for a track...">
+    </div>
+    <ul id="song-list">
+      <!-- Song items will be injected here by JavaScript -->
+    </ul>
+  </div>
+
+  <div id="player-view-content" class="tab-content">
+    <!-- Single player for ?view=player&songId=X will be injected here -->
   </div>
 
   <script>
@@ -247,8 +342,10 @@
         }
     };
 
-    const tracks = [
-      { title: "Rock and Roll", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/rock%20and%20roll%20mixed.wav?download=true" },
+    // Improved Song Management: Store songs in this array
+    // For a truly separate file, you'd fetch 'songs.json'
+    const songsData = [
+      { title: "Rock and Roll", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/rock%20and%20roll%20mixed.wav?download=true", artwork: "https://i.imgur.com/ClMFeop.png" },
       { title: "Mesmerizer", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/vocoloid%20project%20v4.wav?download=true" },
       { title: "1 Track Chiptune", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/one%20track%20challenge.wav?download=true" },
       { title: "Eye of Horus", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/aoharutale%20eye%20of%20horus%20final%20mix.wav?download=true" },
@@ -273,10 +370,23 @@
       { title: "The Joker", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/joker%20game%20song.wav?download=true" },
       { title: "Ely Dreamy", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/Ely%20Dreamy.wav?download=true" }
     ];
+    const defaultArtwork = 'https://i.imgur.com/ClMFeop.png'; // Fallback artwork
 
-    const playerContainer = document.getElementById("player-container");
-    const searchInput = document.querySelector('.search-input');
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const songListUl = document.getElementById('song-list');
+    const musicSearchInput = document.getElementById('music-search-input');
     const autoplayCheckbox = document.getElementById('autoplay-next');
+    const playerViewContainer = document.getElementById('player-view-content');
+    const siteHeader = document.querySelector('.site-header');
+    const tabsContainer = document.querySelector('.tabs');
+
+    function formatTime(seconds) { /* ... (same as before) ... */ }
+    function createPlayerElement(track, index, isEmbedStyle = false) { /* ... (mostly same, adapt for single player view) ... */ }
+    function initializeAudioForPlayer(playerDiv, autoPlay = false) { /* ... (mostly same, use autoPlay param) ... */ }
+    function setMetaTags(options = {}) { /* ... (same as before, ensure it handles new views) ... */ }
+    
+    // --- REWRITTEN/NEW FUNCTIONS ---
 
     function formatTime(seconds) {
       if (isNaN(seconds) || seconds === Infinity) return '--:--';
@@ -285,45 +395,52 @@
       return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-    function createPlayerElement(track, index, isEmbed = false) {
+    function createPlayerElement(track, index, isEmbedStyle = false) {
         const playerDiv = document.createElement("div");
         playerDiv.className = "player";
-        if (isEmbed) playerDiv.classList.add("player-embed");
-        playerDiv.id = `player-${index}`;
+        if (isEmbedStyle) playerDiv.classList.add("player-embed");
+        playerDiv.id = `player-${index}`; // Unique ID still useful
         playerDiv.dataset.src = track.file;
-        playerDiv.dataset.index = index;
+        playerDiv.dataset.index = index; // Store index
 
         const actionsHTML = `
-            <a class="download-link" href="${track.file}" download="${track.title.replace(/[^\w\s.-]/g, '') || 'track'}.wav">⬇ Download</a>
-            <button class="share-btn">🔗 Share</button>
+            <a class="download-link" href="${track.file}" download="${track.title.replace(/[^\w\s.-]/g, '') || 'track'}.wav">
+                ${getComputedStyle(document.documentElement).getPropertyValue('--download-icon-url').trim() || '⬇'} Download
+            </a>
+            <button class="share-btn">
+                ${getComputedStyle(document.documentElement).getPropertyValue('--share-icon-url').trim() || '🔗'} Share
+            </button>
             <span class="copied">Copied!</span>
         `;
 
         playerDiv.innerHTML = `
             <div class="track-title">${track.title}</div>
             <div class="controls">
-                <button class="play-btn">▶</button>
+                <button class="play-btn">${getComputedStyle(document.documentElement).getPropertyValue('--play-icon-url').trim() || '▶'}</button>
                 <div class="progress-container">
                     <span class="current-time">0:00</span>
                     <div class="progress"><div class="progress-filled"></div></div>
                     <span class="duration">--:--</span>
                 </div>
             </div>
-            ${!isEmbed ? `<div class="actions">${actionsHTML}</div>` : ''}
+            ${!isEmbedStyle ? `<div class="actions">${actionsHTML}</div>` : ''}
             <div class="volume-container">
-                <button class="mute-btn">🔇</button>
+                <button class="mute-btn">${getComputedStyle(document.documentElement).getPropertyValue('--mute-icon-url').trim() || '🔇'}</button>
                 <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${globalPlayerState.lastVolume}">
             </div>
         `;
 
-        if (!isEmbed) {
+        if (!isEmbedStyle) {
             const shareBtn = playerDiv.querySelector('.share-btn');
             const copiedMsg = playerDiv.querySelector('.copied');
-            if (shareBtn && copiedMsg) { // Ensure elements exist
-                const baseUrl = window.location.origin + window.location.pathname;
+            if (shareBtn && copiedMsg) {
                 shareBtn.addEventListener('click', () => {
-                    const shareUrl = `${baseUrl}?id=${index}&share=true`;
-                    navigator.clipboard.writeText(shareUrl).then(() => {
+                    // Share link should always point to the '?view=player&songId=X'
+                    const playerViewUrl = new URL(window.location.origin + window.location.pathname);
+                    playerViewUrl.searchParams.set('view', 'player');
+                    playerViewUrl.searchParams.set('songId', index.toString());
+                    
+                    navigator.clipboard.writeText(playerViewUrl.href).then(() => {
                         copiedMsg.classList.add('show');
                         setTimeout(() => copiedMsg.classList.remove('show'), 1500);
                     }).catch(err => console.error('Failed to copy share link:', err));
@@ -333,11 +450,12 @@
         return playerDiv;
     }
 
-    function initializeAudioForPlayer(playerDiv) {
+    function initializeAudioForPlayer(playerDiv, autoPlay = false) {
       if (playerDiv.audioInitialized) return;
+
       const audio = new Audio();
-      audio.preload = "metadata";
-      playerDiv.audio = audio;
+      audio.preload = "metadata"; // Preload metadata only
+      playerDiv.audio = audio; // Attach to playerDiv for access
       playerDiv.audioInitialized = true;
 
       const playBtn = playerDiv.querySelector('.play-btn');
@@ -348,146 +466,158 @@
       const currentTimeDisplay = playerDiv.querySelector('.current-time');
       const durationDisplay = playerDiv.querySelector('.duration');
       const trackTitleElement = playerDiv.querySelector('.track-title');
+      const songIndex = parseInt(playerDiv.dataset.index);
 
+      const playIcon = getComputedStyle(document.documentElement).getPropertyValue('--play-icon-url').trim() || '▶';
+      const pauseIcon = getComputedStyle(document.documentElement).getPropertyValue('--pause-icon-url').trim() || '▮▮';
+      const muteIcon = getComputedStyle(document.documentElement).getPropertyValue('--mute-icon-url').trim() || '🔇';
+      const unmuteIcon = getComputedStyle(document.documentElement).getPropertyValue('--unmute-icon-url').trim() || '🔊';
+
+
+      // Apply global volume/mute settings
       audio.muted = globalPlayerState.isMuted;
-      audio.volume = globalPlayerState.lastVolume; // Will be 0 if muted due to `audio.muted`
+      audio.volume = globalPlayerState.lastVolume;
       volumeSlider.value = globalPlayerState.lastVolume;
-      muteBtn.textContent = globalPlayerState.isMuted ? '🔊' : '🔇';
+      muteBtn.textContent = globalPlayerState.isMuted ? unmuteIcon : muteIcon;
       volumeSlider.disabled = globalPlayerState.isMuted;
 
       audio.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(audio.duration);
-        if (playerDiv.shouldAutoPlay) {
+        if (autoPlay && playerDiv.shouldAutoPlay !== false) { // Check shouldAutoPlay flag
             audio.play().then(() => {
-                playBtn.textContent = '▮▮';
+                playBtn.textContent = pauseIcon;
                 playerDiv.classList.add('player-playing');
                 globalPlayerState.currentPlayingAudio = audio;
                 globalPlayerState.currentPlayingPlayerDiv = playerDiv;
             }).catch(e => console.warn("Autoplay prevented:", e));
-            playerDiv.shouldAutoPlay = false;
         }
       });
-      audio.addEventListener('timeupdate', () => { /* ... (same as before) ... */
+
+      audio.addEventListener('play', () => {
+        playBtn.textContent = pauseIcon;
+        playerDiv.classList.add('player-playing');
+        globalPlayerState.currentPlayingAudio = audio;
+        globalPlayerState.currentPlayingPlayerDiv = playerDiv;
+        if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
+      });
+
+      audio.addEventListener('pause', () => {
+        playBtn.textContent = playIcon;
+        playerDiv.classList.remove('player-playing');
+        if (globalPlayerState.currentPlayingAudio === audio) {
+            // Do not nullify here if pause is temporary (e.g. seeking)
+            // Only nullify if another track starts or explicitly stopped
+        }
+        // document.title = '🎧 Nekohacker591 Portfolio'; // Reset title only if truly stopped
+      });
+
+      audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
           const percent = (audio.currentTime / audio.duration) * 100;
           progressFilled.style.width = percent + '%';
         }
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
-        if (!audio.paused && trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
-      audio.addEventListener('ended', () => { /* ... (same as before, including autoplayNext logic) ... */
-        playBtn.textContent = '▶'; progressFilled.style.width = '0%';
-        currentTimeDisplay.textContent = formatTime(0); playerDiv.classList.remove('player-playing');
+
+      audio.addEventListener('ended', () => {
+        playBtn.textContent = playIcon;
+        progressFilled.style.width = '0%';
+        currentTimeDisplay.textContent = formatTime(0);
+        playerDiv.classList.remove('player-playing');
+        document.title = '🎧 Nekohacker591 Portfolio'; // Reset title
+
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) {
-            globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null;
-            document.title = '🎧 Nekohacker591 Portfolio';
+            globalPlayerState.currentPlayingAudio = null;
+            globalPlayerState.currentPlayingPlayerDiv = null;
         }
+
         if (globalPlayerState.autoplayNext) {
-            let allPlayers = Array.from(playerContainer.children).filter(p => p.style.display !== 'none' && p.classList.contains('player'));
-            let currentPlayerIndex = allPlayers.indexOf(playerDiv);
-            if (currentPlayerIndex !== -1 && currentPlayerIndex < allPlayers.length - 1) {
-                const nextPlayerDiv = allPlayers[currentPlayerIndex + 1];
-                if (nextPlayerDiv) nextPlayerDiv.querySelector('.play-btn')?.click();
+            const currentView = new URLSearchParams(window.location.search).get('view');
+            if (currentView === 'player' && songIndex < songsData.length - 1) {
+                navigateToPlayerView(songIndex + 1);
+            } else if (playerDiv.closest('.embed-mode') && songIndex < songsData.length - 1) {
+                // Handle autoplay next for embed mode (if needed, though usually embed is for one song)
+                // This might involve reloading the iframe with a new embed ID if controlled externally
+                // Or, if self-contained, directly play next song.
+                // For now, let's assume embed is single-song focus.
             }
         }
       });
-      audio.addEventListener('volumechange', () => { /* ... (same as before) ... */
-        muteBtn.textContent = audio.muted || audio.volume === 0 ? '🔊' : '🔇';
+
+      audio.addEventListener('volumechange', () => {
+        muteBtn.textContent = (audio.muted || audio.volume === 0) ? unmuteIcon : muteIcon;
         volumeSlider.disabled = audio.muted;
         if (!audio.muted) {
-          volumeSlider.value = audio.volume; globalPlayerState.lastVolume = audio.volume;
+          volumeSlider.value = audio.volume;
+          globalPlayerState.lastVolume = audio.volume;
         }
         globalPlayerState.isMuted = audio.muted;
-        localStorage.setItem('nekohacker_globalVolume', globalPlayerState.lastVolume);
+        localStorage.setItem('nekohacker_globalVolume', globalPlayerState.lastVolume.toString());
         localStorage.setItem('nekohacker_isMuted', JSON.stringify(globalPlayerState.isMuted));
       });
-      volumeSlider.addEventListener('input', () => { /* ... (same as before) ... */
-        audio.muted = false; audio.volume = parseFloat(volumeSlider.value);
+
+      volumeSlider.addEventListener('input', () => {
+        audio.muted = false; // Unmute if user interacts with volume slider
+        audio.volume = parseFloat(volumeSlider.value);
       });
-      muteBtn.addEventListener('click', () => { audio.muted = !audio.muted; });
-      playBtn.addEventListener('click', () => { /* ... (same as before, including pausing other tracks) ... */
+
+      muteBtn.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+      });
+
+      playBtn.addEventListener('click', () => {
         if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+
         if (audio.paused) {
+          // If another audio is playing, pause it
           if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
             globalPlayerState.currentPlayingAudio.pause();
             if(globalPlayerState.currentPlayingPlayerDiv) {
-                globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn').textContent = '▶';
+                globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn').textContent = playIcon;
                 globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
             }
           }
-          audio.play().then(() => {
-            playBtn.textContent = '▮▮'; playerDiv.classList.add('player-playing');
-            globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
-          }).catch(e => console.error("Play failed:", e));
+          audio.play().catch(e => console.error("Play failed:", e));
         } else {
-          audio.pause(); playBtn.textContent = '▶'; playerDiv.classList.remove('player-playing');
-          if (globalPlayerState.currentPlayingAudio === audio) {
-              globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null;
-          }
-          document.title = '🎧 Nekohacker591 Portfolio';
+          audio.pause();
         }
       });
-      progressBar.addEventListener('click', (e) => { /* ... (same as before) ... */
+
+      progressBar.addEventListener('click', (e) => {
         if (!audio.duration || audio.duration === Infinity) return;
-        const r = progressBar.getBoundingClientRect(); audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+        const rect = progressBar.getBoundingClientRect();
+        const newTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+        audio.currentTime = newTime;
+        // If paused, manually update UI as timeupdate won't fire immediately
         if (audio.paused) {
-          progressFilled.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
-          currentTimeDisplay.textContent = formatTime(audio.currentTime);
+          progressFilled.style.width = ((newTime / audio.duration) * 100) + '%';
+          currentTimeDisplay.textContent = formatTime(newTime);
         }
       });
-      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+      
+      // Set initial source if not already set (e.g. for autoPlay)
+      if (!audio.src && playerDiv.dataset.src) {
+          audio.src = playerDiv.dataset.src;
+      }
     }
-
-    const playerObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const playerDiv = entry.target;
-          if (!playerDiv.audioInitialized) initializeAudioForPlayer(playerDiv);
-        }
-      });
-    }, { root: null, rootMargin: '0px', threshold: 0.01 });
-
+    
     function setMetaTags(options = {}) {
         const defaults = {
             title: '🎧 Nekohacker591 Portfolio',
-            description: 'Check out my music portfolio!',
+            description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.',
             url: window.location.origin + window.location.pathname,
             type: 'website',
-            imageUrl: 'https://i.imgur.com/ClMFeop.png', // Using your specified image
+            imageUrl: defaultArtwork,
             audioUrl: null,
-            trackIdForEmbed: null,
-            twitterCardType: 'summary_large_image',
-            twitterSite: '@Nekohacker591' // Replace if you have one
+            trackIdForEmbed: null, // This is the song's index for twitter:player
+            twitterCardType: 'summary_large_image'
         };
         const config = { ...defaults, ...options };
 
         document.title = config.title;
         const head = document.head;
-        // Remove only dynamically added tags, keep your static ones if preferred,
-        // or remove all to let JS manage them fully.
-        // For simplicity, let's assume JS manages all relevant tags for dynamic content.
-        head.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]').forEach(tag => {
-            // Keep static ones you added unless they are the ones JS will set
-            if (tag.getAttribute('property') === 'og:title' ||
-                tag.getAttribute('property') === 'og:description' ||
-                tag.getAttribute('property') === 'og:url' ||
-                tag.getAttribute('property') === 'og:type' ||
-                tag.getAttribute('property') === 'og:image' ||
-                tag.getAttribute('property') === 'og:audio' ||
-                tag.getAttribute('property') === 'og:audio:type' ||
-                tag.getAttribute('name') === 'twitter:card' ||
-                tag.getAttribute('name') === 'twitter:title' ||
-                tag.getAttribute('name') === 'twitter:description' ||
-                tag.getAttribute('name') === 'twitter:image' ||
-                tag.getAttribute('name') === 'twitter:site' ||
-                tag.getAttribute('name') === 'twitter:player' ||
-                tag.getAttribute('name') === 'twitter:player:width' ||
-                tag.getAttribute('name') === 'twitter:player:height'
-            ) {
-                tag.remove();
-            }
-        });
-
+        // Remove existing dynamic meta tags to prevent duplicates
+        head.querySelectorAll('meta[data-dynamic-meta]').forEach(tag => tag.remove());
 
         const tagsToSet = [
             { property: 'og:title', content: config.title },
@@ -495,28 +625,33 @@
             { property: 'og:url', content: config.url },
             { property: 'og:type', content: config.type },
             { property: 'og:image', content: config.imageUrl },
-            { name: 'twitter:card', content: config.twitterCardType }, // This will be overridden for player
+            { name: 'twitter:card', content: config.twitterCardType },
             { name: 'twitter:title', content: config.title },
             { name: 'twitter:description', content: config.description },
             { name: 'twitter:image', content: config.imageUrl },
         ];
-        if (config.twitterSite) tagsToSet.push({ name: 'twitter:site', content: config.twitterSite });
+
         if (config.audioUrl) {
             tagsToSet.push({ property: 'og:audio', content: config.audioUrl });
             tagsToSet.push({ property: 'og:audio:type', content: 'audio/wav' }); // Assuming WAV
         }
-        if (config.trackIdForEmbed !== null) {
-            const embedUrl = `${window.location.origin}${window.location.pathname}?embed=${config.trackIdForEmbed}`;
-            tagsToSet.push({ name: 'twitter:player', content: embedUrl });
-            tagsToSet.push({ name: 'twitter:player:width', content: '500' });
-            tagsToSet.push({ name: 'twitter:player:height', content: '180' });
-            // Override twitter:card to 'player' when twitter:player is present
+
+        if (config.trackIdForEmbed !== null && songsData[config.trackIdForEmbed]) {
+            const embedUrl = new URL(window.location.origin + window.location.pathname);
+            embedUrl.searchParams.set('embed', config.trackIdForEmbed.toString());
+            
+            tagsToSet.push({ name: 'twitter:player', content: embedUrl.href });
+            tagsToSet.push({ name: 'twitter:player:width', content: '500' }); // Adjust as needed
+            tagsToSet.push({ name: 'twitter:player:height', content: '180' }); // Adjust as needed
+            // Ensure twitter:card is 'player' when twitter:player is present
             const twitterCardIndex = tagsToSet.findIndex(tag => tag.name === 'twitter:card');
             if (twitterCardIndex > -1) tagsToSet[twitterCardIndex].content = 'player';
             else tagsToSet.push({ name: 'twitter:card', content: 'player' });
         }
+        
         tagsToSet.forEach(tagInfo => {
             const meta = document.createElement('meta');
+            meta.setAttribute('data-dynamic-meta', 'true'); // Mark for easy removal
             if (tagInfo.property) meta.setAttribute('property', tagInfo.property);
             if (tagInfo.name) meta.setAttribute('name', tagInfo.name);
             meta.setAttribute('content', tagInfo.content);
@@ -524,123 +659,256 @@
         });
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+
+    function switchTab(targetTabId) {
+      tabContents.forEach(content => content.classList.remove('active'));
+      tabButtons.forEach(button => button.classList.remove('active'));
+
+      document.getElementById(`${targetTabId}-content`).classList.add('active');
+      document.querySelector(`.tab-button[data-tab="${targetTabId}"]`).classList.add('active');
+
+      // Update URL for tab navigation (optional, but good for bookmarking/sharing tab state)
+      const url = new URL(window.location);
+      if (targetTabId === 'home' && url.searchParams.get('view') === 'music') {
+          url.searchParams.delete('view'); // Default to home
+          url.searchParams.delete('s'); // Clear search
+      } else if (targetTabId !== 'home') {
+          url.searchParams.set('view', targetTabId);
+      }
+      window.history.replaceState({ view: targetTabId }, '', url);
+
+      renderView(); // Re-render to ensure correct elements are shown/hidden
+    }
+
+    function populateSongList(filteredSongs = songsData) {
+      songListUl.innerHTML = ''; // Clear previous list
+      if (filteredSongs.length === 0) {
+          songListUl.innerHTML = '<li class="song-item-empty">No tracks match your search, chief.</li>';
+          return;
+      }
+      filteredSongs.forEach((track, originalIndex) => {
+        // Find original index if filteredSongs is a subset
+        const actualIndex = songsData.findIndex(s => s.file === track.file);
+        const li = document.createElement('li');
+        li.className = 'song-item';
+        const link = document.createElement('a');
+        link.href = `?view=player&songId=${actualIndex}`;
+        link.textContent = track.title;
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          navigateToPlayerView(actualIndex);
+        });
+        li.appendChild(link);
+        songListUl.appendChild(li);
+      });
+    }
+
+    function navigateToPlayerView(songId) {
+        const url = new URL(window.location);
+        url.searchParams.set('view', 'player');
+        url.searchParams.set('songId', songId);
+        url.searchParams.delete('s'); // Clear search term
+        // Remove old sharing params if any
+        url.searchParams.delete('id');
+        url.searchParams.delete('share');
+        window.history.pushState({ view: 'player', songId }, '', url);
+        renderView();
+    }
+
+    function renderView() {
         const urlParams = new URLSearchParams(window.location.search);
-        const shareId = urlParams.get('id');
-        const isShareMode = urlParams.get('share') === 'true';
-        const embedId = urlParams.get('embed');
+        const view = urlParams.get('view');
+        const songIdParam = urlParams.get('songId');
+        const embedIdParam = urlParams.get('embed');
+        const legacyShareIdParam = urlParams.get('id'); // For old ?id=X&share=true links
+        const isLegacyShareMode = urlParams.get('share') === 'true';
         const searchQuery = urlParams.get('s');
 
-        if (autoplayCheckbox) { // Check if element exists (it won't in embed mode)
-            const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
-            autoplayCheckbox.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
-            globalPlayerState.autoplayNext = autoplayCheckbox.checked;
-            autoplayCheckbox.addEventListener('change', (e) => globalPlayerState.autoplayNext = e.target.checked);
-        }
-
-        if (embedId !== null && tracks[embedId]) { // --- EMBED MODE ---
-            document.body.innerHTML = ''; // Clear everything
-            document.body.classList.add('embed-mode');
-            const track = tracks[embedId];
-            const playerDiv = createPlayerElement(track, embedId, true);
-            document.body.appendChild(playerDiv);
-            initializeAudioForPlayer(playerDiv);
-            if (playerDiv.audio) { // Attempt autoplay
-                playerDiv.shouldAutoPlay = true;
-                if (!playerDiv.audio.src && playerDiv.dataset.src) playerDiv.audio.src = playerDiv.dataset.src;
+        // Stop any currently playing audio before changing view
+        if (globalPlayerState.currentPlayingAudio) {
+            globalPlayerState.currentPlayingAudio.pause();
+            // Optionally reset the UI of the player that was playing
+            if (globalPlayerState.currentPlayingPlayerDiv) {
+                 const playBtn = globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn');
+                 if(playBtn) playBtn.textContent = getComputedStyle(document.documentElement).getPropertyValue('--play-icon-url').trim() || '▶';
+                 globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
             }
-            // No meta tags needed for the embed page itself.
-            return; // Stop further processing
+            globalPlayerState.currentPlayingAudio = null;
+            globalPlayerState.currentPlayingPlayerDiv = null;
+        }
+        document.title = '🎧 Nekohacker591 Portfolio'; // Default title reset
+
+
+        // Handle embed mode first (completely different page structure)
+        if (embedIdParam !== null && songsData[embedIdParam]) {
+            document.body.innerHTML = ''; // Clear everything
+            document.body.className = 'embed-mode'; // Add class for specific styling
+            const track = songsData[embedIdParam];
+            const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true); // true for embed style
+            document.body.appendChild(playerDiv);
+            playerDiv.shouldAutoPlay = true; // Embeds should usually autoplay
+            initializeAudioForPlayer(playerDiv, true);
+            // Meta tags for embed aren't usually needed as it's iframed, but host page would have them.
+            return; // Stop further processing for embed mode
+        }
+        document.body.classList.remove('embed-mode'); // Ensure not in embed mode if not an embed URL
+
+        // Handle legacy share links by redirecting to new player view
+        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) {
+            navigateToPlayerView(parseInt(legacyShareIdParam));
+            return; // navigateToPlayerView will call renderView again
         }
 
-        // --- NORMAL PAGE / SHARE PAGE LOGIC ---
-        if (playerContainer) { // Check if container exists
-            tracks.forEach((track, index) => {
-                const playerDiv = createPlayerElement(track, index, false);
-                playerContainer.appendChild(playerDiv);
-                playerObserver.observe(playerDiv);
-            });
-        }
+        // Hide all tab contents and player view initially
+        tabContents.forEach(tc => tc.classList.remove('active'));
+        playerViewContainer.innerHTML = ''; // Clear dedicated player view
 
-        let metaOptions = {
-            // Use your statically defined image as default if not in share mode with a specific track
-            imageUrl: document.querySelector('meta[property="og:image"]')?.content || 'https://i.imgur.com/ClMFeop.png'
-        };
-        if (isShareMode && shareId !== null && tracks[shareId]) { // Share Mode
-            document.body.classList.add('share-mode');
-            const track = tracks[shareId];
-            metaOptions = {
+        if (view === 'player' && songIdParam !== null && songsData[songIdParam]) {
+            // Show only player view
+            siteHeader.style.display = 'block'; // Or 'none' if you want player view to be truly minimal
+            tabsContainer.style.display = 'none';
+            playerViewContainer.classList.add('active');
+
+            const songId = parseInt(songIdParam);
+            const track = songsData[songId];
+            const playerDiv = createPlayerElement(track, songId, false); // Not embed style
+            playerViewContainer.appendChild(playerDiv);
+            playerDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            playerDiv.shouldAutoPlay = true; // Autoplay when navigating to player view
+            initializeAudioForPlayer(playerDiv, true);
+
+            setMetaTags({
                 title: `🎧 ${track.title} - Nekohacker591`,
                 description: `Listen to "${track.title}" by Nekohacker591.`,
-                url: window.location.href, // Use the full share URL
+                url: window.location.href,
                 type: 'music.song',
                 audioUrl: track.file,
-                imageUrl: 'https://i.imgur.com/ClMFeop.png', // Your specific image
-                trackIdForEmbed: shareId, // For twitter:player
-            };
-            const playerToFocus = document.getElementById(`player-${shareId}`);
-            if (playerToFocus) {
-              document.querySelectorAll('.player:not(.player-embed)').forEach(p => p.style.display = (p === playerToFocus) ? 'block' : 'none');
-              playerToFocus.scrollIntoView({ behavior: 'auto', block: 'start' });
-            }
-        } else if (searchQuery && searchInput) { // Search from URL
-            searchInput.value = searchQuery.replace(/\+/g, ' ');
-            searchInput.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
-        }
-        // Set meta tags for share page or update for default view
-        setMetaTags(metaOptions);
+                imageUrl: track.artwork || defaultArtwork,
+                trackIdForEmbed: songId, // For twitter:player card
+            });
 
-        // Keydown listener only for non-embed mode
-        document.addEventListener('keydown', (e) => {
-            if (e.target === searchInput || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-            let activeAudio = globalPlayerState.currentPlayingAudio;
-            let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
-            if (e.code === 'Space') { /* ... (same as before) ... */
-                e.preventDefault();
-                if (activeAudio && activePlayerDiv) activePlayerDiv.querySelector('.play-btn')?.click();
-                else {
-                    const firstVisiblePlayer = Array.from(playerContainer?.children ?? []).find(p => p.style.display !== 'none' && p.classList.contains('player'));
-                    firstVisiblePlayer?.querySelector('.play-btn')?.click();
-                }
-            } else if (e.code === 'KeyM') { /* ... (same as before) ... */
-                 e.preventDefault();
-                if (activePlayerDiv) activePlayerDiv.querySelector('.mute-btn')?.click();
-                else {
-                    const firstVisiblePlayer = Array.from(playerContainer?.children ?? []).find(p => p.style.display !== 'none' && p.classList.contains('player'));
-                    if (firstVisiblePlayer?.audioInitialized) firstVisiblePlayer.querySelector('.mute-btn')?.click();
-                }
-            } else if (activeAudio) { /* ... (same as before for arrows) ... */
-                let h=false; const c=activeAudio.currentTime,d=activeAudio.duration,v=activeAudio.volume;
-                if(e.code==='ArrowLeft'){if(d&&d!==Infinity)activeAudio.currentTime=Math.max(0,c-5);h=true;}
-                else if(e.code==='ArrowRight'){if(d&&d!==Infinity)activeAudio.currentTime=Math.min(d,c+5);h=true;}
-                else if(e.code==='ArrowUp'){activeAudio.muted=false;activeAudio.volume=Math.min(1,v+0.05);h=true;}
-                else if(e.code==='ArrowDown'){activeAudio.muted=false;activeAudio.volume=Math.max(0,v-0.05);h=true;}
-                if(h)e.preventDefault();
+        } else if (view === 'music') {
+            // Show Music Tab
+            siteHeader.style.display = 'block';
+            tabsContainer.style.display = 'flex';
+            switchTab('music'); // Activates tab button and content
+            if (searchQuery) {
+                musicSearchInput.value = searchQuery.replace(/\+/g, ' ');
+                const filtered = songsData.filter(track => track.title.toLowerCase().includes(searchQuery.toLowerCase()));
+                populateSongList(filtered);
+            } else {
+                populateSongList();
+            }
+            setMetaTags({ title: 'Music - Nekohacker591 Portfolio' });
+        } else {
+            // Default to Home Tab
+            siteHeader.style.display = 'block';
+            tabsContainer.style.display = 'flex';
+            switchTab('home'); // Activates tab button and content
+            setMetaTags(); // Default meta tags
+        }
+    }
+
+    // --- EVENT LISTENERS ---
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTabId = button.dataset.tab;
+        // If clicking current tab or navigating to player view, different logic
+        const currentParams = new URLSearchParams(window.location.search);
+        if (currentParams.get('view') === 'player') {
+            // If in player view, clicking a tab should go back to that tab view
+            const url = new URL(window.location.origin + window.location.pathname);
+            if (targetTabId !== 'home') url.searchParams.set('view', targetTabId);
+            window.history.pushState({ view: targetTabId }, '', url);
+            renderView();
+        } else {
+            switchTab(targetTabId);
+        }
+      });
+    });
+
+    if (musicSearchInput) {
+        musicSearchInput.addEventListener('input', () => {
+            const query = musicSearchInput.value.toLowerCase();
+            const filteredSongs = songsData.filter(track => track.title.toLowerCase().includes(query));
+            populateSongList(filteredSongs);
+
+            const url = new URL(window.location);
+            if (query) url.searchParams.set('s', query.replace(/ /g, '+'));
+            else url.searchParams.delete('s');
+            // Only update history if on music tab
+            if (document.getElementById('music-content').classList.contains('active')) {
+                 window.history.replaceState({ view: 'music', s: query }, '', url);
             }
         });
-        if (searchInput) { // Search input listener only for non-embed mode
-            searchInput.addEventListener('input', () => {
-                const query = searchInput.value.toLowerCase();
-                document.querySelectorAll('.player:not(.player-embed)').forEach(player => {
-                    const title = player.querySelector('.track-title')?.textContent.toLowerCase() ?? '';
-                    const isVisible = title.includes(query);
-                    player.style.display = isVisible ? 'block' : 'none';
-                    if (!isVisible && player.audio && !player.audio.paused) {
-                        player.audio.pause(); player.querySelector('.play-btn').textContent = '▶';
-                        player.classList.remove('player-playing');
-                        if (globalPlayerState.currentPlayingPlayerDiv === player) {
-                            globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null;
-                            document.title = '🎧 Nekohacker591 Portfolio';
-                        }
-                    }
-                });
-                const newUrl = new URL(window.location.href);
-                if (query) newUrl.searchParams.set('s', query.replace(/ /g, '+'));
-                else newUrl.searchParams.delete('s');
-                window.history.replaceState({}, '', newUrl);
-            });
+    }
+
+    if (autoplayCheckbox) {
+        const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
+        autoplayCheckbox.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
+        globalPlayerState.autoplayNext = autoplayCheckbox.checked; // Initialize from storage
+        autoplayCheckbox.addEventListener('change', (e) => {
+            globalPlayerState.autoplayNext = e.target.checked;
+        });
+    }
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; // Ignore if typing in input
+
+        let activeAudio = globalPlayerState.currentPlayingAudio;
+        let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
+
+        if (!activeAudio && document.getElementById('player-view-content').classList.contains('active')) {
+            // If in player view but no audio active yet (e.g. not autoplayed)
+            // target the player in view
+            activePlayerDiv = document.getElementById('player-view-content').querySelector('.player');
+            if (activePlayerDiv && activePlayerDiv.audio) {
+                activeAudio = activePlayerDiv.audio;
+            }
+        }
+        
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (activePlayerDiv) activePlayerDiv.querySelector('.play-btn')?.click();
+        } else if (e.code === 'KeyM') {
+            e.preventDefault();
+            if (activePlayerDiv) activePlayerDiv.querySelector('.mute-btn')?.click();
+        } else if (activeAudio && activePlayerDiv) { // Ensure player div is also available for UI updates
+            let handled = false;
+            const currentTime = activeAudio.currentTime;
+            const duration = activeAudio.duration;
+            const volume = activeAudio.volume;
+
+            if (e.code === 'ArrowLeft') {
+                if (duration && duration !== Infinity) activeAudio.currentTime = Math.max(0, currentTime - 5);
+                handled = true;
+            } else if (e.code === 'ArrowRight') {
+                if (duration && duration !== Infinity) activeAudio.currentTime = Math.min(duration, currentTime + 5);
+                handled = true;
+            } else if (e.code === 'ArrowUp') {
+                activeAudio.muted = false;
+                activeAudio.volume = Math.min(1, volume + 0.05);
+                handled = true;
+            } else if (e.code === 'ArrowDown') {
+                activeAudio.muted = false;
+                activeAudio.volume = Math.max(0, volume - 0.05);
+                handled = true;
+            }
+            if (handled) e.preventDefault();
         }
     });
+
+    window.addEventListener('popstate', (event) => {
+        // event.state might be null if user navigated manually (typed URL)
+        // or if it's the initial load from a bookmark/refresh
+        renderView();
+    });
+
+    // Initial setup on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        renderView(); // Determine initial view based on URL params
+    });
+
   </script>
 </body>
 </html>
