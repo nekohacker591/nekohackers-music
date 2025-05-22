@@ -314,7 +314,8 @@
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
     .mute-btn { 
-      background-color: var(--ui-bg-button-secondary); 
+      background-color: var(--button-bg); /* THIS IS THE CHANGED LINE */
+      /* color: var(--button-text-color); /* Optional: change text color to match play button too for contrast */
       border: 1px solid var(--border-color-ui); 
       color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; 
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
@@ -323,7 +324,7 @@
     }
     .mute-btn .icon { font-size: 18px; }
     .mute-btn:hover { 
-      background-color: var(--ui-bg-hover-lighten); 
+      background-color: var(--button-bg-hover); /* THIS IS THE OTHER CHANGED LINE */
       border-color: rgba(120,140,160,0.5); 
     }
 
