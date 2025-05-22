@@ -19,56 +19,55 @@
 
   <style>
     :root {
-      --primary-color: #007bff; /* Blue for accents */
+      --primary-color: #007bff;
       --primary-color-hover: #0056b3;
-      --background-color: #f6f8fa; /* GitHub-ish light background */
-      --sidebar-bg: #ffffff; /* Sidebar background */
-      --content-bg: #ffffff; /* Main content area background */
-      --surface-highlight: #e1e4e8; /* Borders, subtle highlights */
-      --text-color: #24292e;      /* Main text color (dark gray) */
-      --text-secondary-color: #586069; /* Secondary text (medium gray) */
-      --text-link-color: #0366d6; /* Link color */
-      --button-bg: #2ea44f; /* GitHub green for primary actions */
+      --background-color: #f6f8fa;
+      --sidebar-bg: #ffffff;
+      --content-bg: #ffffff;
+      --surface-highlight: #e1e4e8;
+      --text-color: #24292e;
+      --text-secondary-color: #586069;
+      --text-link-color: #0366d6;
+      --button-bg: #2ea44f;
       --button-bg-hover: #2c974b;
       --button-text-color: #ffffff;
-      --border-radius: 6px; /* GitHub uses 6px often */
+      --border-radius: 6px;
       --transition-speed: 0.2s ease-in-out;
       --sidebar-width: 260px;
-      --header-height: 60px; /* If you add a fixed header later */
+      --header-height: 60px;
 
-      /* Button icons (placeholders, ideally use SVGs) */
-      --icon-home: "🏠";
-      --icon-music: "🎵";
-      --icon-play: "▶";
-      --icon-pause: "▮▮";
-      --icon-download: "⬇️";
-      --icon-share: "🔗";
-      --icon-mute: "🔇";
-      --icon-unmute: "🔊";
-      --icon-hamburger: "☰";
-      --icon-close: "✕";
+      /* --- CORRECTED ICON DEFINITIONS --- */
+      --icon-home: 🏠;
+      --icon-music: 🎵;
+      --icon-play: ▶;
+      --icon-pause: ▮▮; /* Or use a better pause symbol if available like ⏸️ */
+      --icon-download: ⬇️;
+      --icon-share: 🔗;
+      --icon-mute: 🔇;
+      --icon-unmute: 🔊;
+      --icon-hamburger: ☰;
+      --icon-close: ✕;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"; /* GitHub's font stack */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
       background-color: var(--background-color);
-      /* --- BACKGROUND IMAGE --- */
-      /* background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e'); */ /* Example background */
+      /* background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e'); */
       /* background-size: cover; */
       /* background-position: center center; */
       /* background-attachment: fixed; */
       color: var(--text-color);
       margin: 0;
-      display: flex; /* For sidebar layout */
+      display: flex;
       height: 100vh;
-      overflow-x: hidden; /* Prevent horizontal scroll from sidebar transitions */
+      overflow-x: hidden;
     }
 
     #sidebar-toggle {
       position: fixed;
       top: 15px;
       left: 15px;
-      z-index: 1001; /* Above sidebar */
+      z-index: 1001;
       background: var(--content-bg);
       border: 1px solid var(--surface-highlight);
       color: var(--text-color);
@@ -89,7 +88,7 @@
       background-color: var(--sidebar-bg);
       border-right: 1px solid var(--surface-highlight);
       padding: 20px;
-      padding-top: 70px; /* Space for toggle button */
+      padding-top: 70px;
       height: 100vh;
       box-sizing: border-box;
       position: fixed;
@@ -106,14 +105,11 @@
     body.sidebar-open #main-content-area {
         margin-left: var(--sidebar-width);
     }
-    /* On wider screens, sidebar could be permanently open */
     @media (min-width: 769px) {
-        /* Comment out below if you always want toggle button on desktop */
         #sidebar-toggle { display: none; }
         #sidebar { transform: translateX(0); }
         #main-content-area { margin-left: var(--sidebar-width); }
     }
-
 
     .sidebar-header h2 {
       font-size: 1.5em;
@@ -174,13 +170,13 @@
     #main-content-area {
       flex-grow: 1;
       padding: 20px;
-      padding-top: 20px; /* Default padding */
+      padding-top: 20px;
       transition: margin-left 0.3s ease-in-out;
       box-sizing: border-box;
       overflow-y: auto;
       height: 100vh;
     }
-     @media (max-width: 768px) { /* Adjust padding if toggle is visible */
+     @media (max-width: 768px) {
         #main-content-area { padding-top: 70px; }
     }
     
@@ -273,7 +269,7 @@
       display: inline-flex; align-items: center; gap: 6px;
       box-shadow: 0 1px 0 rgba(27,31,35,0.04), inset 0 1px 0 hsla(0,0%,100%,0.25);
     }
-    .download-link .icon, .share-btn .icon { margin-right: 4px; } /* Small space for icons in buttons */
+    .download-link .icon, .share-btn .icon { margin-right: 4px; }
     .download-link:hover, .share-btn:hover {
       background-color: #f0f2f4;
       border-color: rgba(27,31,35,0.2);
@@ -315,10 +311,10 @@
     </div>
     <nav>
       <a href="#" class="nav-link" data-view="home">
-        <span class="icon"></span> Home <!-- JS will set icon -->
+        <span class="icon"></span> Home
       </a>
       <a href="#" class="nav-link" data-view="music">
-        <span class="icon"></span> Music <!-- JS will set icon -->
+        <span class="icon"></span> Music
       </a>
     </nav>
     <div class="sidebar-controls">
@@ -414,21 +410,31 @@
     const musicContent = document.getElementById('music-content');
     const pageTitleElement = document.getElementById('page-title');
 
-    const iconHamburger = getComputedStyle(document.documentElement).getPropertyValue('--icon-hamburger').trim() || '☰';
-    const iconClose = getComputedStyle(document.documentElement).getPropertyValue('--icon-close').trim() || '✕';
-    const iconHome = getComputedStyle(document.documentElement).getPropertyValue('--icon-home').trim() || '🏠';
-    const iconMusic = getComputedStyle(document.documentElement).getPropertyValue('--icon-music').trim() || '🎵';
+    // Fetch icons from CSS variables (ensure CSS is loaded)
+    let iconHamburger, iconClose, iconHome, iconMusic;
+
+    function getIconsFromCSS() {
+        iconHamburger = getComputedStyle(document.documentElement).getPropertyValue('--icon-hamburger').trim() || '☰';
+        iconClose = getComputedStyle(document.documentElement).getPropertyValue('--icon-close').trim() || '✕';
+        iconHome = getComputedStyle(document.documentElement).getPropertyValue('--icon-home').trim() || '🏠';
+        iconMusic = getComputedStyle(document.documentElement).getPropertyValue('--icon-music').trim() || '🎵';
+    }
+
 
     function updateSidebarToggleIcon() {
+        if (!sidebarToggleBtn.querySelector('.icon')) return; // Safety check
         const isSidebarOpen = document.body.classList.contains('sidebar-open');
         sidebarToggleBtn.querySelector('.icon').textContent = isSidebarOpen ? iconClose : iconHamburger;
         sidebarToggleBtn.setAttribute('aria-expanded', isSidebarOpen.toString());
     }
     
     function setupIcons() {
-        updateSidebarToggleIcon();
-        document.querySelector('.nav-link[data-view="home"] .icon').textContent = iconHome;
-        document.querySelector('.nav-link[data-view="music"] .icon').textContent = iconMusic;
+        getIconsFromCSS(); // Make sure icons are fetched
+        if (sidebarToggleBtn.querySelector('.icon')) updateSidebarToggleIcon();
+        const homeLinkIcon = document.querySelector('.nav-link[data-view="home"] .icon');
+        if (homeLinkIcon) homeLinkIcon.textContent = iconHome;
+        const musicLinkIcon = document.querySelector('.nav-link[data-view="music"] .icon');
+        if (musicLinkIcon) musicLinkIcon.textContent = iconMusic;
     }
 
     function formatTime(seconds) {
@@ -446,10 +452,12 @@
         playerDiv.dataset.src = track.file;
         playerDiv.dataset.index = index;
 
+        // Fetch icons here as well, as this might be called before DOMContentLoaded fully processes CSS sometimes
         const playIconText = getComputedStyle(document.documentElement).getPropertyValue('--icon-play').trim() || '▶';
         const downloadIconText = getComputedStyle(document.documentElement).getPropertyValue('--icon-download').trim() || '⬇️';
         const shareIconText = getComputedStyle(document.documentElement).getPropertyValue('--icon-share').trim() || '🔗';
         const muteIconText = getComputedStyle(document.documentElement).getPropertyValue('--icon-mute').trim() || '🔇';
+
 
         const actionsHTML = `
             <a class="download-link" href="${track.file}" download="${track.title.replace(/[^\w\s.-]/g, '') || 'track'}.wav">
@@ -517,13 +525,14 @@
 
       const playIcon = getComputedStyle(document.documentElement).getPropertyValue('--icon-play').trim() || '▶';
       const pauseIcon = getComputedStyle(document.documentElement).getPropertyValue('--icon-pause').trim() || '▮▮';
-      const muteIcon = getComputedStyle(document.documentElement).getPropertyValue('--icon-mute').trim() || '🔇';
-      const unmuteIcon = getComputedStyle(document.documentElement).getPropertyValue('--icon-unmute').trim() || '🔊';
+      const muteIconCSS = getComputedStyle(document.documentElement).getPropertyValue('--icon-mute').trim() || '🔇'; // Renamed to avoid conflict
+      const unmuteIconCSS = getComputedStyle(document.documentElement).getPropertyValue('--icon-unmute').trim() || '🔊'; // Renamed to avoid conflict
+
 
       audio.muted = globalPlayerState.isMuted;
       audio.volume = globalPlayerState.lastVolume;
       volumeSlider.value = globalPlayerState.lastVolume;
-      muteBtn.textContent = globalPlayerState.isMuted ? unmuteIcon : muteIcon;
+      muteBtn.textContent = globalPlayerState.isMuted ? unmuteIconCSS : muteIconCSS;
       volumeSlider.disabled = globalPlayerState.isMuted;
 
       audio.addEventListener('loadedmetadata', () => {
@@ -557,7 +566,7 @@
         }
       });
       audio.addEventListener('volumechange', () => {
-        muteBtn.textContent = (audio.muted || audio.volume === 0) ? unmuteIcon : muteIcon;
+        muteBtn.textContent = (audio.muted || audio.volume === 0) ? unmuteIconCSS : muteIconCSS;
         volumeSlider.disabled = audio.muted;
         if (!audio.muted) { volumeSlider.value = audio.volume; globalPlayerState.lastVolume = audio.volume; }
         globalPlayerState.isMuted = audio.muted;
@@ -591,7 +600,7 @@
     function setMetaTags(options = {}) {
         const defaults = {
             title: '🎧 Nekohacker591 Portfolio',
-            description: 'Welcome to Nekohacker\'s portfolio...',
+            description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.',
             url: window.location.origin + window.location.pathname, type: 'website', imageUrl: defaultArtwork,
             audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image'
         };
@@ -671,9 +680,10 @@
             playerViewContainer.classList.add('active');
             const songId = parseInt(songIdParam); const track = songsData[songId];
             const playerDiv = createPlayerElement(track, songId, false); playerViewContainer.appendChild(playerDiv);
-            playerDiv.scrollIntoView({ behavior: 'auto', block: 'start' });
+            // playerDiv.scrollIntoView({ behavior: 'auto', block: 'start' }); // scrollIntoView can be jarring
+            playerViewContainer.scrollTop = 0; // Scroll player view to top
             playerDiv.shouldAutoPlay = true; initializeAudioForPlayer(playerDiv, true);
-            setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}"...`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
+            setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
             pageTitleElement.style.display = 'none';
         } else if (view === 'music') {
             musicContent.classList.add('active'); document.querySelector('.nav-link[data-view="music"]').classList.add('active');
@@ -682,7 +692,7 @@
             const filtered = songsData.filter(t => t.title.toLowerCase().includes(currentSearch.toLowerCase()));
             populateSongList(filtered);
             setMetaTags({ title: 'Music - Nekohacker591 Portfolio' });
-        } else {
+        } else { // home
             homeContent.classList.add('active'); document.querySelector('.nav-link[data-view="home"]').classList.add('active');
             setMetaTags();
         }
@@ -696,9 +706,12 @@
       link.addEventListener('click', (e) => {
         e.preventDefault(); const targetView = link.dataset.view; const url = new URL(window.location);
         const currentParams = new URLSearchParams(url.search); const currentView = currentParams.get('view') || 'home';
-        if (targetView === currentView && currentView !== 'player') return;
+        if (targetView === currentView && !(targetView === 'player' && currentParams.get('songId') !== link.dataset.songId)) { // Avoid re-render for same view unless it's a different player
+             if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
+            return;
+        }
         if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
-        else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
+        else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); } // For music tab, clear songId
         window.history.pushState({ view: targetView }, '', url); renderView();
         if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
       });
@@ -706,11 +719,14 @@
     if (musicSearchInput) {
         musicSearchInput.addEventListener('input', () => {
             const query = musicSearchInput.value.toLowerCase();
-            const filteredSongs = songsData.filter(track => track.title.toLowerCase().includes(query));
-            populateSongList(filteredSongs);
+            // No need to repopulate list here, URL change will trigger renderView which populates
             const url = new URL(window.location);
             if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
-            if (document.getElementById('music-content').classList.contains('active')) { window.history.replaceState({ view: 'music', s: query }, '', url); }
+            // Only update history if music tab is active, to avoid changing URL if typing while on home tab for instance
+            if (document.getElementById('music-content').classList.contains('active')) {
+                 window.history.replaceState({ view: 'music', s: query }, '', url);
+                 renderView(); // Explicitly re-render on search input to update list
+            }
         });
     }
     document.addEventListener('keydown', (e) => {
@@ -730,7 +746,7 @@
     });
     window.addEventListener('popstate', (event) => { renderView(); });
     document.addEventListener('DOMContentLoaded', () => {
-        setupIcons();
+        setupIcons(); // Initialize icons
         if (autoplayCheckboxSidebar) {
             const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
             autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
