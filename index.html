@@ -343,7 +343,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
     }
 
-    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--player-background-repeat); }
+    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--page-background-repeat); }
     .player-embed { width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0; box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column; justify-content: center; background: transparent; }
     .player-embed .track-title { font-size: 18px; margin-bottom: 12px; }
     .player-embed .controls { margin-bottom: 12px; }
@@ -598,7 +598,7 @@
       if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
       
       const audio = new Audio();
-      audio.preload = "metadata";
+      audio.preload = "metadata"; // Important: set to metadata so duration is available but doesn't load entire file
       playerDiv.audio = audio;
       playerDiv.audioInitialized = true;
 
@@ -621,7 +621,7 @@
 
       audio.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(audio.duration);
-        if (autoPlay) { 
+        if (autoPlay) { // This 'autoPlay' is true ONLY for "autoplay next"
             audio.play().catch(e => console.warn("Autoplay prevented:", e));
         }
       });
@@ -650,9 +650,9 @@
         if (globalPlayerState.autoplayNext) {
             const currentView = new URLSearchParams(window.location.search).get('view');
             if (currentView === 'player' && songIndex < songsData.length - 1) {
-                navigateToPlayerView(songIndex + 1, true); 
+                navigateToPlayerView(songIndex + 1, true); // true here means "autoplay this next song"
             } else if (currentView === 'player' && songIndex === songsData.length - 1) { // Loop to first song
-                navigateToPlayerView(0, true);
+                navigateToPlayerView(0, true); // true here means "autoplay this next song"
             }
         }
       });
@@ -668,7 +668,7 @@
       
       playerDiv.querySelector('.mute-btn').addEventListener('click', () => { audio.muted = !audio.muted; });
       playerDiv.querySelector('.play-btn').addEventListener('click', () => {
-        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src; // Load src if not already set
         if (audio.paused) {
           if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
             globalPlayerState.currentPlayingAudio.pause(); 
@@ -686,7 +686,7 @@
         audio.currentTime = newTime;
         if (audio.paused) { progressFilled.style.width = ((newTime / audio.duration) * 100) + '%'; currentTimeDisplay.textContent = formatTime(newTime); }
       });
-      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+      if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src; // Ensure src is set on initialization if not autoplaying
     }
 
     function populateUpNextList(currentSongId, mainContainer) {
@@ -710,11 +710,10 @@
         const numUpNext = 5; 
         let songsToShow = [];
 
-        for (let i = 1; i <= songsData.length -1 ; i++) { // Iterate enough to show all other songs if fewer than numUpNext
+        for (let i = 1; i <= songsData.length -1 ; i++) { 
             if (songsToShow.length >= numUpNext) break;
             const nextIndex = (currentSongId + i) % songsData.length;
-            if (nextIndex === currentSongId) continue; // Should not happen with i starting at 1 unless only 1 song
-             // Check if already added (can happen if songsData.length < numUpNext)
+            if (nextIndex === currentSongId) continue; 
             if (!songsToShow.find(s => s.originalIndex === nextIndex)) {
                 songsToShow.push({track: songsData[nextIndex], originalIndex: nextIndex});
             }
@@ -730,12 +729,12 @@
             li.className = 'up-next-item';
             li.textContent = item.track.title;
             li.dataset.songId = item.originalIndex;
-            // Highlight the very next song if autoplay is on and it's the immediate next
             if (globalPlayerState.autoplayNext && item.originalIndex === (currentSongId + 1) % songsData.length) {
                 li.classList.add('playing-next');
             }
             li.addEventListener('click', () => {
-                navigateToPlayerView(item.originalIndex, true); // true to autoplay
+                // MODIFIED: Pass false for playNow, so it doesn't autoplay on click
+                navigateToPlayerView(item.originalIndex, false); 
             });
             ul.appendChild(li);
         });
@@ -781,20 +780,28 @@
         const li = document.createElement('li'); li.className = 'song-item';
         const link = document.createElement('a'); link.href = `?view=player&songId=${actualIndex}`;
         link.textContent = track.title;
-        link.addEventListener('click', (e) => { e.preventDefault(); navigateToPlayerView(actualIndex, true); }); // Play when selected from main list
+        link.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            // MODIFIED: Pass false for playNow, so it doesn't autoplay on click
+            navigateToPlayerView(actualIndex, false); 
+        });
         li.appendChild(link); songListUl.appendChild(li);
       });
     }
 
+    // playNow parameter determines if the song should attempt to play immediately after loading its view.
+    // This should be true ONLY for the "autoplay next song" feature.
     function navigateToPlayerView(songId, playNow = false) {
         const url = new URL(window.location);
         url.searchParams.set('view', 'player');
         url.searchParams.set('songId', songId.toString());
         url.searchParams.delete('s'); url.searchParams.delete('id'); url.searchParams.delete('share');
         window.history.pushState({ view: 'player', songId: songId }, '', url);
+        // Pass playNow (as triggeredByAutoplayNext) to renderView
         renderView({ triggeredByAutoplayNext: playNow });
     }
 
+    // options can include { triggeredByAutoplayNext: boolean }
     function renderView(options = {}) {
         const { triggeredByAutoplayNext = false } = options; 
 
@@ -814,47 +821,45 @@
             document.body.innerHTML = ''; document.body.className = 'embed-mode';
             const track = songsData[embedIdParam]; const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
             document.body.appendChild(playerDiv);
-            initializeAudioForPlayer(playerDiv, false); 
+            initializeAudioForPlayer(playerDiv, false); // Embeds never autoplay initially
             return;
         }
         document.body.classList.remove('embed-mode');
-        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam)); return; } 
+        // For legacy share, navigate to player view, but don't autoplay initially
+        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam), false); return; } 
         if (!view && !songIdParam) view = 'home';
 
         tabContents.forEach(tc => tc.classList.remove('active'));
         navLinks.forEach(link => link.classList.remove('active'));
-        pageTitleElement.style.display = 'block'; // Show by default
+        pageTitleElement.style.display = 'block'; 
 
-        // Clear player view container if not transitioning to player or if it's not already player view
         if (view !== 'player' && playerViewContainer.classList.contains('active')) {
-            playerViewContainer.innerHTML = ''; // Clear it out completely
+            playerViewContainer.innerHTML = ''; 
         }
-
 
         if (view === 'player' && songIdParam !== null && songsData[songIdParam]) {
             playerViewContainer.classList.add('active');
             const songId = parseInt(songIdParam);
             const track = songsData[songId];
 
-            // Remove old player and up-next list if they exist to ensure clean slate for animations
             const oldPlayer = playerViewContainer.querySelector('.player');
             if (oldPlayer) oldPlayer.remove();
             const oldUpNext = playerViewContainer.querySelector('#up-next-list-container');
             if (oldUpNext) oldUpNext.remove();
 
             const playerDiv = createPlayerElement(track, songId, false);
-            playerDiv.classList.add('player-loading'); // Add class for entry animation
+            playerDiv.classList.add('player-loading'); 
 
-            // Prepend player so up-next list (added later) appears below it
             playerViewContainer.insertBefore(playerDiv, playerViewContainer.firstChild);
             
-            // Trigger animation
             requestAnimationFrame(() => {
-                requestAnimationFrame(() => { // Double RAF for reliability
+                requestAnimationFrame(() => { 
                     playerDiv.classList.remove('player-loading');
                 });
             });
             
+            // Pass triggeredByAutoplayNext to initializeAudioForPlayer
+            // This will be true if navigating due to song ending, false otherwise (e.g. direct load, click)
             initializeAudioForPlayer(playerDiv, triggeredByAutoplayNext);
             setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
             pageTitleElement.style.display = 'none';
@@ -889,7 +894,7 @@
         if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
         else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
         window.history.pushState({ view: targetView }, '', url); 
-        renderView(); 
+        renderView(); // Default call, so triggeredByAutoplayNext will be false
         if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
       });
     });
@@ -900,7 +905,7 @@
             if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
             if (document.getElementById('music-content').classList.contains('active')) {
                  window.history.replaceState({ view: 'music', s: query }, '', url);
-                 renderView();  
+                 renderView();  // Default call
             }
         });
     }
@@ -924,16 +929,23 @@
         }
     });
     window.addEventListener('popstate', (event) => { 
-        renderView(); 
+        renderView(); // Default call
     });
     document.addEventListener('DOMContentLoaded', () => {
         setupIcons();
         if (autoplayCheckboxSidebar) {
             const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
             autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
-            autoplayCheckboxSidebar.addEventListener('change', (e) => { globalPlayerState.autoplayNext = e.target.checked; });
+            autoplayCheckboxSidebar.addEventListener('change', (e) => { 
+                globalPlayerState.autoplayNext = e.target.checked; 
+                // Update "playing-next" class on current up-next list if visible
+                const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
+                if (playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
+                    populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
+                }
+            });
         }
-        renderView(); 
+        renderView(); // Default call
     });
   </script>
 </body>
