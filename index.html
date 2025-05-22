@@ -67,7 +67,6 @@
       --text-secondary-color: var(--text-color-secondary);
       --text-link-color: var(--text-link-color-main);
       
-      /* Primary button (Play button) remains prominent but can be slightly transparent */
       --button-bg: rgba(0, 123, 255, 0.75); 
       --button-bg-hover: rgba(0, 100, 205, 0.9);
       --button-text-color: #ffffff; 
@@ -187,6 +186,13 @@
     }
     .tab-content { display: none; width: 100%; max-width: 750px; margin: 0 auto; }
     .tab-content.active { display: block; }
+    /* Specific display for player view container when active for flex layout */
+    #player-view-content.active {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* Space between player and up-next list */
+    }
+
 
     #home-content { 
       padding: 20px; 
@@ -231,13 +237,14 @@
       color: var(--text-link-color); 
       text-decoration: none; border-radius: var(--border-radius); 
       border: 1px solid var(--border-color-ui); 
-      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed); 
+      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out; /* ADDED TRANSFORM */
       font-size: 16px; font-weight: 500; 
     }
     .song-item a:hover { 
       background-color: var(--ui-bg-hover-lighten);
       border-color: var(--primary-color); 
-      box-shadow: 0 1px 5px rgba(0,123,255,0.2); 
+      box-shadow: 0 2px 8px rgba(0,123,255,0.25); /* Enhanced shadow */
+      transform: scale(1.02) translateX(5px); /* Pop out and slight shift */
     }
     .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; background-color: var(--ui-bg-element); border-radius: var(--border-radius); }
 
@@ -249,7 +256,16 @@
       padding: 20px; border-radius: var(--border-radius); 
       box-shadow: var(--box-shadow-ui); 
       border: 1px solid var(--border-color-ui); 
-      width: 100%; box-sizing: border-box; margin-top: 20px; 
+      width: 100%; box-sizing: border-box; 
+      /* Removed margin-top: 20px; as player-view-content will handle gap */
+      /* Animation styles for player pop-in */
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .player.player-loading { /* State before animation */
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
     }
     .player.player-playing { border-color: var(--primary-color); }
     .track-title { 
@@ -273,7 +289,7 @@
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
-    .progress { flex-grow: 1; height: 8px; background-color: rgba(100, 120, 140, 0.3); /* Lighter than surface-highlight for better contrast with fill */ border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
+    .progress { flex-grow: 1; height: 8px; background-color: rgba(100, 120, 140, 0.3); border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
     .progress-filled { height: 100%; background-color: var(--primary-color); width: 0; border-radius: 4px; transition: width 0.1s linear; }
     .current-time, .duration { font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center; }
 
@@ -316,7 +332,7 @@
       -webkit-appearance: none; appearance: none; width: 16px; height: 16px; 
       background: var(--text-link-color); 
       border-radius: 50%; cursor: pointer; 
-      border: 2px solid var(--ui-bg-panel); /* Blends with player bg */
+      border: 2px solid var(--ui-bg-panel);
       box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
     }
     .volume-slider::-moz-range-thumb { 
@@ -327,12 +343,65 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
     }
 
-    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); /* Will be semi-transparent dark */ background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--player-background-repeat); }
+    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--player-background-repeat); }
     .player-embed { width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0; box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column; justify-content: center; background: transparent; }
     .player-embed .track-title { font-size: 18px; margin-bottom: 12px; }
     .player-embed .controls { margin-bottom: 12px; }
     .player-embed .volume-container { margin-top: 12px; }
     .player-embed .actions { display: none; }
+
+    /* --- UP NEXT LIST STYLES --- */
+    #up-next-list-container {
+        padding: 15px;
+        background-color: var(--ui-bg-panel); /* Consistent with player panel */
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color-ui);
+        box-shadow: var(--box-shadow-ui);
+        width: 100%;
+        box-sizing: border-box;
+    }
+    #up-next-list-container h2 {
+        font-size: 1.2em;
+        color: var(--text-color);
+        margin-top: 0;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-color-ui);
+        text-shadow: var(--text-shadow-soft);
+    }
+    #up-next-song-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .up-next-item {
+        display: block;
+        padding: 10px 12px;
+        background-color: var(--ui-bg-element); 
+        color: var(--text-link-color);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        border: 1px solid transparent; /* For hover consistency */
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color var(--transition-speed), border-color var(--transition-speed);
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .up-next-item:hover {
+        transform: scale(1.02) translateX(5px); /* Pop out and slight shift */
+        background-color: var(--ui-bg-hover-lighten);
+        border-color: var(--primary-color);
+        box-shadow: 0 2px 6px rgba(0,123,255,0.25);
+    }
+    .up-next-item.playing-next { /* Optional: highlight the very next song */
+        border-left: 3px solid var(--primary-color);
+        padding-left: 9px; 
+        font-weight: 600;
+    }
+
   </style>
 </head>
 <body>
@@ -367,7 +436,9 @@
         <div class="search-bar"><input type="text" id="music-search-input" class="search-input" placeholder="Search for a track..."></div>
         <ul id="song-list"></ul>
     </div>
-    <div id="player-view-content" class="tab-content"></div>
+    <div id="player-view-content" class="tab-content">
+        <!-- Player and Up Next list will be dynamically inserted here -->
+    </div>
   </main>
 
   <script>
@@ -522,7 +593,7 @@
         return playerDiv;
     }
     
-    function initializeAudioForPlayer(playerDiv, autoPlay = false) { // autoPlay parameter is key
+    function initializeAudioForPlayer(playerDiv, autoPlay = false) { 
       if (playerDiv.audioInitialized && playerDiv.audio && playerDiv.audio.src === playerDiv.dataset.src && !autoPlay) return;
       if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
       
@@ -550,7 +621,6 @@
 
       audio.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(audio.duration);
-        // *** MODIFIED AUTOPLAY LOGIC ***
         if (autoPlay) { 
             audio.play().catch(e => console.warn("Autoplay prevented:", e));
         }
@@ -580,8 +650,9 @@
         if (globalPlayerState.autoplayNext) {
             const currentView = new URLSearchParams(window.location.search).get('view');
             if (currentView === 'player' && songIndex < songsData.length - 1) {
-                // *** MODIFIED CALL TO navigateToPlayerView ***
-                navigateToPlayerView(songIndex + 1, true); // Pass true for autoplay next
+                navigateToPlayerView(songIndex + 1, true); 
+            } else if (currentView === 'player' && songIndex === songsData.length - 1) { // Loop to first song
+                navigateToPlayerView(0, true);
             }
         }
       });
@@ -603,6 +674,7 @@
             globalPlayerState.currentPlayingAudio.pause(); 
             if(globalPlayerState.currentPlayingPlayerDiv) {
                 globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
+                 getAndApplyIcon(globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn .icon'), '--icon-play');
             }
           }
           audio.play().catch(e => console.error("Play failed:", e));
@@ -615,6 +687,58 @@
         if (audio.paused) { progressFilled.style.width = ((newTime / audio.duration) * 100) + '%'; currentTimeDisplay.textContent = formatTime(newTime); }
       });
       if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+    }
+
+    function populateUpNextList(currentSongId, mainContainer) {
+        let upNextContainer = mainContainer.querySelector('#up-next-list-container');
+        if (!upNextContainer) {
+            upNextContainer = document.createElement('div');
+            upNextContainer.id = 'up-next-list-container';
+            upNextContainer.innerHTML = `<h2>Up Next</h2><ul id="up-next-song-list"></ul>`;
+            mainContainer.appendChild(upNextContainer);
+        }
+
+        const ul = upNextContainer.querySelector('#up-next-song-list');
+        ul.innerHTML = ''; 
+
+        if (songsData.length <= 1) {
+            upNextContainer.style.display = 'none';
+            return;
+        }
+        upNextContainer.style.display = 'block';
+
+        const numUpNext = 5; 
+        let songsToShow = [];
+
+        for (let i = 1; i <= songsData.length -1 ; i++) { // Iterate enough to show all other songs if fewer than numUpNext
+            if (songsToShow.length >= numUpNext) break;
+            const nextIndex = (currentSongId + i) % songsData.length;
+            if (nextIndex === currentSongId) continue; // Should not happen with i starting at 1 unless only 1 song
+             // Check if already added (can happen if songsData.length < numUpNext)
+            if (!songsToShow.find(s => s.originalIndex === nextIndex)) {
+                songsToShow.push({track: songsData[nextIndex], originalIndex: nextIndex});
+            }
+        }
+        
+        if (songsToShow.length === 0) {
+             ul.innerHTML = '<li class="song-item-empty">No other songs available.</li>';
+             return;
+        }
+
+        songsToShow.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'up-next-item';
+            li.textContent = item.track.title;
+            li.dataset.songId = item.originalIndex;
+            // Highlight the very next song if autoplay is on and it's the immediate next
+            if (globalPlayerState.autoplayNext && item.originalIndex === (currentSongId + 1) % songsData.length) {
+                li.classList.add('playing-next');
+            }
+            li.addEventListener('click', () => {
+                navigateToPlayerView(item.originalIndex, true); // true to autoplay
+            });
+            ul.appendChild(li);
+        });
     }
     
     function setMetaTags(options = {}) {
@@ -657,25 +781,22 @@
         const li = document.createElement('li'); li.className = 'song-item';
         const link = document.createElement('a'); link.href = `?view=player&songId=${actualIndex}`;
         link.textContent = track.title;
-        link.addEventListener('click', (e) => { e.preventDefault(); navigateToPlayerView(actualIndex); }); // playNow defaults to false
+        link.addEventListener('click', (e) => { e.preventDefault(); navigateToPlayerView(actualIndex, true); }); // Play when selected from main list
         li.appendChild(link); songListUl.appendChild(li);
       });
     }
 
-    // *** MODIFIED navigateToPlayerView SIGNATURE ***
     function navigateToPlayerView(songId, playNow = false) {
         const url = new URL(window.location);
         url.searchParams.set('view', 'player');
         url.searchParams.set('songId', songId.toString());
         url.searchParams.delete('s'); url.searchParams.delete('id'); url.searchParams.delete('share');
         window.history.pushState({ view: 'player', songId: songId }, '', url);
-        // *** MODIFIED CALL TO renderView ***
         renderView({ triggeredByAutoplayNext: playNow });
     }
 
-    // *** MODIFIED renderView SIGNATURE ***
     function renderView(options = {}) {
-        const { triggeredByAutoplayNext = false } = options; // Get the option
+        const { triggeredByAutoplayNext = false } = options; 
 
         const urlParams = new URLSearchParams(window.location.search);
         let view = urlParams.get('view');
@@ -693,30 +814,53 @@
             document.body.innerHTML = ''; document.body.className = 'embed-mode';
             const track = songsData[embedIdParam]; const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
             document.body.appendChild(playerDiv);
-            // *** MODIFIED: Embeds no longer try to autoplay on initial load ***
-            // playerDiv.shouldAutoPlay = true; // REMOVED
-            initializeAudioForPlayer(playerDiv, false); // ALWAYS FALSE for embed initial load
+            initializeAudioForPlayer(playerDiv, false); 
             return;
         }
         document.body.classList.remove('embed-mode');
-        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam)); return; } // playNow defaults to false
+        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam)); return; } 
         if (!view && !songIdParam) view = 'home';
 
         tabContents.forEach(tc => tc.classList.remove('active'));
         navLinks.forEach(link => link.classList.remove('active'));
-        playerViewContainer.innerHTML = '';
-        pageTitleElement.style.display = 'block';
+        pageTitleElement.style.display = 'block'; // Show by default
+
+        // Clear player view container if not transitioning to player or if it's not already player view
+        if (view !== 'player' && playerViewContainer.classList.contains('active')) {
+            playerViewContainer.innerHTML = ''; // Clear it out completely
+        }
+
 
         if (view === 'player' && songIdParam !== null && songsData[songIdParam]) {
             playerViewContainer.classList.add('active');
-            const songId = parseInt(songIdParam); const track = songsData[songId];
-            const playerDiv = createPlayerElement(track, songId, false); playerViewContainer.appendChild(playerDiv);
-            playerViewContainer.scrollTop = 0;
-            // *** MODIFIED: Pass autoplay intent to initializeAudioForPlayer ***
-            // playerDiv.shouldAutoPlay = true; // REMOVED
+            const songId = parseInt(songIdParam);
+            const track = songsData[songId];
+
+            // Remove old player and up-next list if they exist to ensure clean slate for animations
+            const oldPlayer = playerViewContainer.querySelector('.player');
+            if (oldPlayer) oldPlayer.remove();
+            const oldUpNext = playerViewContainer.querySelector('#up-next-list-container');
+            if (oldUpNext) oldUpNext.remove();
+
+            const playerDiv = createPlayerElement(track, songId, false);
+            playerDiv.classList.add('player-loading'); // Add class for entry animation
+
+            // Prepend player so up-next list (added later) appears below it
+            playerViewContainer.insertBefore(playerDiv, playerViewContainer.firstChild);
+            
+            // Trigger animation
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => { // Double RAF for reliability
+                    playerDiv.classList.remove('player-loading');
+                });
+            });
+            
             initializeAudioForPlayer(playerDiv, triggeredByAutoplayNext);
             setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
             pageTitleElement.style.display = 'none';
+
+            populateUpNextList(songId, playerViewContainer);
+
         } else if (view === 'music') {
             musicContent.classList.add('active'); document.querySelector('.nav-link[data-view="music"]').classList.add('active');
             const currentSearch = searchQuery || '';
@@ -745,7 +889,7 @@
         if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
         else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
         window.history.pushState({ view: targetView }, '', url); 
-        renderView(); // Defaults to triggeredByAutoplayNext = false
+        renderView(); 
         if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
       });
     });
@@ -756,7 +900,7 @@
             if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
             if (document.getElementById('music-content').classList.contains('active')) {
                  window.history.replaceState({ view: 'music', s: query }, '', url);
-                 renderView();  // Defaults to triggeredByAutoplayNext = false
+                 renderView();  
             }
         });
     }
@@ -780,7 +924,7 @@
         }
     });
     window.addEventListener('popstate', (event) => { 
-        renderView(); // Defaults to triggeredByAutoplayNext = false
+        renderView(); 
     });
     document.addEventListener('DOMContentLoaded', () => {
         setupIcons();
@@ -789,7 +933,7 @@
             autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
             autoplayCheckboxSidebar.addEventListener('change', (e) => { globalPlayerState.autoplayNext = e.target.checked; });
         }
-        renderView(); // Defaults to triggeredByAutoplayNext = false
+        renderView(); 
     });
   </script>
 </body>
