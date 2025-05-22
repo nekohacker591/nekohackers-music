@@ -19,56 +19,65 @@
 
   <style>
     :root {
-      --primary-color: #007bff;
+      --primary-color: #007bff; /* Main accent color */
       --primary-color-hover: #0056b3;
-      /* --- BACKGROUND CONFIGURATION --- */
-      /* Page Background */
-      /* --page-background: #f6f8fa; /* Default solid color */
-      /* Example Image:  */
+
+      /* --- PAGE BACKGROUND --- */
       --page-background: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/background.jpg');
-      /* Example Gradient: --page-background: linear-gradient(to bottom, #f6f8fa, #e1e4e8); */
       --page-background-size: cover;
       --page-background-position: center center;
       --page-background-repeat: no-repeat;
 
-      /* Sidebar Background */
-      /* --sidebar-background: #ffffff; */  /* Default solid color */
-      /* Example Image: */
-      --sidebar-background: url(''); */
-      /* Example Gradient: --sidebar-background: linear-gradient(to bottom, #fff, #f9f9f9); */
+      /* --- NEW SEMI-TRANSPARENT UI STYLES --- */
+      --ui-bg-panel: rgba(30, 30, 40, 0.8);          /* Darker, more opaque for main panels */
+      --ui-bg-element: rgba(45, 45, 55, 0.75);       /* Slightly lighter for items/inputs */
+      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7); /* For secondary buttons */
+      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8);  /* Lighter hover for dark elements */
+
+      --text-color-main: #f0f5fa;                     /* Main text - light, slightly cool white */
+      --text-color-secondary: #b0c0d0;               /* Secondary text - softer light gray-blue */
+      --text-link-color-main: #87CEFA;                /* Links - LightSkyBlue, stands out */
+      --text-shadow-strong: 1px 1px 3px rgba(0,0,0,0.7);
+      --text-shadow-soft: 1px 1px 2px rgba(0,0,0,0.5);
+
+      --border-color-ui: rgba(100, 120, 140, 0.4);    /* Subtle border for UI elements */
+      --box-shadow-ui: 0 2px 6px rgba(0,0,0,0.35);    /* General box shadow for depth */
+      --box-shadow-inset-ui: inset 0 1px 2px rgba(0,0,0,0.2);
+
+      /* --- APPLYING NEW STYLES TO EXISTING VARS --- */
+      --sidebar-background: var(--ui-bg-panel);
       --sidebar-background-size: auto;
       --sidebar-background-position: center;
       --sidebar-background-repeat: repeat;
 
-      /* Home Content Card Background */
-      --home-content-background: #ffffff; /* Default solid color */
-      /* Example: --home-content-background: url('card-bg.png'); */
+      --home-content-background: var(--ui-bg-panel);
       --home-content-background-size: cover;
       --home-content-background-position: center;
       --home-content-background-repeat: no-repeat;
       
-      /* Player Background */
-      --player-background: #ffffff; /* Default solid color */
-      /* Example: --player-background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); */
+      --player-background: var(--ui-bg-panel);
       --player-background-size: cover;
       --player-background-position: center;
       --player-background-repeat: no-repeat;
       
-      /* Other Colors & Variables */
-      --content-bg-fallback: #ffffff; /* Fallback if specific element bg not set */
-      --surface-highlight: #e1e4e8;
-      --text-color: #24292e;
-      --text-secondary-color: #586069;
-      --text-link-color: #0366d6;
-      --button-bg: #2ea44f;
-      --button-bg-hover: #2c974b;
-      --button-text-color: #ffffff;
+      --content-bg-fallback: var(--ui-bg-element); 
+      --surface-highlight: var(--border-color-ui); /* Used for less prominent borders, progress track */
+      
+      --text-color: var(--text-color-main);
+      --text-secondary-color: var(--text-color-secondary);
+      --text-link-color: var(--text-link-color-main);
+      
+      /* Primary button (Play button) remains prominent but can be slightly transparent */
+      --button-bg: rgba(0, 123, 255, 0.75); 
+      --button-bg-hover: rgba(0, 100, 205, 0.9);
+      --button-text-color: #ffffff; 
+      
       --border-radius: 6px;
       --transition-speed: 0.2s ease-in-out;
       --sidebar-width: 260px;
       --header-height: 60px;
 
-      /* --- ICON DEFINITIONS (Can be emoji OR url()) --- */
+      /* --- ICON DEFINITIONS --- */
       --icon-home: 🏠;
       --icon-music: 🎵;
       --icon-play: ▶;
@@ -116,13 +125,17 @@
 
     #sidebar-toggle {
       position: fixed; top: 15px; left: 15px; z-index: 1001; 
-      background: var(--content-bg-fallback);
-      border: 1px solid var(--surface-highlight); color: var(--text-color); font-size: 20px;
+      background: var(--ui-bg-element);
+      border: 1px solid var(--border-color-ui); 
+      color: var(--text-color); font-size: 20px;
       width: 40px; height: 40px; border-radius: var(--border-radius); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex; align-items: center; justify-content: center; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     #sidebar-toggle .icon { font-size: inherit; }
-    #sidebar-toggle:hover { background-color: #f0f0f0; }
+    #sidebar-toggle:hover { 
+      background-color: var(--ui-bg-hover-lighten); 
+    }
 
     #sidebar {
       width: var(--sidebar-width); 
@@ -130,9 +143,10 @@
       background-size: var(--sidebar-background-size);
       background-position: var(--sidebar-background-position);
       background-repeat: var(--sidebar-background-repeat);
-      border-right: 1px solid var(--surface-highlight); padding: 20px; padding-top: 70px;
+      border-right: 1px solid var(--border-color-ui); padding: 20px; padding-top: 70px;
       height: 100vh; box-sizing: border-box; position: fixed; left: 0; top: 0;
       transform: translateX(-100%); transition: transform 0.3s ease-in-out; z-index: 1000; overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     }
     body.sidebar-open #sidebar { transform: translateX(0); }
     body.sidebar-open #main-content-area { margin-left: var(--sidebar-width); }
@@ -142,21 +156,35 @@
         #main-content-area { margin-left: var(--sidebar-width); }
     }
 
-    .sidebar-header h2 { font-size: 1.5em; color: var(--text-color); margin-top: 0; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--surface-highlight); }
+    .sidebar-header h2 { 
+      font-size: 1.5em; color: var(--text-color); 
+      margin-top: 0; margin-bottom: 25px; padding-bottom: 15px; 
+      border-bottom: 1px solid var(--border-color-ui);
+      text-shadow: var(--text-shadow-soft);
+    }
     #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
     #sidebar nav a.nav-link .icon { margin-right: 10px; min-width: var(--icon-image-width); text-align: center; }
-    #sidebar nav a.nav-link:hover { background-color: #f0f0f0; }
-    #sidebar nav a.nav-link.active { background-color: var(--primary-color); color: var(--button-text-color); font-weight: 600; }
+    #sidebar nav a.nav-link:hover { 
+      background-color: var(--ui-bg-hover-lighten); 
+    }
+    #sidebar nav a.nav-link.active { 
+      background-color: var(--button-bg); 
+      color: var(--button-text-color); font-weight: 600; 
+    }
     #sidebar nav a.nav-link.active .icon { color: var(--button-text-color); }
 
-    .sidebar-controls { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--surface-highlight); }
+    .sidebar-controls { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color-ui); }
     .sidebar-controls label { display: flex; align-items: center; font-size: 14px; color: var(--text-secondary-color); cursor: pointer; }
     .sidebar-controls input[type="checkbox"] { accent-color: var(--primary-color); margin-right: 8px; transform: scale(1.1); }
 
     #main-content-area { flex-grow: 1; padding: 20px; padding-top: 20px; transition: margin-left 0.3s ease-in-out; box-sizing: border-box; overflow-y: auto; height: 100vh; }
     @media (max-width: 768px) { #main-content-area { padding-top: 70px; } }
     
-    .main-header-content h1 { color: var(--text-color); text-align: center; margin-bottom: 30px; font-weight: 600; }
+    .main-header-content h1 { 
+      color: var(--text-color); text-align: center; 
+      margin-bottom: 30px; font-weight: 600;
+      text-shadow: var(--text-shadow-strong);
+    }
     .tab-content { display: none; width: 100%; max-width: 750px; margin: 0 auto; }
     .tab-content.active { display: block; }
 
@@ -167,21 +195,51 @@
       background-position: var(--home-content-background-position);
       background-repeat: var(--home-content-background-repeat);
       border-radius: var(--border-radius); 
-      box-shadow: 0 1px 3px rgba(27,31,35,0.1); 
-      border: 1px solid var(--surface-highlight); 
+      box-shadow: var(--box-shadow-ui); 
+      border: 1px solid var(--border-color-ui); 
     }
-    #home-content p, #home-content ul { margin-bottom: 1em; color: var(--text-secondary-color); }
-    #home-content h2 { color: var(--text-color); margin-top: 0; }
+    #home-content p, #home-content ul { margin-bottom: 1em; color: var(--text-secondary-color); line-height: 1.6; }
+    #home-content h2 { 
+      color: var(--text-color); margin-top: 0; 
+      text-shadow: var(--text-shadow-soft);
+    }
     #home-content li { margin-bottom: 0.5em;}
 
     .search-bar { margin-bottom: 20px; width: 100%; }
-    .search-input { width: 100%; padding: 10px 12px; font-size: 14px; border: 1px solid var(--surface-highlight); border-radius: var(--border-radius); background-color: var(--sidebar-bg);  color: var(--text-color); box-shadow: inset 0 1px 2px rgba(27,31,35,0.075); transition: border-color var(--transition-speed), box-shadow var(--transition-speed); }
-    .search-input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 1px 2px rgba(27,31,35,0.075), 0 0 0 3px rgba(3,102,214,0.3); }
+    .search-input { 
+      width: 100%; padding: 10px 12px; font-size: 14px; 
+      border: 1px solid var(--border-color-ui); 
+      border-radius: var(--border-radius); 
+      background-color: var(--ui-bg-element);  
+      color: var(--text-color); 
+      box-shadow: var(--box-shadow-inset-ui); 
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed); 
+    }
+    .search-input::placeholder {
+      color: var(--text-secondary-color);
+      opacity: 0.7;
+    }
+    .search-input:focus { 
+      outline: none; border-color: var(--primary-color); 
+      box-shadow: var(--box-shadow-inset-ui), 0 0 0 3px rgba(0,123,255,0.3); 
+    }
 
     #song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-    .song-item a { display: block; padding: 12px 15px; background-color: var(--content-bg-fallback); color: var(--text-link-color); text-decoration: none; border-radius: var(--border-radius); border: 1px solid var(--surface-highlight); transition: border-color var(--transition-speed), box-shadow var(--transition-speed); font-size: 16px; font-weight: 500; }
-    .song-item a:hover { border-color: var(--primary-color); box-shadow: 0 1px 5px rgba(3,102,214,0.15); }
-    .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; }
+    .song-item a { 
+      display: block; padding: 12px 15px; 
+      background-color: var(--content-bg-fallback); /* ui-bg-element */
+      color: var(--text-link-color); 
+      text-decoration: none; border-radius: var(--border-radius); 
+      border: 1px solid var(--border-color-ui); 
+      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed); 
+      font-size: 16px; font-weight: 500; 
+    }
+    .song-item a:hover { 
+      background-color: var(--ui-bg-hover-lighten);
+      border-color: var(--primary-color); 
+      box-shadow: 0 1px 5px rgba(0,123,255,0.2); 
+    }
+    .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; background-color: var(--ui-bg-element); border-radius: var(--border-radius); }
 
     .player { 
       background: var(--player-background);
@@ -189,39 +247,87 @@
       background-position: var(--player-background-position);
       background-repeat: var(--player-background-repeat);
       padding: 20px; border-radius: var(--border-radius); 
-      box-shadow: 0 3px 6px rgba(27,31,35,0.1); border: 1px solid var(--surface-highlight); 
+      box-shadow: var(--box-shadow-ui); 
+      border: 1px solid var(--border-color-ui); 
       width: 100%; box-sizing: border-box; margin-top: 20px; 
     }
     .player.player-playing { border-color: var(--primary-color); }
-    .track-title { font-size: 20px; margin-bottom: 15px; color: var(--text-color); font-weight: 600; text-align: center; }
+    .track-title { 
+      font-size: 20px; margin-bottom: 15px; 
+      color: var(--text-color); font-weight: 600; text-align: center; 
+      text-shadow: var(--text-shadow-soft);
+    }
     .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
     
-    .play-btn { background-color: var(--button-bg); border: 1px solid rgba(27,31,35,0.15); color: var(--button-text-color); width: 48px; height: 48px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color var(--transition-speed); box-shadow: 0 1px 0 rgba(27,31,35,0.04), inset 0 1px 0 hsla(0,0%,100%,0.25); padding: 0; }
+    .play-btn { 
+      background-color: var(--button-bg); 
+      border: 1px solid rgba(255,255,255,0.15); 
+      color: var(--button-text-color); 
+      width: 48px; height: 48px; border-radius: 50%; cursor: pointer; 
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
+      transition: background-color var(--transition-speed); 
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1); 
+      padding: 0; 
+    }
     .play-btn .icon { font-size: 20px; }
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
-    .progress { flex-grow: 1; height: 8px; background-color: var(--surface-highlight); border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
+    .progress { flex-grow: 1; height: 8px; background-color: rgba(100, 120, 140, 0.3); /* Lighter than surface-highlight for better contrast with fill */ border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
     .progress-filled { height: 100%; background-color: var(--primary-color); width: 0; border-radius: 4px; transition: width 0.1s linear; }
     .current-time, .duration { font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center; }
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
-    .download-link, .share-btn { background-color: #f6f8fa; border: 1px solid rgba(27,31,35,0.15); color: var(--text-color); padding: 8px 16px; border-radius: var(--border-radius); text-decoration: none; cursor: pointer; font-size: 14px; font-weight: 500; transition: background-color var(--transition-speed), border-color var(--transition-speed); display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 0 rgba(27,31,35,0.04), inset 0 1px 0 hsla(0,0%,100%,0.25); }
+    .download-link, .share-btn { 
+      background-color: var(--ui-bg-button-secondary); 
+      border: 1px solid var(--border-color-ui); 
+      color: var(--text-color); padding: 8px 16px; 
+      border-radius: var(--border-radius); text-decoration: none; cursor: pointer; 
+      font-size: 14px; font-weight: 500; 
+      transition: background-color var(--transition-speed), border-color var(--transition-speed); 
+      display: inline-flex; align-items: center; gap: 6px; 
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
+    }
     .download-link .icon, .share-btn .icon { margin-right: 4px; }
-    .download-link:hover, .share-btn:hover { background-color: #f0f2f4; border-color: rgba(27,31,35,0.2); }
+    .download-link:hover, .share-btn:hover { 
+      background-color: var(--ui-bg-hover-lighten); 
+      border-color: rgba(120,140,160,0.5); 
+    }
     .copied { opacity: 0; color: var(--primary-color); font-size: 13px; transition: opacity 0.3s var(--transition-speed); margin-left: 5px; }
     .copied.show { opacity: 1; }
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
-    .mute-btn { background-color: #f6f8fa; border: 1px solid rgba(27,31,35,0.15); color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 1px 0 rgba(27,31,35,0.04), inset 0 1px 0 hsla(0,0%,100%,0.25); transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0; }
+    .mute-btn { 
+      background-color: var(--ui-bg-button-secondary); 
+      border: 1px solid var(--border-color-ui); 
+      color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; 
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
+      transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0; 
+    }
     .mute-btn .icon { font-size: 18px; }
-    .mute-btn:hover { background-color: #f0f2f4; border-color: rgba(27,31,35,0.2); }
+    .mute-btn:hover { 
+      background-color: var(--ui-bg-hover-lighten); 
+      border-color: rgba(120,140,160,0.5); 
+    }
 
-    .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: var(--surface-highlight); outline: none; border-radius: 3px; cursor: pointer; }
-    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--content-bg-fallback); box-shadow: 0 1px 3px rgba(27,31,35,0.1); }
-    .volume-slider::-moz-range-thumb { width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--content-bg-fallback); box-shadow: 0 1px 3px rgba(27,31,35,0.1); }
+    .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(100, 120, 140, 0.3); outline: none; border-radius: 3px; cursor: pointer; }
+    .volume-slider::-webkit-slider-thumb { 
+      -webkit-appearance: none; appearance: none; width: 16px; height: 16px; 
+      background: var(--text-link-color); 
+      border-radius: 50%; cursor: pointer; 
+      border: 2px solid var(--ui-bg-panel); /* Blends with player bg */
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
+    }
+    .volume-slider::-moz-range-thumb { 
+      width: 16px; height: 16px; 
+      background: var(--text-link-color); 
+      border-radius: 50%; cursor: pointer; 
+      border: 2px solid var(--ui-bg-panel); 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
+    }
 
-    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--player-background-repeat); }
+    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); /* Will be semi-transparent dark */ background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--player-background-repeat); }
     .player-embed { width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0; box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column; justify-content: center; background: transparent; }
     .player-embed .track-title { font-size: 18px; margin-bottom: 12px; }
     .player-embed .controls { margin-bottom: 12px; }
