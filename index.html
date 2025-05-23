@@ -69,23 +69,22 @@
       --button-bg-hover: rgba(0, 100, 205, 0.9);
       --button-text-color: #ffffff;
       --border-radius: 6px;
-      --transition-speed: 0.2s ease-in-out; /* General transition speed */
-      --loading-fade-duration: 0.4s; /* Specific for loading overlay fade */
+      --transition-speed: 0.2s ease-in-out;
+      --loading-fade-duration: 0.4s;
       --sidebar-width: 260px;
       --header-height: 60px;
 
       --icon-home: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/home_icon.webp');
       --icon-music: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/music_display.webp');
-      --icon-play: ▶; /* Text icon, not affected by image scaling */
+      --icon-play: ▶;
       --icon-pause: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/pause.webp');
       --icon-download: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/download_icon.png');
       --icon-share: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/share_icon.png');
       --icon-mute: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/mute.webp');
       --icon-unmute: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/unmute.webp');
-      --icon-hamburger: ☰; /* Text icon */
-      --icon-close: ✕; /* Text icon */
+      --icon-hamburger: ☰;
+      --icon-close: ✕;
 
-      /* Base dimensions for ALL image icons' containers */
       --icon-image-width: 20px;
       --icon-image-height: 20px;
     }
@@ -141,36 +140,38 @@
     /* General styling for ALL IMAGE icons */
     .icon.image-icon {
         display: inline-block;
-        width: var(--icon-image-width);  /* Uses 20px */
-        height: var(--icon-image-height); /* Uses 20px */
+        width: var(--icon-image-width);
+        height: var(--icon-image-height);
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
         vertical-align: middle;
-        font-size: 0; /* Hides text if any was accidentally set for image icons */
+        font-size: 0;
         transform-origin: center center;
-        /* Default visual scale for most (e.g., Home, Music in sidebar) */
-        /* This makes them 20px * 2 = 40px visually */
-        transform: scale(2);
+        transform: scale(2); /* Default: 20px * 2 = 40px visual */
     }
 
-    /* --- MODIFIED SECTION for icon scaling --- */
-    /* Specific visual scale for IMAGE icons in Play/Pause and Mute/Unmute buttons */
-    /* This makes them 20px * 2 = 40px visually */
-    .play-btn .icon.image-icon, /* For the Pause icon image */
+    /* --- MODIFIED SECTION for specific icon scaling --- */
+    /* Specific visual scale for the PAUSE IMAGE icon in Play button */
+    /* This makes it 20px * 4 = 80px visually */
+    .play-btn .icon.image-icon { /* Targets the image icon when it's for pause */
+        transform: scale(4); /* DOUBLED from previous scale(2) */
+    }
+
+    /* Specific visual scale for Mute/Unmute button icons */
+    /* This keeps them at 20px * 2 = 40px visually */
     .mute-btn .icon.image-icon {
-        transform: scale(2); /* CHANGED from 1.5 to 2 */
+        transform: scale(2); /* REMAINS scale(2) */
     }
 
     /* Specific visual scale for Download and Share button icons */
     /* This keeps them at 20px * 1.5 = 30px visually */
     .download-link .icon.image-icon,
     .share-btn .icon.image-icon {
-        transform: scale(1.5); /* REMAINS 1.5 */
+        transform: scale(1.5); /* REMAINS scale(1.5) */
     }
     /* --- END MODIFIED SECTION --- */
 
-    /* Sidebar icons (Home, Music) will use the general .icon.image-icon scale(2) for a 40px visual size. */
 
     #sidebar-toggle {
       position: fixed; top: 15px; left: 15px; z-index: 1001;
@@ -181,7 +182,7 @@
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
-    #sidebar-toggle .icon { font-size: inherit; } /* For text icons like hamburger/close */
+    #sidebar-toggle .icon { font-size: inherit; }
     #sidebar-toggle:hover { background-color: var(--ui-bg-hover-lighten); }
 
     #sidebar {
@@ -212,16 +213,15 @@
     }
     #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
     
-    #sidebar nav a.nav-link .icon { /* Applies to icons within nav links */
+    #sidebar nav a.nav-link .icon {
         margin-right: 10px;
-        min-width: var(--icon-image-width); /* Ensures space for the 20px box */
+        min-width: var(--icon-image-width);
         text-align: center;
-        /* Image icons for Home/Music here get scale(2) from the general .icon.image-icon rule */
     }
 
     #sidebar nav a.nav-link:hover { background-color: var(--ui-bg-hover-lighten); }
     #sidebar nav a.nav-link.active { background-color: var(--button-bg); color: var(--button-text-color); font-weight: 600; }
-    #sidebar nav a.nav-link.active .icon { color: var(--button-text-color); } /* For text icons if any */
+    #sidebar nav a.nav-link.active .icon { color: var(--button-text-color); }
 
     .sidebar-controls { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color-ui); }
     .sidebar-controls label { display: flex; align-items: center; font-size: 14px; color: var(--text-secondary-color); cursor: pointer; }
@@ -301,19 +301,19 @@
     .track-title { font-size: 20px; margin-bottom: 15px; color: var(--text-color); font-weight: 600; text-align: center; text-shadow: var(--text-shadow-soft); }
     .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
     
-    .play-btn { /* Button size itself */
+    .play-btn {
       background-color: var(--button-bg);
       border: 1px solid rgba(255,255,255,0.15);
       color: var(--button-text-color);
-      width: 48px; /* Button width */
-      height: 48px; /* Button height */
+      width: 48px; 
+      height: 48px; 
       border-radius: 50%; cursor: pointer;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
       transition: background-color var(--transition-speed);
       box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1);
       padding: 0;
     }
-    .play-btn .icon { font-size: 20px; } /* For text 'play' icon, if image fails or is not used */
+    .play-btn .icon { font-size: 20px; } /* For text play icon '▶' */
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
@@ -322,7 +322,7 @@
     .current-time, .duration { font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center; }
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
-    .download-link, .share-btn { /* Button size */
+    .download-link, .share-btn {
       background-color: var(--ui-bg-button-secondary);
       border: 1px solid var(--border-color-ui);
       color: var(--text-color);
@@ -340,18 +340,18 @@
     .copied.show { opacity: 1; }
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
-    .mute-btn { /* Button size itself */
-      background-color: var(--button-bg); /* Using primary button bg for mute, can be changed */
+    .mute-btn {
+      background-color: var(--button-bg);
       border: 1px solid var(--border-color-ui);
       color: var(--text-color); 
-      width: 38px;  /* Button width */
-      height: 38px; /* Button height */
+      width: 38px; 
+      height: 38px; 
       border-radius: 50%; cursor: pointer;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
       transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0;
     }
-    .mute-btn .icon { font-size: 18px; } /* For text 'mute' icon, if image fails or is not used */
+    .mute-btn .icon { font-size: 18px; }
     .mute-btn:hover { background-color: var(--button-bg-hover); border-color: rgba(120,140,160,0.5); }
 
     .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(100, 120, 140, 0.3); outline: none; border-radius: 3px; cursor: pointer; }
@@ -434,7 +434,7 @@
         }
     };
 
-    const songsData = [
+    const songsData = [ /* ... Your songsData ... */
       { title: "Rock and Roll", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/rock%20and%20roll%20mixed.wav?download=true", artwork: "https://i.imgur.com/ClMFeop.png" },
       { title: "Mesmerizer", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/vocoloid%20project%20v4.wav?download=true" },
       { title: "1 Track Chiptune", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/one%20track%20challenge.wav?download=true" },
@@ -466,6 +466,8 @@
         autoplayCheckboxSidebar, playerViewContainer, homeContent, musicContent, pageTitleElement;
     let iconMap = {};
 
+    // --- All your JavaScript functions (getAndApplyIcon, initializeAudioForPlayer, etc.) go here ---
+    // --- No changes needed to the JavaScript functions themselves for this specific icon size request ---
     function getAndApplyIcon(element, cssVarName) {
         if (!element) return;
         const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
@@ -536,7 +538,7 @@
                 <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${globalPlayerState.lastVolume}">
             </div>
         `;
-        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play');
+        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play'); // Initially play
         getAndApplyIcon(playerDiv.querySelector('.mute-btn .icon'), globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
         if (!isEmbedStyle) {
             getAndApplyIcon(playerDiv.querySelector('.download-link .icon'), '--icon-download');
@@ -583,13 +585,13 @@
         if (autoPlay) { audio.play().catch(e => console.warn("Autoplay prevented:", e)); }
       });
       audio.addEventListener('play', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-pause');
+        getAndApplyIcon(playBtnIconElement, '--icon-pause'); // Switch to pause IMAGE
         playerDiv.classList.add('player-playing');
         globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
         if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('pause', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        getAndApplyIcon(playBtnIconElement, '--icon-play'); // Switch to play TEXT
         playerDiv.classList.remove('player-playing');
         if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = '🎧 Nekohacker591 Portfolio'; }
       });
@@ -598,7 +600,7 @@
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
       });
       audio.addEventListener('ended', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        getAndApplyIcon(playBtnIconElement, '--icon-play'); // Switch to play TEXT
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing'); document.title = '🎧 Nekohacker591 Portfolio';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
