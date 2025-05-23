@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nekohacker591 Music</title>
-  <meta name="title" content="Nekohacker591 Music" />
+  <title>Nekohacker's Music</title>
+  <meta name="title" content="Nekohacker's Music" />
   <meta name="description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://nekohackers-music.onrender.com/" />
-  <meta property="og:title" content="Nekohacker591 Music" />
+  <meta property="og:title" content="Nekohacker's Music" />
   <meta property="og:description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
   <meta property="og:image" content="https://i.imgur.com/ClMFeop.png" />
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://nekohackers-music.onrender.com/" />
-  <meta property="twitter:title" content="Nekohacker591 Music" />
+  <meta property="twitter:title" content="Nekohacker's Music" />
   <meta property="twitter:description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
   <meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png" />
 
@@ -423,7 +423,7 @@
     </aside>
     <main id="main-content-area">
       <div class="main-header-content">
-           <h1 id="page-title">Nekohacker591 Music</h1>
+           <h1 id="page-title">Nekohacker's Music</h1>
       </div>
       <div id="home-content" class="tab-content">
           <h2>Welcome!</h2>
@@ -628,7 +628,7 @@
       audio.addEventListener('pause', () => {
         getAndApplyIcon(playBtnIconElement, '--icon-play');
         playerDiv.classList.remove('player-playing');
-        if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = 'Nekohacker591 Music'; }
+        if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = 'Nekohacker's Music'; }
       });
       audio.addEventListener('timeupdate', () => {
         if (audio.duration) { const percent = (audio.currentTime / audio.duration) * 100; progressFilled.style.width = percent + '%'; }
@@ -637,7 +637,7 @@
       audio.addEventListener('ended', () => {
         getAndApplyIcon(playBtnIconElement, '--icon-play');
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
-        playerDiv.classList.remove('player-playing'); document.title = 'Nekohacker591 Music';
+        playerDiv.classList.remove('player-playing'); document.title = 'Nekohacker's Music';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
         if (globalPlayerState.autoplayNext) {
             const currentView = new URLSearchParams(window.location.search).get('view');
@@ -709,7 +709,7 @@
         });
     }
     function setMetaTags(options = {}) {
-        const defaults = { title: 'Nekohacker591 Music', description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.', url: window.location.origin + window.location.pathname, type: 'website', imageUrl: defaultArtwork, audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image' };
+        const defaults = { title: 'Nekohacker's Music', description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.', url: window.location.origin + window.location.pathname, type: 'website', imageUrl: defaultArtwork, audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image' };
         const config = { ...defaults, ...options }; document.title = config.title;
         const head = document.head; head.querySelectorAll('meta[data-dynamic-meta]').forEach(tag => tag.remove());
         const tagsToSet = [ { property: 'og:title', content: config.title }, { property: 'og:description', content: config.description }, { property: 'og:url', content: config.url }, { property: 'og:type', content: config.type }, { property: 'og:image', content: config.imageUrl }, { name: 'twitter:card', content: config.twitterCardType }, { name: 'twitter:title', content: config.title }, { name: 'twitter:description', content: config.description }, { name: 'twitter:image', content: config.imageUrl }, ];
