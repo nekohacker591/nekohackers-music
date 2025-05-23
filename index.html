@@ -37,8 +37,8 @@
       --page-background-repeat: no-repeat;
       --ui-bg-panel: rgba(30, 30, 40, 0.6);
       --ui-bg-element: rgba(45, 45, 55, 0.75);
-      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7);
-      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8);
+      --ui-bg-button-secondary: rgba(60, 60, 70, 0.7); /* Original secondary button bg */
+      --ui-bg-hover-lighten: rgba(75, 75, 85, 0.8); /* Gray hover effect */
       --text-color-main: #f0f5fa;
       --text-color-secondary: #b0c0d0;
       --text-link-color-main: #87CEFA;
@@ -64,8 +64,8 @@
       --text-color: var(--text-color-main);
       --text-secondary-color: var(--text-color-secondary);
       --text-link-color: var(--text-link-color-main);
-      --button-bg: rgba(0, 123, 255, 0.75);
-      --button-bg-hover: rgba(0, 100, 205, 0.9);
+      --button-bg: rgba(0, 123, 255, 0.75); /* Primary button bg (Play/Mute) */
+      --button-bg-hover: rgba(0, 100, 205, 0.9); /* Primary button hover */
       --button-text-color: #ffffff;
       --border-radius: 6px;
       --transition-speed: 0.2s ease-in-out;
@@ -177,33 +177,29 @@
 
     .sidebar-controls { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color-ui); }
     
-    /* --- AUTOPLAY BUTTON STYLING --- */
+    /* --- AUTOPLAY BUTTON STYLING (Modified for transparency) --- */
     #autoplay-toggle-btn {
-        display: block; /* Make it take full width available in sidebar controls */
-        width: 100%;
-        padding: 10px 12px;
-        margin-bottom: 8px; /* Consistent margin */
-        background-color: var(--ui-bg-button-secondary);
+        display: block; width: 100%;
+        padding: 10px 12px; margin-bottom: 8px;
+        background-color: transparent; /* MODIFIED */
         color: var(--text-color);
         border: 1px solid var(--border-color-ui);
         border-radius: var(--border-radius);
-        font-size: 14px; /* Consistent with other controls */
-        font-weight: 500;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color var(--transition-speed), border-color var(--transition-speed);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
+        font-size: 14px; font-weight: 500; text-align: center; cursor: pointer;
+        transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed); /* Added color transition */
+        box-shadow: none; /* Optional: remove shadow for transparent buttons, or keep var(--box-shadow-ui) */
     }
     #autoplay-toggle-btn:hover {
-        background-color: var(--ui-bg-hover-lighten);
-        border-color: rgba(120,140,160,0.5);
+        background-color: var(--ui-bg-hover-lighten); /* Gray hover */
+        border-color: rgba(120,140,160,0.5); /* Keep or adjust hover border */
+        /* color: var(--text-color-main); /* Ensure text color is good on hover */
     }
-    #autoplay-toggle-btn.autoplay-on {
-        background-color: var(--primary-color); /* Or a distinct "on" color */
+    #autoplay-toggle-btn.autoplay-on { /* Active state */
+        background-color: var(--primary-color); 
         color: var(--button-text-color);
         border-color: var(--primary-color-hover);
     }
-    #autoplay-toggle-btn.autoplay-on:hover {
+    #autoplay-toggle-btn.autoplay-on:hover { /* Hover when active */
         background-color: var(--primary-color-hover);
     }
     /* --- END AUTOPLAY BUTTON STYLING --- */
@@ -249,7 +245,7 @@
     }
 
     #song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-    .song-item a {
+    .song-item a { /* Song list items are already transparent with hover */
       display: block; padding: 12px 15px; background-color: var(--content-bg-fallback);
       color: var(--text-link-color); text-decoration: none; border-radius: var(--border-radius);
       border: 1px solid var(--border-color-ui);
@@ -281,6 +277,7 @@
     }
     .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
     
+    /* Play/Pause button - Remains unchanged */
     .play-btn {
       background-color: var(--button-bg); border: 1px solid rgba(255,255,255,0.15);
       color: var(--button-text-color); width: 48px; height: 48px;
@@ -306,17 +303,26 @@
     }
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+    
+    /* --- DOWNLOAD AND SHARE BUTTONS (Modified for transparency) --- */
     .download-link, .share-btn {
-      background-color: var(--ui-bg-button-secondary); border: 1px solid var(--border-color-ui);
-      color: var(--text-color); padding: 8px 16px; border-radius: var(--border-radius);
-      text-decoration: none; cursor: pointer; font-size: 14px; font-weight: 500;
-      transition: background-color var(--transition-speed), border-color var(--transition-speed);
+      background-color: transparent; /* MODIFIED */
+      border: 1px solid var(--border-color-ui);
+      color: var(--text-color); /* Ensure text is readable */
+      padding: 8px 16px;
+      border-radius: var(--border-radius); text-decoration: none; cursor: pointer;
+      font-size: 14px; font-weight: 500;
+      transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
       display: inline-flex; align-items: center; gap: 6px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
+      box-shadow: none; /* Optional: remove shadow */
     }
     .download-link:hover, .share-btn:hover {
-      background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5);
+      background-color: var(--ui-bg-hover-lighten); /* Gray hover */
+      border-color: rgba(120,140,160,0.5); 
+      /* color: var(--text-color-main); /* Adjust if needed for hover */
     }
+    /* --- END DOWNLOAD AND SHARE BUTTONS --- */
+
     .copied {
       opacity: 0; color: var(--primary-color); font-size: 13px;
       transition: opacity 0.3s var(--transition-speed); margin-left: 5px;
@@ -324,6 +330,7 @@
     .copied.show { opacity: 1; }
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
+    /* Mute button - Remains unchanged */
     .mute-btn {
       background-color: var(--button-bg); border: 1px solid var(--border-color-ui);
       color: var(--text-color); width: 38px; height: 38px; border-radius: 50%;
@@ -411,7 +418,6 @@
         <a href="#" class="nav-link" data-view="music"><span class="icon"></span> Music</a>
       </nav>
       <div class="sidebar-controls">
-        <!-- MODIFIED: Autoplay Checkbox replaced with a button -->
         <button id="autoplay-toggle-btn">Autoplay: ON</button> 
       </div>
     </aside>
@@ -437,20 +443,18 @@
   </div>
 
   <script>
-    // --- MODIFIED globalPlayerState ---
     const globalPlayerState = {
         currentPlayingAudio: null,
         currentPlayingPlayerDiv: null,
         lastVolume: parseFloat(localStorage.getItem('nekohacker_globalVolume')) || 0.75,
         isMuted: JSON.parse(localStorage.getItem('nekohacker_isMuted')) || false,
-        _autoplayNextInternal: true, // Internal state for autoplay
+        _autoplayNextInternal: true, 
         get autoplayNext() { 
             return this._autoplayNextInternal;
         },
         set autoplayNext(value) {
-            this._autoplayNextInternal = !!value; // Ensure boolean
+            this._autoplayNextInternal = !!value; 
             localStorage.setItem('nekohacker_autoplayNext', JSON.stringify(this._autoplayNextInternal));
-            
             const autoplayBtn = document.getElementById('autoplay-toggle-btn');
             if (autoplayBtn) {
                 autoplayBtn.textContent = `Autoplay: ${this._autoplayNextInternal ? 'ON' : 'OFF'}`;
@@ -462,10 +466,8 @@
             }
         }
     };
-    // --- END MODIFIED globalPlayerState ---
 
-
-    const songsData = [ /* ... Your songsData array ... */
+    const songsData = [ /* ... Your songsData ... */
       { title: "Rock and Roll", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/rock%20and%20roll%20mixed.wav?download=true", artwork: "https://i.imgur.com/ClMFeop.png" },
       { title: "Mesmerizer", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/vocoloid%20project%20v4.wav?download=true" },
       { title: "1 Track Chiptune", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/one%20track%20challenge.wav?download=true" },
@@ -494,13 +496,13 @@
     const defaultArtwork = 'https://i.imgur.com/ClMFeop.png';
 
     let sidebarToggleBtn, navLinks, tabContents, songListUl, musicSearchInput,
-        autoplayToggleBtnElement, /* MODIFIED: was autoplayCheckboxSidebar */
+        autoplayToggleBtnElement, 
         playerViewContainer, homeContent, musicContent, pageTitleElement;
     
     let iconMap = {};
 
     // --- All your JavaScript functions (getAndApplyIcon, initializeAudioForPlayer, etc.) ---
-    // --- No changes needed to these for the autoplay button, except where it's initialized ---
+    // --- No changes needed to these for this specific CSS request ---
     function getAndApplyIcon(element, cssVarName) {
         if (!element) return;
         const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
@@ -637,7 +639,7 @@
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing'); document.title = '🎧 Nekohacker591 Portfolio';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
-        if (globalPlayerState.autoplayNext) { // Uses the getter
+        if (globalPlayerState.autoplayNext) {
             const currentView = new URLSearchParams(window.location.search).get('view');
             if (currentView === 'player' && songIndex < songsData.length - 1) { navigateToPlayerView(songIndex + 1, true); }
             else if (currentView === 'player' && songIndex === songsData.length - 1) { navigateToPlayerView(0, true); }
@@ -813,7 +815,7 @@
             }
             try {
                 sidebarToggleBtn = document.getElementById('sidebar-toggle');
-                autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn'); //MODIFIED
+                autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn');
                 setupIcons();
                 renderView();
             } catch(e) { console.error("Error in fallback setup:", e); }
@@ -854,7 +856,7 @@
             tabContents = document.querySelectorAll('#page-wrapper .tab-content');
             songListUl = document.getElementById('song-list');
             musicSearchInput = document.getElementById('music-search-input');
-            autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn'); // MODIFIED
+            autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn');
             playerViewContainer = document.getElementById('player-view-content');
             homeContent = document.getElementById('home-content');
             musicContent = document.getElementById('music-content');
@@ -862,21 +864,18 @@
 
             setupIcons();
 
-            // --- MODIFIED AUTOPLAY SETUP ---
             const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
-            // Set the initial state and button text via the setter
             globalPlayerState.autoplayNext = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true; 
 
             if (autoplayToggleBtnElement) {
                 autoplayToggleBtnElement.addEventListener('click', () => {
-                    globalPlayerState.autoplayNext = !globalPlayerState.autoplayNext; // Toggle and let setter handle UI
+                    globalPlayerState.autoplayNext = !globalPlayerState.autoplayNext;
                     const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
                     if (playerViewContainer && playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
                         populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
                     }
                 });
             }
-            // --- END MODIFIED AUTOPLAY SETUP ---
             
             renderView();
 
