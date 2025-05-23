@@ -17,6 +17,18 @@
   <meta property="twitter:description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
   <meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png" />
 
+  <!-- Preload critical assets -->
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/background.jpg" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/home_icon.webp" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/music_display.webp" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/pause.webp" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/download_icon.png" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/share_icon.png" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/mute.webp" as="image">
+  <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/unmute.webp" as="image">
+  <link rel="preload" href="https://i.imgur.com/ClMFeop.png" as="image"> <!-- Default artwork / OG image -->
+
+
   <style>
     :root {
       --primary-color: #007bff;
@@ -49,14 +61,14 @@
       --player-background-size: cover;
       --player-background-position: center;
       --player-background-repeat: no-repeat;
-      --content-bg-fallback: var(--ui-bg-element); 
+      --content-bg-fallback: var(--ui-bg-element);
       --surface-highlight: var(--border-color-ui);
       --text-color: var(--text-color-main);
       --text-secondary-color: var(--text-color-secondary);
       --text-link-color: var(--text-link-color-main);
-      --button-bg: rgba(0, 123, 255, 0.75); 
+      --button-bg: rgba(0, 123, 255, 0.75);
       --button-bg-hover: rgba(0, 100, 205, 0.9);
-      --button-text-color: #ffffff; 
+      --button-text-color: #ffffff;
       --border-radius: 6px;
       --transition-speed: 0.2s ease-in-out;
       --sidebar-width: 260px;
@@ -64,7 +76,7 @@
 
       --icon-home: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/home_icon.webp');
       --icon-music: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/music_display.webp');
-      --icon-play: ▶; 
+      --icon-play: ▶;
       --icon-pause: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/pause.webp');
       --icon-download: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/download_icon.png');
       --icon-share: url('https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/share_icon.png');
@@ -79,22 +91,40 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--page-background);
+      background: var(--page-background); /* Define background properties; preload hint helps load it faster */
       background-size: var(--page-background-size);
       background-position: var(--page-background-position);
       background-repeat: var(--page-background-repeat);
-      background-attachment: fixed; 
+      background-attachment: fixed;
       color: var(--text-color);
       margin: 0;
       display: flex;
       height: 100vh;
       overflow-x: hidden;
+
+      /* --- MODIFICATION FOR SEAMLESS LOADING --- */
+      opacity: 0;
+      visibility: hidden;
+      /* Transition opacity, and manage visibility change timing */
+      /* For fade-out (if you ever need it): visibility 0s linear 0.25s to delay hiding */
+      /* For fade-in: visibility 0s linear 0s to show immediately when opacity starts */
+      transition: opacity 0.25s ease-in-out, visibility 0s linear 0.25s;
+      /* --- END MODIFICATION --- */
     }
+
+    /* --- ADDED CLASS FOR SEAMLESS LOADING --- */
+    body.page-ready {
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s, 0s !important; /* Ensure visibility updates immediately with opacity for fade-in */
+    }
+    /* --- END ADDED CLASS --- */
+
 
     /* General styling for IMAGE icons */
     .icon.image-icon {
         display: inline-block;
-        width: var(--icon-image-width); 
+        width: var(--icon-image-width);
         height: var(--icon-image-height);
         background-size: contain;
         background-repeat: no-repeat;
@@ -116,19 +146,19 @@
 
 
     #sidebar-toggle {
-      position: fixed; top: 15px; left: 15px; z-index: 1001; 
+      position: fixed; top: 15px; left: 15px; z-index: 1001;
       background: var(--ui-bg-element);
-      border: 1px solid var(--border-color-ui); 
-      color: var(--text-color); font-size: 20px; 
+      border: 1px solid var(--border-color-ui);
+      color: var(--text-color); font-size: 20px;
       width: 40px; height: 40px; border-radius: var(--border-radius); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; 
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     #sidebar-toggle .icon { font-size: inherit; }
     #sidebar-toggle:hover { background-color: var(--ui-bg-hover-lighten); }
 
     #sidebar {
-      width: var(--sidebar-width); 
+      width: var(--sidebar-width);
       background: var(--sidebar-background);
       background-size: var(--sidebar-background-size);
       background-position: var(--sidebar-background-position);
@@ -146,14 +176,14 @@
         #main-content-area { margin-left: var(--sidebar-width); }
     }
 
-    .sidebar-header h2 { 
-      font-size: 1.5em; color: var(--text-color); 
-      margin-top: 0; margin-bottom: 25px; padding-bottom: 15px; 
+    .sidebar-header h2 {
+      font-size: 1.5em; color: var(--text-color);
+      margin-top: 0; margin-bottom: 25px; padding-bottom: 15px;
       border-bottom: 1px solid var(--border-color-ui);
       text-shadow: var(--text-shadow-soft);
     }
     #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
-    
+
     #sidebar nav a.nav-link .icon {
         margin-right: 10px;
         min-width: var(--icon-image-width);
@@ -171,9 +201,9 @@
 
     #main-content-area { flex-grow: 1; padding: 20px; padding-top: 20px; transition: margin-left 0.3s ease-in-out; box-sizing: border-box; overflow-y: auto; height: 100vh; }
     @media (max-width: 768px) { #main-content-area { padding-top: 70px; } }
-    
-    .main-header-content h1 { 
-      color: var(--text-color); text-align: center; 
+
+    .main-header-content h1 {
+      color: var(--text-color); text-align: center;
       margin-bottom: 30px; font-weight: 600;
       text-shadow: var(--text-shadow-strong);
     }
@@ -181,55 +211,55 @@
     .tab-content.active { display: block; }
     #player-view-content.active { display: flex; flex-direction: column; gap: 20px; }
 
-    #home-content { 
-      padding: 20px; 
+    #home-content {
+      padding: 20px;
       background: var(--home-content-background);
       background-size: var(--home-content-background-size);
       background-position: var(--home-content-background-position);
       background-repeat: var(--home-content-background-repeat);
-      border-radius: var(--border-radius); 
-      box-shadow: var(--box-shadow-ui); 
-      border: 1px solid var(--border-color-ui); 
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-ui);
+      border: 1px solid var(--border-color-ui);
     }
     #home-content p, #home-content ul { margin-bottom: 1em; color: var(--text-secondary-color); line-height: 1.6; }
     #home-content h2 { color: var(--text-color); margin-top: 0; text-shadow: var(--text-shadow-soft); }
     #home-content li { margin-bottom: 0.5em;}
 
     .search-bar { margin-bottom: 20px; width: 100%; }
-    .search-input { 
-      width: 100%; padding: 10px 12px; font-size: 14px; 
-      border: 1px solid var(--border-color-ui); 
-      border-radius: var(--border-radius); 
-      background-color: var(--ui-bg-element);  
-      color: var(--text-color); 
-      box-shadow: var(--box-shadow-inset-ui); 
-      transition: border-color var(--transition-speed), box-shadow var(--transition-speed); 
+    .search-input {
+      width: 100%; padding: 10px 12px; font-size: 14px;
+      border: 1px solid var(--border-color-ui);
+      border-radius: var(--border-radius);
+      background-color: var(--ui-bg-element);
+      color: var(--text-color);
+      box-shadow: var(--box-shadow-inset-ui);
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
     }
     .search-input::placeholder { color: var(--text-secondary-color); opacity: 0.7; }
     .search-input:focus { outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-inset-ui), 0 0 0 3px rgba(0,123,255,0.3); }
 
     #song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-    .song-item a { 
-      display: block; padding: 12px 15px; 
-      background-color: var(--content-bg-fallback); 
-      color: var(--text-link-color); 
-      text-decoration: none; border-radius: var(--border-radius); 
-      border: 1px solid var(--border-color-ui); 
-      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out; 
-      font-size: 16px; font-weight: 500; 
+    .song-item a {
+      display: block; padding: 12px 15px;
+      background-color: var(--content-bg-fallback);
+      color: var(--text-link-color);
+      text-decoration: none; border-radius: var(--border-radius);
+      border: 1px solid var(--border-color-ui);
+      transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out;
+      font-size: 16px; font-weight: 500;
     }
     .song-item a:hover { background-color: var(--ui-bg-hover-lighten); border-color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,123,255,0.25); transform: scale(1.02) translateX(5px); }
     .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; background-color: var(--ui-bg-element); border-radius: var(--border-radius); }
 
-    .player { 
+    .player {
       background: var(--player-background);
       background-size: var(--player-background-size);
       background-position: var(--player-background-position);
       background-repeat: var(--player-background-repeat);
-      padding: 20px; border-radius: var(--border-radius); 
-      box-shadow: var(--box-shadow-ui); 
-      border: 1px solid var(--border-color-ui); 
-      width: 100%; box-sizing: border-box; 
+      padding: 20px; border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-ui);
+      border: 1px solid var(--border-color-ui);
+      width: 100%; box-sizing: border-box;
       opacity: 1;
       transform: translateY(0) scale(1);
       transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -238,16 +268,16 @@
     .player.player-playing { border-color: var(--primary-color); }
     .track-title { font-size: 20px; margin-bottom: 15px; color: var(--text-color); font-weight: 600; text-align: center; text-shadow: var(--text-shadow-soft); }
     .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-    
-    .play-btn { 
-      background-color: var(--button-bg); 
-      border: 1px solid rgba(255,255,255,0.15); 
-      color: var(--button-text-color); 
-      width: 48px; height: 48px; border-radius: 50%; cursor: pointer; 
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
-      transition: background-color var(--transition-speed); 
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1); 
-      padding: 0; 
+
+    .play-btn {
+      background-color: var(--button-bg);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--button-text-color);
+      width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background-color var(--transition-speed);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1);
+      padding: 0;
     }
     .play-btn .icon { font-size: 20px; }
     /* .play-btn .icon.image-icon gets scale(1.5) */
@@ -260,18 +290,18 @@
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
     /* MODIFIED: Download and Share buttons RESTORED to original size */
-    .download-link, .share-btn { 
-      background-color: var(--ui-bg-button-secondary); 
-      border: 1px solid var(--border-color-ui); 
-      color: var(--text-color); 
+    .download-link, .share-btn {
+      background-color: var(--ui-bg-button-secondary);
+      border: 1px solid var(--border-color-ui);
+      color: var(--text-color);
       padding: 8px 16px; /* Restored from 4px 8px */
-      border-radius: var(--border-radius); text-decoration: none; cursor: pointer; 
+      border-radius: var(--border-radius); text-decoration: none; cursor: pointer;
       font-size: 14px; /* Restored from 12px */
-      font-weight: 500; 
-      transition: background-color var(--transition-speed), border-color var(--transition-speed); 
-      display: inline-flex; align-items: center; 
+      font-weight: 500;
+      transition: background-color var(--transition-speed), border-color var(--transition-speed);
+      display: inline-flex; align-items: center;
       gap: 6px; /* Restored from 3px */
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
     }
     /* .download-link .icon.image-icon and .share-btn .icon.image-icon get scale(1.5) from specific rule above */
     .download-link:hover, .share-btn:hover { background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5); }
@@ -279,13 +309,13 @@
     .copied.show { opacity: 1; }
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
-    .mute-btn { 
+    .mute-btn {
       background-color: var(--button-bg);
-      border: 1px solid var(--border-color-ui); 
-      color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; 
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; 
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05); 
-      transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0; 
+      border: 1px solid var(--border-color-ui);
+      color: var(--text-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
+      transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0;
     }
     .mute-btn .icon { font-size: 18px; }
     /* .mute-btn .icon.image-icon gets scale(1.5) */
@@ -400,16 +430,16 @@
     const homeContent = document.getElementById('home-content');
     const musicContent = document.getElementById('music-content');
     const pageTitleElement = document.getElementById('page-title');
-    let iconMap = {}; 
+    let iconMap = {};
 
     function getAndApplyIcon(element, cssVarName) {
         if (!element) return;
         const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
-        iconMap[cssVarName] = iconValue; 
+        iconMap[cssVarName] = iconValue;
 
         element.classList.remove('image-icon');
         element.style.backgroundImage = '';
-        element.textContent = ''; 
+        element.textContent = '';
 
         if (iconValue.toLowerCase().startsWith('url(')) {
             element.classList.add('image-icon');
@@ -421,12 +451,12 @@
 
     function updateSidebarToggleIcon() {
         const iconElement = sidebarToggleBtn.querySelector('.icon');
-        if (!iconElement) return; 
+        if (!iconElement) return;
         const isSidebarOpen = document.body.classList.contains('sidebar-open');
         getAndApplyIcon(iconElement, isSidebarOpen ? '--icon-close' : '--icon-hamburger');
         sidebarToggleBtn.setAttribute('aria-expanded', isSidebarOpen.toString());
     }
-    
+
     function setupIcons() {
         ['--icon-home', '--icon-music', '--icon-play', '--icon-pause', '--icon-download', '--icon-share', '--icon-mute', '--icon-unmute', '--icon-hamburger', '--icon-close'].forEach(varName => {
             iconMap[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
@@ -453,7 +483,7 @@
 
         const actionsHTML = `
             <a class="download-link" href="${track.file}" download="${track.title.replace(/[^\w\s.-]/g, '') || 'track'}.wav">
-                <span class="icon"></span> Download 
+                <span class="icon"></span> Download
             </a>
             <button class="share-btn">
                 <span class="icon"></span> Share
@@ -478,9 +508,9 @@
             </div>
         `;
 
-        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play'); 
+        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play');
         getAndApplyIcon(playerDiv.querySelector('.mute-btn .icon'), globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
-        
+
         if (!isEmbedStyle) {
             getAndApplyIcon(playerDiv.querySelector('.download-link .icon'), '--icon-download');
             getAndApplyIcon(playerDiv.querySelector('.share-btn .icon'), '--icon-share');
@@ -500,11 +530,11 @@
         }
         return playerDiv;
     }
-    
-    function initializeAudioForPlayer(playerDiv, autoPlay = false) { 
+
+    function initializeAudioForPlayer(playerDiv, autoPlay = false) {
       if (playerDiv.audioInitialized && playerDiv.audio && playerDiv.audio.src === playerDiv.dataset.src && !autoPlay) return;
       if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
-      
+
       const audio = new Audio();
       audio.preload = "metadata";
       playerDiv.audio = audio;
@@ -531,13 +561,13 @@
         if (autoPlay) { audio.play().catch(e => console.warn("Autoplay prevented:", e)); }
       });
       audio.addEventListener('play', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-pause'); 
+        getAndApplyIcon(playBtnIconElement, '--icon-pause');
         playerDiv.classList.add('player-playing');
         globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
         if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('pause', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play'); 
+        getAndApplyIcon(playBtnIconElement, '--icon-play');
         playerDiv.classList.remove('player-playing');
         if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = '🎧 Nekohacker591 Portfolio'; }
       });
@@ -546,7 +576,7 @@
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
       });
       audio.addEventListener('ended', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play'); 
+        getAndApplyIcon(playBtnIconElement, '--icon-play');
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing'); document.title = '🎧 Nekohacker591 Portfolio';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
@@ -565,13 +595,13 @@
         localStorage.setItem('nekohacker_isMuted', JSON.stringify(globalPlayerState.isMuted));
       });
       volumeSlider.addEventListener('input', () => { audio.muted = false; audio.volume = parseFloat(volumeSlider.value); });
-      
+
       playerDiv.querySelector('.mute-btn').addEventListener('click', () => { audio.muted = !audio.muted; });
       playerDiv.querySelector('.play-btn').addEventListener('click', () => {
         if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
         if (audio.paused) {
           if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
-            globalPlayerState.currentPlayingAudio.pause(); 
+            globalPlayerState.currentPlayingAudio.pause();
             if(globalPlayerState.currentPlayingPlayerDiv) {
                 globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
                  getAndApplyIcon(globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn .icon'), '--icon-play');
@@ -598,15 +628,15 @@
             mainContainer.appendChild(upNextContainer);
         }
         const ul = upNextContainer.querySelector('#up-next-song-list');
-        ul.innerHTML = ''; 
+        ul.innerHTML = '';
         if (songsData.length <= 1) { upNextContainer.style.display = 'none'; return; }
         upNextContainer.style.display = 'block';
-        const numUpNext = 5; 
+        const numUpNext = 5;
         let songsToShow = [];
-        for (let i = 1; i <= songsData.length -1 ; i++) { 
+        for (let i = 1; i <= songsData.length -1 ; i++) {
             if (songsToShow.length >= numUpNext) break;
             const nextIndex = (currentSongId + i) % songsData.length;
-            if (nextIndex === currentSongId) continue; 
+            if (nextIndex === currentSongId) continue;
             if (!songsToShow.find(s => s.originalIndex === nextIndex)) { songsToShow.push({track: songsData[nextIndex], originalIndex: nextIndex}); }
         }
         if (songsToShow.length === 0) { ul.innerHTML = '<li class="song-item-empty">No other songs available.</li>'; return; }
@@ -620,7 +650,7 @@
             ul.appendChild(li);
         });
     }
-    
+
     function setMetaTags(options = {}) {
         const defaults = { title: '🎧 Nekohacker591 Portfolio', description: 'Welcome to Nekohacker\'s portfolio where I post my music to share with others without compression from platforms.', url: window.location.origin + window.location.pathname, type: 'website', imageUrl: defaultArtwork, audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image' };
         const config = { ...defaults, ...options }; document.title = config.title;
@@ -659,7 +689,7 @@
     }
 
     function renderView(options = {}) {
-        const { triggeredByAutoplayNext = false } = options; 
+        const { triggeredByAutoplayNext = false } = options;
         const urlParams = new URLSearchParams(window.location.search);
         let view = urlParams.get('view');
         const songIdParam = urlParams.get('songId');
@@ -671,24 +701,24 @@
         if (globalPlayerState.currentPlayingAudio && (!songIdParam || globalPlayerState.currentPlayingPlayerDiv?.dataset.index !== songIdParam)) { globalPlayerState.currentPlayingAudio.pause(); }
 
         if (embedIdParam !== null && songsData[embedIdParam]) {
-            document.body.innerHTML = ''; document.body.className = 'embed-mode';
+            document.body.innerHTML = ''; document.body.className = 'embed-mode page-ready'; // Ensure page-ready for embed mode
             const track = songsData[embedIdParam]; const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
             document.body.appendChild(playerDiv); initializeAudioForPlayer(playerDiv, false); return;
         }
         document.body.classList.remove('embed-mode');
-        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam), false); return; } 
+        if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam), false); return; }
         if (!view && !songIdParam) view = 'home';
 
         tabContents.forEach(tc => tc.classList.remove('active'));
         navLinks.forEach(link => link.classList.remove('active'));
-        pageTitleElement.style.display = 'block'; 
+        pageTitleElement.style.display = 'block';
         if (view !== 'player' && playerViewContainer.classList.contains('active')) { playerViewContainer.innerHTML = ''; }
 
         if (view === 'player' && songIdParam !== null && songsData[songIdParam]) {
             playerViewContainer.classList.add('active'); const songId = parseInt(songIdParam); const track = songsData[songId];
             const oldPlayer = playerViewContainer.querySelector('.player'); if (oldPlayer) oldPlayer.remove();
             const oldUpNext = playerViewContainer.querySelector('#up-next-list-container'); if (oldUpNext) oldUpNext.remove();
-            const playerDiv = createPlayerElement(track, songId, false); playerDiv.classList.add('player-loading'); 
+            const playerDiv = createPlayerElement(track, songId, false); playerDiv.classList.add('player-loading');
             playerViewContainer.insertBefore(playerDiv, playerViewContainer.firstChild);
             requestAnimationFrame(() => { requestAnimationFrame(() => { playerDiv.classList.remove('player-loading'); }); });
             initializeAudioForPlayer(playerDiv, triggeredByAutoplayNext);
@@ -702,7 +732,7 @@
             populateSongList(filtered); setMetaTags({ title: 'Music - Nekohacker591 Portfolio' });
         } else { homeContent.classList.add('active'); document.querySelector('.nav-link[data-view="home"]').classList.add('active'); setMetaTags(); }
     }
-    
+
     sidebarToggleBtn.addEventListener('click', () => { document.body.classList.toggle('sidebar-open'); updateSidebarToggleIcon(); });
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -742,18 +772,28 @@
         }
     });
     window.addEventListener('popstate', (event) => { renderView(); });
+
     document.addEventListener('DOMContentLoaded', () => {
-        setupIcons(); 
+        setupIcons();
         if (autoplayCheckboxSidebar) {
             const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
             autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
-            autoplayCheckboxSidebar.addEventListener('change', (e) => { 
-                globalPlayerState.autoplayNext = e.target.checked; 
+            autoplayCheckboxSidebar.addEventListener('change', (e) => {
+                globalPlayerState.autoplayNext = e.target.checked;
                 const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
                 if (playerViewContainer.classList.contains('active') && currentSongIdParam !== null) { populateUpNextList(parseInt(currentSongIdParam), playerViewContainer); }
             });
         }
         renderView();
+
+        // --- MODIFICATION FOR SEAMLESS LOADING ---
+        // Make the page visible after initial setup and rendering attempt.
+        // requestAnimationFrame helps ensure initial styles (opacity:0) are applied
+        // before we add the class that triggers the transition.
+        requestAnimationFrame(() => {
+            document.body.classList.add('page-ready');
+        });
+        // --- END MODIFICATION ---
     });
   </script>
 </body>
