@@ -623,7 +623,7 @@
         getAndApplyIcon(playBtnIconElement, '--icon-pause');
         playerDiv.classList.add('player-playing');
         globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
-        if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
+        if (trackTitleElement) document.title = ` ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('pause', () => {
         getAndApplyIcon(playBtnIconElement, '--icon-play');
@@ -767,7 +767,7 @@
             playerViewContainer.insertBefore(playerDiv, playerViewContainer.firstChild);
             requestAnimationFrame(() => { requestAnimationFrame(() => { playerDiv.classList.remove('player-loading'); }); });
             initializeAudioForPlayer(playerDiv, triggeredByAutoplayNext);
-            setMetaTags({ title: `🎧 ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
+            setMetaTags({ title: ` ${track.title} - Nekohacker591`, description: `Listen to "${track.title}" by Nekohacker591.`, url: window.location.href, type: 'music.song', audioUrl: track.file, imageUrl: track.artwork || defaultArtwork, trackIdForEmbed: songId });
             pageTitleElement.style.display = 'none';
             populateUpNextList(songId, playerViewContainer);
         } else if (view === 'music') {
