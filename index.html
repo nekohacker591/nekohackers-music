@@ -17,7 +17,6 @@
   <meta property="twitter:description" content="Welcome to Nekohacker's portfolio where I post my music to share with others without compression from platforms." />
   <meta property="twitter:image" content="https://i.imgur.com/ClMFeop.png" />
 
-  <!-- Preload critical assets -->
   <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/background.jpg" as="image">
   <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/home_icon.webp" as="image">
   <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/music_display.webp" as="image">
@@ -97,103 +96,55 @@
     }
 
     #loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(10, 10, 20, 0.85);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        opacity: 1;
-        visibility: visible;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(10, 10, 20, 0.85); display: flex;
+        align-items: center; justify-content: center; z-index: 10000;
+        opacity: 1; visibility: visible;
         transition: opacity var(--loading-fade-duration) ease-out, visibility 0s linear 0s;
     }
     #loading-overlay.hidden {
-        opacity: 0;
-        visibility: hidden;
+        opacity: 0; visibility: hidden;
         transition-delay: 0s, var(--loading-fade-duration);
     }
     .loading-text {
-        font-size: 3.5em;
-        font-weight: bold;
-        color: var(--text-color-main);
+        font-size: 3.5em; font-weight: bold; color: var(--text-color-main);
         text-shadow: 0 0 15px rgba(135, 206, 250, 0.7), 0 0 5px rgba(135, 206, 250, 0.5);
         letter-spacing: 1px;
     }
 
     #page-wrapper {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-      display: flex;
-      height: 100vh;
-      overflow-x: hidden;
+      display: none; opacity: 0; transition: opacity 0.3s ease-in-out;
+      display: flex; height: 100vh; overflow-x: hidden;
     }
-    #page-wrapper.visible {
-      display: flex !important;
-      opacity: 1;
-    }
+    #page-wrapper.visible { display: flex !important; opacity: 1; }
 
-    /* General styling for ALL IMAGE icons */
     .icon.image-icon {
-        display: inline-block;
-        width: var(--icon-image-width);
-        height: var(--icon-image-height);
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        vertical-align: middle;
-        font-size: 0;
-        transform-origin: center center;
-        transform: scale(2); /* Default: 20px * 2 = 40px visual */
+        display: inline-block; width: var(--icon-image-width); height: var(--icon-image-height);
+        background-size: contain; background-repeat: no-repeat; background-position: center;
+        vertical-align: middle; font-size: 0; transform-origin: center center;
+        transform: scale(2);
     }
-
-    /* --- MODIFIED SECTION for specific icon scaling --- */
-    /* Specific visual scale for the PAUSE IMAGE icon in Play button */
-    /* This makes it 20px * 4 = 80px visually */
-    .play-btn .icon.image-icon { /* Targets the image icon when it's for pause */
-        transform: scale(4); /* DOUBLED from previous scale(2) */
-    }
-
-    /* Specific visual scale for Mute/Unmute button icons */
-    /* This keeps them at 20px * 2 = 40px visually */
-    .mute-btn .icon.image-icon {
-        transform: scale(2); /* REMAINS scale(2) */
-    }
-
-    /* Specific visual scale for Download and Share button icons */
-    /* This keeps them at 20px * 1.5 = 30px visually */
-    .download-link .icon.image-icon,
-    .share-btn .icon.image-icon {
-        transform: scale(1.5); /* REMAINS scale(1.5) */
-    }
-    /* --- END MODIFIED SECTION --- */
-
+    .play-btn .icon.image-icon { transform: scale(4); }
+    .mute-btn .icon.image-icon { transform: scale(2); }
+    .download-link .icon.image-icon, .share-btn .icon.image-icon { transform: scale(1.5); }
 
     #sidebar-toggle {
       position: fixed; top: 15px; left: 15px; z-index: 1001;
-      background: var(--ui-bg-element);
-      border: 1px solid var(--border-color-ui);
-      color: var(--text-color); font-size: 20px;
-      width: 40px; height: 40px; border-radius: var(--border-radius); cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      background: var(--ui-bg-element); border: 1px solid var(--border-color-ui);
+      color: var(--text-color); font-size: 20px; width: 40px; height: 40px;
+      border-radius: var(--border-radius); cursor: pointer; display: flex;
+      align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     #sidebar-toggle .icon { font-size: inherit; }
     #sidebar-toggle:hover { background-color: var(--ui-bg-hover-lighten); }
 
     #sidebar {
-      width: var(--sidebar-width);
-      background: var(--sidebar-background);
-      background-size: var(--sidebar-background-size);
-      background-position: var(--sidebar-background-position);
-      background-repeat: var(--sidebar-background-repeat);
-      border-right: 1px solid var(--border-color-ui); padding: 20px; padding-top: 70px;
-      height: 100vh; box-sizing: border-box; position: fixed; left: 0; top: 0;
-      transform: translateX(-100%); transition: transform 0.3s ease-in-out; z-index: 1000; overflow-y: auto;
+      width: var(--sidebar-width); background: var(--sidebar-background);
+      background-size: var(--sidebar-background-size); background-position: var(--sidebar-background-position);
+      background-repeat: var(--sidebar-background-repeat); border-right: 1px solid var(--border-color-ui);
+      padding: 20px; padding-top: 70px; height: 100vh; box-sizing: border-box;
+      position: fixed; left: 0; top: 0; transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out; z-index: 1000; overflow-y: auto;
       box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     }
     body.sidebar-open #sidebar { transform: translateX(0); }
@@ -206,26 +157,57 @@
     }
 
     .sidebar-header h2 {
-      font-size: 1.5em; color: var(--text-color);
-      margin-top: 0; margin-bottom: 25px; padding-bottom: 15px;
-      border-bottom: 1px solid var(--border-color-ui);
+      font-size: 1.5em; color: var(--text-color); margin-top: 0; margin-bottom: 25px;
+      padding-bottom: 15px; border-bottom: 1px solid var(--border-color-ui);
       text-shadow: var(--text-shadow-soft);
     }
-    #sidebar nav a.nav-link { display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px; text-decoration: none; color: var(--text-color); border-radius: var(--border-radius); font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed); }
-    
-    #sidebar nav a.nav-link .icon {
-        margin-right: 10px;
-        min-width: var(--icon-image-width);
-        text-align: center;
+    #sidebar nav a.nav-link {
+      display: flex; align-items: center; padding: 10px 12px; margin-bottom: 8px;
+      text-decoration: none; color: var(--text-color); border-radius: var(--border-radius);
+      font-size: 16px; transition: background-color var(--transition-speed), color var(--transition-speed);
     }
-
+    #sidebar nav a.nav-link .icon {
+        margin-right: 10px; min-width: var(--icon-image-width); text-align: center;
+    }
     #sidebar nav a.nav-link:hover { background-color: var(--ui-bg-hover-lighten); }
-    #sidebar nav a.nav-link.active { background-color: var(--button-bg); color: var(--button-text-color); font-weight: 600; }
+    #sidebar nav a.nav-link.active {
+      background-color: var(--button-bg); color: var(--button-text-color); font-weight: 600;
+    }
     #sidebar nav a.nav-link.active .icon { color: var(--button-text-color); }
 
     .sidebar-controls { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color-ui); }
-    .sidebar-controls label { display: flex; align-items: center; font-size: 14px; color: var(--text-secondary-color); cursor: pointer; }
-    .sidebar-controls input[type="checkbox"] { accent-color: var(--primary-color); margin-right: 8px; transform: scale(1.1); }
+    
+    /* --- AUTOPLAY BUTTON STYLING --- */
+    #autoplay-toggle-btn {
+        display: block; /* Make it take full width available in sidebar controls */
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 8px; /* Consistent margin */
+        background-color: var(--ui-bg-button-secondary);
+        color: var(--text-color);
+        border: 1px solid var(--border-color-ui);
+        border-radius: var(--border-radius);
+        font-size: 14px; /* Consistent with other controls */
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color var(--transition-speed), border-color var(--transition-speed);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
+    }
+    #autoplay-toggle-btn:hover {
+        background-color: var(--ui-bg-hover-lighten);
+        border-color: rgba(120,140,160,0.5);
+    }
+    #autoplay-toggle-btn.autoplay-on {
+        background-color: var(--primary-color); /* Or a distinct "on" color */
+        color: var(--button-text-color);
+        border-color: var(--primary-color-hover);
+    }
+    #autoplay-toggle-btn.autoplay-on:hover {
+        background-color: var(--primary-color-hover);
+    }
+    /* --- END AUTOPLAY BUTTON STYLING --- */
+
 
     #main-content-area {
       flex-grow: 1; padding: 20px; padding-top: 20px;
@@ -236,22 +218,17 @@
     
     .main-header-content h1 {
       color: var(--text-color); text-align: center;
-      margin-bottom: 30px; font-weight: 600;
-      text-shadow: var(--text-shadow-strong);
+      margin-bottom: 30px; font-weight: 600; text-shadow: var(--text-shadow-strong);
     }
     .tab-content { display: none; width: 100%; max-width: 750px; margin: 0 auto; }
     .tab-content.active { display: block; }
     #player-view-content.active { display: flex; flex-direction: column; gap: 20px; }
 
     #home-content {
-      padding: 20px;
-      background: var(--home-content-background);
-      background-size: var(--home-content-background-size);
-      background-position: var(--home-content-background-position);
-      background-repeat: var(--home-content-background-repeat);
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow-ui);
-      border: 1px solid var(--border-color-ui);
+      padding: 20px; background: var(--home-content-background);
+      background-size: var(--home-content-background-size); background-position: var(--home-content-background-position);
+      background-repeat: var(--home-content-background-repeat); border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-ui); border: 1px solid var(--border-color-ui);
     }
     #home-content p, #home-content ul { margin-bottom: 1em; color: var(--text-secondary-color); line-height: 1.6; }
     #home-content h2 { color: var(--text-color); margin-top: 0; text-shadow: var(--text-shadow-soft); }
@@ -260,122 +237,160 @@
     .search-bar { margin-bottom: 20px; width: 100%; }
     .search-input {
       width: 100%; padding: 10px 12px; font-size: 14px;
-      border: 1px solid var(--border-color-ui);
-      border-radius: var(--border-radius);
-      background-color: var(--ui-bg-element);
-      color: var(--text-color);
+      border: 1px solid var(--border-color-ui); border-radius: var(--border-radius);
+      background-color: var(--ui-bg-element); color: var(--text-color);
       box-shadow: var(--box-shadow-inset-ui);
       transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
     }
     .search-input::placeholder { color: var(--text-secondary-color); opacity: 0.7; }
-    .search-input:focus { outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-inset-ui), 0 0 0 3px rgba(0,123,255,0.3); }
+    .search-input:focus {
+      outline: none; border-color: var(--primary-color);
+      box-shadow: var(--box-shadow-inset-ui), 0 0 0 3px rgba(0,123,255,0.3);
+    }
 
     #song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
     .song-item a {
-      display: block; padding: 12px 15px;
-      background-color: var(--content-bg-fallback);
-      color: var(--text-link-color);
-      text-decoration: none; border-radius: var(--border-radius);
+      display: block; padding: 12px 15px; background-color: var(--content-bg-fallback);
+      color: var(--text-link-color); text-decoration: none; border-radius: var(--border-radius);
       border: 1px solid var(--border-color-ui);
       transition: border-color var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed), transform 0.2s ease-out;
       font-size: 16px; font-weight: 500;
     }
-    .song-item a:hover { background-color: var(--ui-bg-hover-lighten); border-color: var(--primary-color); box-shadow: 0 2px 8px rgba(0,123,255,0.25); transform: scale(1.02) translateX(5px); }
-    .song-item-empty { padding: 15px 20px; color: var(--text-secondary-color); text-align: center; background-color: var(--ui-bg-element); border-radius: var(--border-radius); }
+    .song-item a:hover {
+      background-color: var(--ui-bg-hover-lighten); border-color: var(--primary-color);
+      box-shadow: 0 2px 8px rgba(0,123,255,0.25); transform: scale(1.02) translateX(5px);
+    }
+    .song-item-empty {
+      padding: 15px 20px; color: var(--text-secondary-color); text-align: center;
+      background-color: var(--ui-bg-element); border-radius: var(--border-radius);
+    }
 
     .player {
-      background: var(--player-background);
-      background-size: var(--player-background-size);
-      background-position: var(--player-background-position);
-      background-repeat: var(--player-background-repeat);
-      padding: 20px; border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow-ui);
-      border: 1px solid var(--border-color-ui);
-      width: 100%; box-sizing: border-box;
-      opacity: 1;
-      transform: translateY(0) scale(1);
+      background: var(--player-background); background-size: var(--player-background-size);
+      background-position: var(--player-background-position); background-repeat: var(--player-background-repeat);
+      padding: 20px; border-radius: var(--border-radius); box-shadow: var(--box-shadow-ui);
+      border: 1px solid var(--border-color-ui); width: 100%; box-sizing: border-box;
+      opacity: 1; transform: translateY(0) scale(1);
       transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     .player.player-loading { opacity: 0; transform: translateY(30px) scale(0.95); }
     .player.player-playing { border-color: var(--primary-color); }
-    .track-title { font-size: 20px; margin-bottom: 15px; color: var(--text-color); font-weight: 600; text-align: center; text-shadow: var(--text-shadow-soft); }
+    .track-title {
+      font-size: 20px; margin-bottom: 15px; color: var(--text-color);
+      font-weight: 600; text-align: center; text-shadow: var(--text-shadow-soft);
+    }
     .controls { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
     
     .play-btn {
-      background-color: var(--button-bg);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: var(--button-text-color);
-      width: 48px; 
-      height: 48px; 
-      border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      transition: background-color var(--transition-speed);
+      background-color: var(--button-bg); border: 1px solid rgba(255,255,255,0.15);
+      color: var(--button-text-color); width: 48px; height: 48px;
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; transition: background-color var(--transition-speed);
       box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 1px 0 hsla(0,0%,100%,0.1);
       padding: 0;
     }
-    .play-btn .icon { font-size: 20px; } /* For text play icon '▶' */
+    .play-btn .icon { font-size: 20px; }
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
-    .progress { flex-grow: 1; height: 8px; background-color: rgba(100, 120, 140, 0.3); border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; }
-    .progress-filled { height: 100%; background-color: var(--primary-color); width: 0; border-radius: 4px; transition: width 0.1s linear; }
-    .current-time, .duration { font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center; }
+    .progress {
+      flex-grow: 1; height: 8px; background-color: rgba(100, 120, 140, 0.3);
+      border-radius: 4px; overflow: hidden; position: relative; cursor: pointer;
+    }
+    .progress-filled {
+      height: 100%; background-color: var(--primary-color); width: 0;
+      border-radius: 4px; transition: width 0.1s linear;
+    }
+    .current-time, .duration {
+      font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center;
+    }
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
     .download-link, .share-btn {
-      background-color: var(--ui-bg-button-secondary);
-      border: 1px solid var(--border-color-ui);
-      color: var(--text-color);
-      padding: 8px 16px;
-      border-radius: var(--border-radius); text-decoration: none; cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
+      background-color: var(--ui-bg-button-secondary); border: 1px solid var(--border-color-ui);
+      color: var(--text-color); padding: 8px 16px; border-radius: var(--border-radius);
+      text-decoration: none; cursor: pointer; font-size: 14px; font-weight: 500;
       transition: background-color var(--transition-speed), border-color var(--transition-speed);
-      display: inline-flex; align-items: center;
-      gap: 6px;
+      display: inline-flex; align-items: center; gap: 6px;
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
     }
-    .download-link:hover, .share-btn:hover { background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5); }
-    .copied { opacity: 0; color: var(--primary-color); font-size: 13px; transition: opacity 0.3s var(--transition-speed); margin-left: 5px; }
+    .download-link:hover, .share-btn:hover {
+      background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5);
+    }
+    .copied {
+      opacity: 0; color: var(--primary-color); font-size: 13px;
+      transition: opacity 0.3s var(--transition-speed); margin-left: 5px;
+    }
     .copied.show { opacity: 1; }
 
     .volume-container { display: flex; align-items: center; gap: 10px; margin-top: 15px; }
     .mute-btn {
-      background-color: var(--button-bg);
-      border: 1px solid var(--border-color-ui);
-      color: var(--text-color); 
-      width: 38px; 
-      height: 38px; 
-      border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
+      background-color: var(--button-bg); border: 1px solid var(--border-color-ui);
+      color: var(--text-color); width: 38px; height: 38px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
       transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0;
     }
     .mute-btn .icon { font-size: 18px; }
     .mute-btn:hover { background-color: var(--button-bg-hover); border-color: rgba(120,140,160,0.5); }
 
-    .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(100, 120, 140, 0.3); outline: none; border-radius: 3px; cursor: pointer; }
-    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-    .volume-slider::-moz-range-thumb { width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .volume-slider {
+      flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%;
+      height: 6px; background: rgba(100, 120, 140, 0.3); outline: none;
+      border-radius: 3px; cursor: pointer;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
+      background: var(--text-link-color); border-radius: 50%; cursor: pointer;
+      border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .volume-slider::-moz-range-thumb {
+      width: 16px; height: 16px; background: var(--text-link-color);
+      border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
 
     body.embed-mode {
-        padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh;
+        padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center;
+        justify-content: center; height: 100vh;
         background: var(--player-background) var(--player-background-position) / var(--player-background-size) var(--page-background-repeat) fixed;
-        opacity: 1 !important;
-        visibility: visible !important;
+        opacity: 1 !important; visibility: visible !important;
     }
-    .player-embed { width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0; box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column; justify-content: center; background: transparent; }
+    .player-embed {
+      width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0;
+      box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column;
+      justify-content: center; background: transparent;
+    }
     .player-embed .track-title { font-size: 18px; margin-bottom: 12px; }
     .player-embed .controls { margin-bottom: 12px; }
     .player-embed .volume-container { margin-top: 12px; }
     .player-embed .actions { display: none; }
 
-    #up-next-list-container { padding: 15px; background-color: var(--ui-bg-panel); border-radius: var(--border-radius); border: 1px solid var(--border-color-ui); box-shadow: var(--box-shadow-ui); width: 100%; box-sizing: border-box; }
-    #up-next-list-container h2 { font-size: 1.2em; color: var(--text-color); margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color-ui); text-shadow: var(--text-shadow-soft); }
+    #up-next-list-container {
+      padding: 15px; background-color: var(--ui-bg-panel); border-radius: var(--border-radius);
+      border: 1px solid var(--border-color-ui); box-shadow: var(--box-shadow-ui);
+      width: 100%; box-sizing: border-box;
+    }
+    #up-next-list-container h2 {
+      font-size: 1.2em; color: var(--text-color); margin-top: 0; margin-bottom: 15px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--border-color-ui);
+      text-shadow: var(--text-shadow-soft);
+    }
     #up-next-song-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-    .up-next-item { display: block; padding: 10px 12px; background-color: var(--ui-bg-element); color: var(--text-link-color); text-decoration: none; border-radius: var(--border-radius); border: 1px solid transparent; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color var(--transition-speed), border-color var(--transition-speed); font-size: 15px; font-weight: 500; cursor: pointer; }
-    .up-next-item:hover { transform: scale(1.02) translateX(5px); background-color: var(--ui-bg-hover-lighten); border-color: var(--primary-color); box-shadow: 0 2px 6px rgba(0,123,255,0.25); }
-    .up-next-item.playing-next { border-left: 3px solid var(--primary-color); padding-left: 9px; font-weight: 600; }
+    .up-next-item {
+      display: block; padding: 10px 12px; background-color: var(--ui-bg-element);
+      color: var(--text-link-color); text-decoration: none; border-radius: var(--border-radius);
+      border: 1px solid transparent;
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color var(--transition-speed), border-color var(--transition-speed);
+      font-size: 15px; font-weight: 500; cursor: pointer;
+    }
+    .up-next-item:hover {
+      transform: scale(1.02) translateX(5px); background-color: var(--ui-bg-hover-lighten);
+      border-color: var(--primary-color); box-shadow: 0 2px 6px rgba(0,123,255,0.25);
+    }
+    .up-next-item.playing-next {
+      border-left: 3px solid var(--primary-color); padding-left: 9px; font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -396,7 +411,8 @@
         <a href="#" class="nav-link" data-view="music"><span class="icon"></span> Music</a>
       </nav>
       <div class="sidebar-controls">
-        <label for="autoplay-next-sidebar"><input type="checkbox" id="autoplay-next-sidebar">Autoplay Next</label>
+        <!-- MODIFIED: Autoplay Checkbox replaced with a button -->
+        <button id="autoplay-toggle-btn">Autoplay: ON</button> 
       </div>
     </aside>
     <main id="main-content-area">
@@ -421,20 +437,35 @@
   </div>
 
   <script>
+    // --- MODIFIED globalPlayerState ---
     const globalPlayerState = {
         currentPlayingAudio: null,
         currentPlayingPlayerDiv: null,
         lastVolume: parseFloat(localStorage.getItem('nekohacker_globalVolume')) || 0.75,
         isMuted: JSON.parse(localStorage.getItem('nekohacker_isMuted')) || false,
-        get autoplayNext() { return document.getElementById('autoplay-next-sidebar')?.checked ?? true; },
+        _autoplayNextInternal: true, // Internal state for autoplay
+        get autoplayNext() { 
+            return this._autoplayNextInternal;
+        },
         set autoplayNext(value) {
-            const cb = document.getElementById('autoplay-next-sidebar');
-            if (cb) cb.checked = value;
-            localStorage.setItem('nekohacker_autoplayNext', JSON.stringify(value));
+            this._autoplayNextInternal = !!value; // Ensure boolean
+            localStorage.setItem('nekohacker_autoplayNext', JSON.stringify(this._autoplayNextInternal));
+            
+            const autoplayBtn = document.getElementById('autoplay-toggle-btn');
+            if (autoplayBtn) {
+                autoplayBtn.textContent = `Autoplay: ${this._autoplayNextInternal ? 'ON' : 'OFF'}`;
+                if (this._autoplayNextInternal) {
+                    autoplayBtn.classList.add('autoplay-on');
+                } else {
+                    autoplayBtn.classList.remove('autoplay-on');
+                }
+            }
         }
     };
+    // --- END MODIFIED globalPlayerState ---
 
-    const songsData = [ /* ... Your songsData ... */
+
+    const songsData = [ /* ... Your songsData array ... */
       { title: "Rock and Roll", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/rock%20and%20roll%20mixed.wav?download=true", artwork: "https://i.imgur.com/ClMFeop.png" },
       { title: "Mesmerizer", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/vocoloid%20project%20v4.wav?download=true" },
       { title: "1 Track Chiptune", file: "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/one%20track%20challenge.wav?download=true" },
@@ -463,11 +494,13 @@
     const defaultArtwork = 'https://i.imgur.com/ClMFeop.png';
 
     let sidebarToggleBtn, navLinks, tabContents, songListUl, musicSearchInput,
-        autoplayCheckboxSidebar, playerViewContainer, homeContent, musicContent, pageTitleElement;
+        autoplayToggleBtnElement, /* MODIFIED: was autoplayCheckboxSidebar */
+        playerViewContainer, homeContent, musicContent, pageTitleElement;
+    
     let iconMap = {};
 
-    // --- All your JavaScript functions (getAndApplyIcon, initializeAudioForPlayer, etc.) go here ---
-    // --- No changes needed to the JavaScript functions themselves for this specific icon size request ---
+    // --- All your JavaScript functions (getAndApplyIcon, initializeAudioForPlayer, etc.) ---
+    // --- No changes needed to these for the autoplay button, except where it's initialized ---
     function getAndApplyIcon(element, cssVarName) {
         if (!element) return;
         const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
@@ -538,7 +571,7 @@
                 <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${globalPlayerState.lastVolume}">
             </div>
         `;
-        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play'); // Initially play
+        getAndApplyIcon(playerDiv.querySelector('.play-btn .icon'), '--icon-play');
         getAndApplyIcon(playerDiv.querySelector('.mute-btn .icon'), globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
         if (!isEmbedStyle) {
             getAndApplyIcon(playerDiv.querySelector('.download-link .icon'), '--icon-download');
@@ -585,13 +618,13 @@
         if (autoPlay) { audio.play().catch(e => console.warn("Autoplay prevented:", e)); }
       });
       audio.addEventListener('play', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-pause'); // Switch to pause IMAGE
+        getAndApplyIcon(playBtnIconElement, '--icon-pause');
         playerDiv.classList.add('player-playing');
         globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
         if (trackTitleElement) document.title = `🎧 ${trackTitleElement.textContent} - Nekohacker591`;
       });
       audio.addEventListener('pause', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play'); // Switch to play TEXT
+        getAndApplyIcon(playBtnIconElement, '--icon-play');
         playerDiv.classList.remove('player-playing');
         if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = '🎧 Nekohacker591 Portfolio'; }
       });
@@ -600,11 +633,11 @@
         currentTimeDisplay.textContent = formatTime(audio.currentTime);
       });
       audio.addEventListener('ended', () => {
-        getAndApplyIcon(playBtnIconElement, '--icon-play'); // Switch to play TEXT
+        getAndApplyIcon(playBtnIconElement, '--icon-play');
         progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
         playerDiv.classList.remove('player-playing'); document.title = '🎧 Nekohacker591 Portfolio';
         if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
-        if (globalPlayerState.autoplayNext) {
+        if (globalPlayerState.autoplayNext) { // Uses the getter
             const currentView = new URLSearchParams(window.location.search).get('view');
             if (currentView === 'player' && songIndex < songsData.length - 1) { navigateToPlayerView(songIndex + 1, true); }
             else if (currentView === 'player' && songIndex === songsData.length - 1) { navigateToPlayerView(0, true); }
@@ -780,6 +813,7 @@
             }
             try {
                 sidebarToggleBtn = document.getElementById('sidebar-toggle');
+                autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn'); //MODIFIED
                 setupIcons();
                 renderView();
             } catch(e) { console.error("Error in fallback setup:", e); }
@@ -820,7 +854,7 @@
             tabContents = document.querySelectorAll('#page-wrapper .tab-content');
             songListUl = document.getElementById('song-list');
             musicSearchInput = document.getElementById('music-search-input');
-            autoplayCheckboxSidebar = document.getElementById('autoplay-next-sidebar');
+            autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn'); // MODIFIED
             playerViewContainer = document.getElementById('player-view-content');
             homeContent = document.getElementById('home-content');
             musicContent = document.getElementById('music-content');
@@ -828,17 +862,22 @@
 
             setupIcons();
 
-            if (autoplayCheckboxSidebar) {
-                const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
-                autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
-                autoplayCheckboxSidebar.addEventListener('change', (e) => {
-                    globalPlayerState.autoplayNext = e.target.checked;
+            // --- MODIFIED AUTOPLAY SETUP ---
+            const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
+            // Set the initial state and button text via the setter
+            globalPlayerState.autoplayNext = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true; 
+
+            if (autoplayToggleBtnElement) {
+                autoplayToggleBtnElement.addEventListener('click', () => {
+                    globalPlayerState.autoplayNext = !globalPlayerState.autoplayNext; // Toggle and let setter handle UI
                     const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
                     if (playerViewContainer && playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
                         populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
                     }
                 });
             }
+            // --- END MODIFIED AUTOPLAY SETUP ---
+            
             renderView();
 
             if (sidebarToggleBtn) {
