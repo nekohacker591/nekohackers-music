@@ -28,7 +28,6 @@
   <link rel="preload" href="https://raw.githubusercontent.com/nekohacker591/nekohackers-music/refs/heads/main/Icons/unmute.webp" as="image">
   <link rel="preload" href="https://i.imgur.com/ClMFeop.png" as="image"> <!-- Default artwork / OG image -->
 
-
   <style>
     :root {
       --primary-color: #007bff;
@@ -91,34 +90,28 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--page-background); /* Define background properties; preload hint helps load it faster */
-      background-size: var(--page-background-size);
-      background-position: var(--page-background-position);
-      background-repeat: var(--page-background-repeat);
-      background-attachment: fixed;
+      background: var(--page-background) var(--page-background-position) / var(--page-background-size) var(--page-background-repeat) fixed;
       color: var(--text-color);
       margin: 0;
-      display: flex;
+      /* display, height, overflow-x are now on #page-wrapper */
+    }
+
+    #page-wrapper {
+      display: none; /* CRITICAL: Start hidden */
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out; /* For fade-in */
+
+      /* These styles were on body, now apply to the wrapper for main layout */
+      display: flex; /* This will be its display type when visible, but display:none overrides initially */
       height: 100vh;
       overflow-x: hidden;
-
-      /* --- MODIFICATION FOR SEAMLESS LOADING --- */
-      opacity: 0;
-      visibility: hidden;
-      /* Transition opacity, and manage visibility change timing */
-      /* For fade-out (if you ever need it): visibility 0s linear 0.25s to delay hiding */
-      /* For fade-in: visibility 0s linear 0s to show immediately when opacity starts */
-      transition: opacity 0.25s ease-in-out, visibility 0s linear 0.25s;
-      /* --- END MODIFICATION --- */
+      /* Inherit font and color from body by default */
     }
 
-    /* --- ADDED CLASS FOR SEAMLESS LOADING --- */
-    body.page-ready {
+    #page-wrapper.visible {
+      display: flex !important; /* Or its intended final display type (matches the one above) */
       opacity: 1;
-      visibility: visible;
-      transition-delay: 0s, 0s !important; /* Ensure visibility updates immediately with opacity for fade-in */
     }
-    /* --- END ADDED CLASS --- */
 
 
     /* General styling for IMAGE icons */
@@ -138,11 +131,10 @@
     /* Specific visual scale for IMAGE icons in Play/Pause, Mute/Unmute, Download, and Share buttons */
     .play-btn .icon.image-icon,
     .mute-btn .icon.image-icon,
-    .download-link .icon.image-icon, /* ADDED: Download icon scaling */
-    .share-btn .icon.image-icon {     /* ADDED: Share icon scaling */
-        transform: scale(1.5); /* Makes their 20px box look 30px visually */
+    .download-link .icon.image-icon,
+    .share-btn .icon.image-icon {
+        transform: scale(1.5);
     }
-    /* Note: Home and Music image icons in the sidebar will still get scale(2) from the general rule above */
 
 
     #sidebar-toggle {
@@ -169,11 +161,13 @@
       box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     }
     body.sidebar-open #sidebar { transform: translateX(0); }
-    body.sidebar-open #main-content-area { margin-left: var(--sidebar-width); }
+    /* Margin adjustment for main content is now on #page-wrapper's child (#main-content-area) */
+    body.sidebar-open #page-wrapper #main-content-area { margin-left: var(--sidebar-width); }
+
     @media (min-width: 769px) {
         #sidebar-toggle { display: none; }
         #sidebar { transform: translateX(0); }
-        #main-content-area { margin-left: var(--sidebar-width); }
+        #page-wrapper #main-content-area { margin-left: var(--sidebar-width); }
     }
 
     .sidebar-header h2 {
@@ -188,7 +182,6 @@
         margin-right: 10px;
         min-width: var(--icon-image-width);
         text-align: center;
-        /* Image icons for Home/Music get scale(2) */
     }
 
     #sidebar nav a.nav-link:hover { background-color: var(--ui-bg-hover-lighten); }
@@ -199,7 +192,11 @@
     .sidebar-controls label { display: flex; align-items: center; font-size: 14px; color: var(--text-secondary-color); cursor: pointer; }
     .sidebar-controls input[type="checkbox"] { accent-color: var(--primary-color); margin-right: 8px; transform: scale(1.1); }
 
-    #main-content-area { flex-grow: 1; padding: 20px; padding-top: 20px; transition: margin-left 0.3s ease-in-out; box-sizing: border-box; overflow-y: auto; height: 100vh; }
+    #main-content-area { /* This is now a direct child of #page-wrapper */
+      flex-grow: 1; padding: 20px; padding-top: 20px;
+      transition: margin-left 0.3s ease-in-out; box-sizing: border-box;
+      overflow-y: auto; height: 100%; /* Adjust height if #page-wrapper is flex container */
+    }
     @media (max-width: 768px) { #main-content-area { padding-top: 70px; } }
 
     .main-header-content h1 {
@@ -280,7 +277,6 @@
       padding: 0;
     }
     .play-btn .icon { font-size: 20px; }
-    /* .play-btn .icon.image-icon gets scale(1.5) */
     .play-btn:hover { background-color: var(--button-bg-hover); }
 
     .progress-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; }
@@ -289,21 +285,19 @@
     .current-time, .duration { font-size: 13px; color: var(--text-secondary-color); min-width: 38px; text-align: center; }
 
     .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
-    /* MODIFIED: Download and Share buttons RESTORED to original size */
     .download-link, .share-btn {
       background-color: var(--ui-bg-button-secondary);
       border: 1px solid var(--border-color-ui);
       color: var(--text-color);
-      padding: 8px 16px; /* Restored from 4px 8px */
+      padding: 8px 16px;
       border-radius: var(--border-radius); text-decoration: none; cursor: pointer;
-      font-size: 14px; /* Restored from 12px */
+      font-size: 14px;
       font-weight: 500;
       transition: background-color var(--transition-speed), border-color var(--transition-speed);
       display: inline-flex; align-items: center;
-      gap: 6px; /* Restored from 3px */
+      gap: 6px;
       box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05);
     }
-    /* .download-link .icon.image-icon and .share-btn .icon.image-icon get scale(1.5) from specific rule above */
     .download-link:hover, .share-btn:hover { background-color: var(--ui-bg-hover-lighten); border-color: rgba(120,140,160,0.5); }
     .copied { opacity: 0; color: var(--primary-color); font-size: 13px; transition: opacity 0.3s var(--transition-speed); margin-left: 5px; }
     .copied.show { opacity: 1; }
@@ -318,14 +312,19 @@
       transition: background-color var(--transition-speed), border-color var(--transition-speed); padding: 0;
     }
     .mute-btn .icon { font-size: 18px; }
-    /* .mute-btn .icon.image-icon gets scale(1.5) */
     .mute-btn:hover { background-color: var(--button-bg-hover); border-color: rgba(120,140,160,0.5); }
 
     .volume-slider { flex-grow: 1; -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: rgba(100, 120, 140, 0.3); outline: none; border-radius: 3px; cursor: pointer; }
     .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
     .volume-slider::-moz-range-thumb { width: 16px; height: 16px; background: var(--text-link-color); border-radius: 50%; cursor: pointer; border: 2px solid var(--ui-bg-panel); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
-    body.embed-mode { padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--player-background); background-size: var(--player-background-size); background-position: var(--player-background-position); background-repeat: var(--page-background-repeat); }
+    body.embed-mode {
+        padding: 0; margin: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh;
+        background: var(--player-background) var(--player-background-position) / var(--player-background-size) var(--page-background-repeat) fixed;
+        /* Ensure body itself is visible immediately in embed mode if script handles player directly */
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
     .player-embed { width: 100%; height: 100%; box-sizing: border-box; margin: 0; border-radius: 0; box-shadow: none; border: none; padding: 15px; display: flex; flex-direction: column; justify-content: center; background: transparent; }
     .player-embed .track-title { font-size: 18px; margin-bottom: 12px; }
     .player-embed .controls { margin-bottom: 12px; }
@@ -342,41 +341,43 @@
   </style>
 </head>
 <body>
-  <button id="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false">
-    <span class="icon"></span>
-  </button>
-  <aside id="sidebar">
-    <div class="sidebar-header">
-      <h2>Navigation</h2>
-    </div>
-    <nav>
-      <a href="#" class="nav-link" data-view="home"><span class="icon"></span> Home</a>
-      <a href="#" class="nav-link" data-view="music"><span class="icon"></span> Music</a>
-    </nav>
-    <div class="sidebar-controls">
-      <label for="autoplay-next-sidebar"><input type="checkbox" id="autoplay-next-sidebar">Autoplay Next</label>
-    </div>
-  </aside>
-  <main id="main-content-area">
-    <div class="main-header-content">
-         <h1 id="page-title">🎧 Nekohacker591 Portfolio</h1>
-    </div>
-    <div id="home-content" class="tab-content">
-        <h2>Welcome!</h2>
-        <p>Hey there, welcome to my little corner of the internet! This is where I stash all my musical creations. I got tired of platforms squashing the life out of my audio, so I built this place to share my tracks in their full, uncompressed glory.</p>
-        <p>Here you can:</p>
-        <ul><li>Browse my latest tunes via the "Music" link in the sidebar.</li><li>Listen to high-quality WAV files.</li><li>Download anything you like.</li><li>Share your favorites with your pals.</li></ul>
-        <p>Thanks for stopping by and having a listen. Hope you find something that makes your ears happy!</p>
-        <p><em>- Nekohacker591</em></p>
-    </div>
-    <div id="music-content" class="tab-content">
-        <div class="search-bar"><input type="text" id="music-search-input" class="search-input" placeholder="Search for a track..."></div>
-        <ul id="song-list"></ul>
-    </div>
-    <div id="player-view-content" class="tab-content">
-        <!-- Player and Up Next list will be dynamically inserted here -->
-    </div>
-  </main>
+  <div id="page-wrapper"> <!-- All main content goes in here -->
+    <button id="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="icon"></span>
+    </button>
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2>Navigation</h2>
+      </div>
+      <nav>
+        <a href="#" class="nav-link" data-view="home"><span class="icon"></span> Home</a>
+        <a href="#" class="nav-link" data-view="music"><span class="icon"></span> Music</a>
+      </nav>
+      <div class="sidebar-controls">
+        <label for="autoplay-next-sidebar"><input type="checkbox" id="autoplay-next-sidebar">Autoplay Next</label>
+      </div>
+    </aside>
+    <main id="main-content-area">
+      <div class="main-header-content">
+           <h1 id="page-title">🎧 Nekohacker591 Portfolio</h1>
+      </div>
+      <div id="home-content" class="tab-content">
+          <h2>Welcome!</h2>
+          <p>Hey there, welcome to my little corner of the internet! This is where I stash all my musical creations. I got tired of platforms squashing the life out of my audio, so I built this place to share my tracks in their full, uncompressed glory.</p>
+          <p>Here you can:</p>
+          <ul><li>Browse my latest tunes via the "Music" link in the sidebar.</li><li>Listen to high-quality WAV files.</li><li>Download anything you like.</li><li>Share your favorites with your pals.</li></ul>
+          <p>Thanks for stopping by and having a listen. Hope you find something that makes your ears happy!</p>
+          <p><em>- Nekohacker591</em></p>
+      </div>
+      <div id="music-content" class="tab-content">
+          <div class="search-bar"><input type="text" id="music-search-input" class="search-input" placeholder="Search for a track..."></div>
+          <ul id="song-list"></ul>
+      </div>
+      <div id="player-view-content" class="tab-content">
+          <!-- Player and Up Next list will be dynamically inserted here -->
+      </div>
+    </main>
+  </div> <!-- End of #page-wrapper -->
 
   <script>
     const globalPlayerState = {
@@ -420,16 +421,10 @@
     ];
     const defaultArtwork = 'https://i.imgur.com/ClMFeop.png';
 
-    const sidebarToggleBtn = document.getElementById('sidebar-toggle');
-    const navLinks = document.querySelectorAll('#sidebar .nav-link');
-    const tabContents = document.querySelectorAll('.tab-content');
-    const songListUl = document.getElementById('song-list');
-    const musicSearchInput = document.getElementById('music-search-input');
-    const autoplayCheckboxSidebar = document.getElementById('autoplay-next-sidebar');
-    const playerViewContainer = document.getElementById('player-view-content');
-    const homeContent = document.getElementById('home-content');
-    const musicContent = document.getElementById('music-content');
-    const pageTitleElement = document.getElementById('page-title');
+    // Element Caching (cache these after DOMContentLoaded and image preloading, if they are inside #page-wrapper)
+    let sidebarToggleBtn, navLinks, tabContents, songListUl, musicSearchInput,
+        autoplayCheckboxSidebar, playerViewContainer, homeContent, musicContent, pageTitleElement;
+    
     let iconMap = {};
 
     function getAndApplyIcon(element, cssVarName) {
@@ -450,6 +445,7 @@
     }
 
     function updateSidebarToggleIcon() {
+        if (!sidebarToggleBtn) return; // Guard against missing element if called too early
         const iconElement = sidebarToggleBtn.querySelector('.icon');
         if (!iconElement) return;
         const isSidebarOpen = document.body.classList.contains('sidebar-open');
@@ -461,9 +457,11 @@
         ['--icon-home', '--icon-music', '--icon-play', '--icon-pause', '--icon-download', '--icon-share', '--icon-mute', '--icon-unmute', '--icon-hamburger', '--icon-close'].forEach(varName => {
             iconMap[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
         });
-        updateSidebarToggleIcon();
-        getAndApplyIcon(document.querySelector('.nav-link[data-view="home"] .icon'), '--icon-home');
-        getAndApplyIcon(document.querySelector('.nav-link[data-view="music"] .icon'), '--icon-music');
+        updateSidebarToggleIcon(); // Will use the cached sidebarToggleBtn
+        const homeNavIcon = document.querySelector('#page-wrapper .nav-link[data-view="home"] .icon');
+        const musicNavIcon = document.querySelector('#page-wrapper .nav-link[data-view="music"] .icon');
+        if (homeNavIcon) getAndApplyIcon(homeNavIcon, '--icon-home');
+        if (musicNavIcon) getAndApplyIcon(musicNavIcon, '--icon-music');
     }
 
     function formatTime(seconds) {
@@ -536,7 +534,7 @@
       if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
 
       const audio = new Audio();
-      audio.preload = "metadata";
+      audio.preload = "metadata"; // Keep as metadata; full preload handled by strategy if desired for audio itself
       playerDiv.audio = audio;
       playerDiv.audioInitialized = true;
 
@@ -620,6 +618,7 @@
     }
 
     function populateUpNextList(currentSongId, mainContainer) {
+        if (!mainContainer) return;
         let upNextContainer = mainContainer.querySelector('#up-next-list-container');
         if (!upNextContainer) {
             upNextContainer = document.createElement('div');
@@ -668,8 +667,9 @@
     }
 
     function populateSongList(filteredSongs = songsData) {
+      if (!songListUl) return;
       songListUl.innerHTML = '';
-      if (filteredSongs.length === 0 && musicSearchInput.value !== '') { songListUl.innerHTML = '<li class="song-item-empty">No tracks match your search, chief.</li>'; return; }
+      if (filteredSongs.length === 0 && musicSearchInput && musicSearchInput.value !== '') { songListUl.innerHTML = '<li class="song-item-empty">No tracks match your search, chief.</li>'; return; }
       filteredSongs.forEach((track) => {
         const actualIndex = songsData.findIndex(s => s.file === track.file); if (actualIndex === -1) return;
         const li = document.createElement('li'); li.className = 'song-item';
@@ -689,23 +689,22 @@
     }
 
     function renderView(options = {}) {
+        if (!tabContents || !navLinks || !pageTitleElement || !playerViewContainer || !musicContent || !homeContent) return; // Guard
+
         const { triggeredByAutoplayNext = false } = options;
         const urlParams = new URLSearchParams(window.location.search);
         let view = urlParams.get('view');
         const songIdParam = urlParams.get('songId');
-        const embedIdParam = urlParams.get('embed');
+        const embedIdParam = urlParams.get('embed'); // Already checked before this function in DOMContentLoaded
         const legacyShareIdParam = urlParams.get('id');
         const isLegacyShareMode = urlParams.get('share') === 'true';
         const searchQuery = urlParams.get('s');
 
         if (globalPlayerState.currentPlayingAudio && (!songIdParam || globalPlayerState.currentPlayingPlayerDiv?.dataset.index !== songIdParam)) { globalPlayerState.currentPlayingAudio.pause(); }
 
-        if (embedIdParam !== null && songsData[embedIdParam]) {
-            document.body.innerHTML = ''; document.body.className = 'embed-mode page-ready'; // Ensure page-ready for embed mode
-            const track = songsData[embedIdParam]; const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
-            document.body.appendChild(playerDiv); initializeAudioForPlayer(playerDiv, false); return;
-        }
-        document.body.classList.remove('embed-mode');
+        // Embed mode is handled before calling renderView in the new structure
+        // document.body.classList.remove('embed-mode'); // This might be redundant or handled earlier
+
         if (isLegacyShareMode && legacyShareIdParam !== null && songsData[legacyShareIdParam]) { navigateToPlayerView(parseInt(legacyShareIdParam), false); return; }
         if (!view && !songIdParam) view = 'home';
 
@@ -726,74 +725,175 @@
             pageTitleElement.style.display = 'none';
             populateUpNextList(songId, playerViewContainer);
         } else if (view === 'music') {
-            musicContent.classList.add('active'); document.querySelector('.nav-link[data-view="music"]').classList.add('active');
-            const currentSearch = searchQuery || ''; musicSearchInput.value = currentSearch.replace(/\+/g, ' ');
+            musicContent.classList.add('active');
+            const musicNavLink = document.querySelector('#page-wrapper .nav-link[data-view="music"]');
+            if (musicNavLink) musicNavLink.classList.add('active');
+            const currentSearch = searchQuery || '';
+            if(musicSearchInput) musicSearchInput.value = currentSearch.replace(/\+/g, ' ');
             const filtered = songsData.filter(t => t.title.toLowerCase().includes(currentSearch.toLowerCase()));
             populateSongList(filtered); setMetaTags({ title: 'Music - Nekohacker591 Portfolio' });
-        } else { homeContent.classList.add('active'); document.querySelector('.nav-link[data-view="home"]').classList.add('active'); setMetaTags(); }
-    }
-
-    sidebarToggleBtn.addEventListener('click', () => { document.body.classList.toggle('sidebar-open'); updateSidebarToggleIcon(); });
-    navLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault(); const targetView = link.dataset.view; const url = new URL(window.location);
-        const currentParams = new URLSearchParams(url.search); const currentView = currentParams.get('view') || 'home';
-        if (targetView === currentView && !(targetView === 'player' && currentParams.get('songId') !== link.dataset.songId)) {
-             if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); } return;
+        } else { // Home view
+            homeContent.classList.add('active');
+            const homeNavLink = document.querySelector('#page-wrapper .nav-link[data-view="home"]');
+            if(homeNavLink) homeNavLink.classList.add('active');
+            setMetaTags();
         }
-        if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
-        else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
-        window.history.pushState({ view: targetView }, '', url); renderView();
-        if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
-      });
-    });
-    if (musicSearchInput) {
-        musicSearchInput.addEventListener('input', () => {
-            const query = musicSearchInput.value.toLowerCase(); const url = new URL(window.location);
-            if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
-            if (document.getElementById('music-content').classList.contains('active')) { window.history.replaceState({ view: 'music', s: query }, '', url); renderView(); }
-        });
     }
-    document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        let activeAudio = globalPlayerState.currentPlayingAudio; let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
-        if (!activeAudio && playerViewContainer.classList.contains('active')) { activePlayerDiv = playerViewContainer.querySelector('.player'); if (activePlayerDiv && activePlayerDiv.audio) activeAudio = activePlayerDiv.audio; }
-        const playButton = activePlayerDiv ? activePlayerDiv.querySelector('.play-btn') : null;
-        const muteButton = activePlayerDiv ? activePlayerDiv.querySelector('.mute-btn') : null;
-        if (e.code === 'Space') { e.preventDefault(); if (playButton) playButton.click(); }
-        else if (e.code === 'KeyM') { e.preventDefault(); if (muteButton) muteButton.click(); }
-        else if (activeAudio && activePlayerDiv) {
-            let handled = false; const cT = activeAudio.currentTime, dur = activeAudio.duration, vol = activeAudio.volume;
-            if(e.code==='ArrowLeft'){if(dur&&dur!==Infinity)activeAudio.currentTime=Math.max(0,cT-5);handled=true;}
-            else if(e.code==='ArrowRight'){if(dur&&dur!==Infinity)activeAudio.currentTime=Math.min(dur,cT+5);handled=true;}
-            else if(e.code==='ArrowUp'){activeAudio.muted=false;activeAudio.volume=Math.min(1,vol+0.05);handled=true;}
-            else if(e.code==='ArrowDown'){activeAudio.muted=false;activeAudio.volume=Math.max(0,vol-0.05);handled=true;}
-            if(handled)e.preventDefault();
-        }
-    });
-    window.addEventListener('popstate', (event) => { renderView(); });
 
     document.addEventListener('DOMContentLoaded', () => {
-        setupIcons();
-        if (autoplayCheckboxSidebar) {
-            const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
-            autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
-            autoplayCheckboxSidebar.addEventListener('change', (e) => {
-                globalPlayerState.autoplayNext = e.target.checked;
-                const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
-                if (playerViewContainer.classList.contains('active') && currentSongIdParam !== null) { populateUpNextList(parseInt(currentSongIdParam), playerViewContainer); }
+        const pageWrapper = document.getElementById('page-wrapper');
+        if (!pageWrapper) {
+            console.error("#page-wrapper element not found. Cannot apply strict preloading.");
+            // Fallback: try to make body visible if it was hidden by other means (not ideal)
+            document.body.style.opacity = '1';
+            document.body.style.visibility = 'visible';
+            // Attempt to run critical setup anyway
+            try {
+                // Minimal setup if pageWrapper is missing
+                sidebarToggleBtn = document.getElementById('sidebar-toggle');
+                setupIcons(); 
+                renderView();
+            } catch(e) { console.error("Error in fallback setup:", e); }
+            return;
+        }
+
+        // Collect all unique image URLs from CSS variables that start with 'url(...)' and default artwork
+        const cssVarNamesForImages = [
+            '--page-background', '--icon-home', '--icon-music', '--icon-pause',
+            '--icon-download', '--icon-share', '--icon-mute', '--icon-unmute'
+        ];
+        const imageUrlsFromCss = cssVarNamesForImages.map(varName => {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+            if (value.toLowerCase().startsWith('url(')) {
+                return value.slice(4, -1).replace(/["']/g, ""); // Extract URL from url("...")
+            }
+            return null;
+        }).filter(url => url !== null);
+        const allUniqueImageUrls = Array.from(new Set([...imageUrlsFromCss, defaultArtwork]));
+
+        function loadImagePromise(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    // For even stricter "ready to render", you could use img.decode()
+                    // img.decode().then(() => resolve({status: 'fulfilled', value: url})).catch(() => resolve({status: 'rejected', reason: `decode failed for ${url}`}));
+                    resolve({status: 'fulfilled', value: url});
+                };
+                img.onerror = () => {
+                    resolve({status: 'rejected', reason: url});
+                };
+                img.src = url;
             });
         }
-        renderView();
 
-        // --- MODIFICATION FOR SEAMLESS LOADING ---
-        // Make the page visible after initial setup and rendering attempt.
-        // requestAnimationFrame helps ensure initial styles (opacity:0) are applied
-        // before we add the class that triggers the transition.
-        requestAnimationFrame(() => {
-            document.body.classList.add('page-ready');
+        Promise.allSettled(allUniqueImageUrls.map(loadImagePromise)).then((results) => {
+            results.forEach(result => {
+                if (result.status === 'rejected') {
+                    console.warn(`Critical image failed to load or was not an image URL: ${result.reason}. Page will still attempt to load.`);
+                }
+            });
+
+            // --- All image preloading attempts are done. Now setup the page. ---
+
+            // Cache DOM elements that are INSIDE #page-wrapper now
+            sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            navLinks = document.querySelectorAll('#page-wrapper #sidebar .nav-link'); // Scope to page-wrapper
+            tabContents = document.querySelectorAll('#page-wrapper .tab-content');   // Scope to page-wrapper
+            songListUl = document.getElementById('song-list');
+            musicSearchInput = document.getElementById('music-search-input');
+            autoplayCheckboxSidebar = document.getElementById('autoplay-next-sidebar');
+            playerViewContainer = document.getElementById('player-view-content');
+            homeContent = document.getElementById('home-content');
+            musicContent = document.getElementById('music-content');
+            pageTitleElement = document.getElementById('page-title');
+
+
+            // Check for embed mode first, as it drastically changes the page
+            const urlParamsForEmbed = new URLSearchParams(window.location.search);
+            const embedIdParam = urlParamsForEmbed.get('embed');
+
+            if (embedIdParam !== null && songsData[embedIdParam]) {
+                document.body.innerHTML = ''; // Clear everything, including page-wrapper
+                document.body.className = 'embed-mode';
+                const track = songsData[embedIdParam];
+                const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
+                document.body.appendChild(playerDiv);
+                initializeAudioForPlayer(playerDiv, false);
+                // Embed body is made visible by its CSS `body.embed-mode`
+                return; // Stop further processing for normal page
+            }
+
+            // --- Not embed mode, proceed with normal page structure ---
+            setupIcons(); // Initialize icons based on CSS variables
+
+            if (autoplayCheckboxSidebar) {
+                const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
+                autoplayCheckboxSidebar.checked = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
+                autoplayCheckboxSidebar.addEventListener('change', (e) => {
+                    globalPlayerState.autoplayNext = e.target.checked;
+                    const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
+                    if (playerViewContainer && playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
+                        populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
+                    }
+                });
+            }
+            
+            renderView(); // Initial view rendering
+
+            // Setup event listeners
+            if (sidebarToggleBtn) {
+                sidebarToggleBtn.addEventListener('click', () => {
+                    document.body.classList.toggle('sidebar-open');
+                    updateSidebarToggleIcon();
+                });
+            }
+            if (navLinks) {
+                navLinks.forEach(link => {
+                  link.addEventListener('click', (e) => {
+                    e.preventDefault(); const targetView = link.dataset.view; const url = new URL(window.location);
+                    const currentParams = new URLSearchParams(url.search); const currentView = currentParams.get('view') || 'home';
+                    if (targetView === currentView && !(targetView === 'player' && currentParams.get('songId') !== link.dataset.songId)) {
+                         if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); } return;
+                    }
+                    if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
+                    else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
+                    window.history.pushState({ view: targetView }, '', url); renderView();
+                    if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
+                  });
+                });
+            }
+            if (musicSearchInput) {
+                musicSearchInput.addEventListener('input', () => {
+                    const query = musicSearchInput.value.toLowerCase(); const url = new URL(window.location);
+                    if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
+                    if (musicContent && musicContent.classList.contains('active')) { window.history.replaceState({ view: 'music', s: query }, '', url); renderView(); }
+                });
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                let activeAudio = globalPlayerState.currentPlayingAudio; let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
+                if (!activeAudio && playerViewContainer && playerViewContainer.classList.contains('active')) { activePlayerDiv = playerViewContainer.querySelector('.player'); if (activePlayerDiv && activePlayerDiv.audio) activeAudio = activePlayerDiv.audio; }
+                const playButton = activePlayerDiv ? activePlayerDiv.querySelector('.play-btn') : null;
+                const muteButton = activePlayerDiv ? activePlayerDiv.querySelector('.mute-btn') : null;
+                if (e.code === 'Space') { e.preventDefault(); if (playButton) playButton.click(); }
+                else if (e.code === 'KeyM') { e.preventDefault(); if (muteButton) muteButton.click(); }
+                else if (activeAudio && activePlayerDiv) {
+                    let handled = false; const cT = activeAudio.currentTime, dur = activeAudio.duration, vol = activeAudio.volume;
+                    if(e.code==='ArrowLeft'){if(dur&&dur!==Infinity)activeAudio.currentTime=Math.max(0,cT-5);handled=true;}
+                    else if(e.code==='ArrowRight'){if(dur&&dur!==Infinity)activeAudio.currentTime=Math.min(dur,cT+5);handled=true;}
+                    else if(e.code==='ArrowUp'){activeAudio.muted=false;activeAudio.volume=Math.min(1,vol+0.05);handled=true;}
+                    else if(e.code==='ArrowDown'){activeAudio.muted=false;activeAudio.volume=Math.max(0,vol-0.05);handled=true;}
+                    if(handled)e.preventDefault();
+                }
+            });
+            window.addEventListener('popstate', (event) => { renderView(); });
+
+            // --- Make the page wrapper visible ---
+            pageWrapper.style.display = 'flex'; // Set final display type
+            requestAnimationFrame(() => { // Ensure display is applied before opacity transition starts
+                pageWrapper.classList.add('visible');
+            });
         });
-        // --- END MODIFICATION ---
     });
   </script>
 </body>
