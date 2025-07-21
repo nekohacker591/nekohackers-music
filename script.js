@@ -18,7 +18,7 @@ const globalPlayerState = {
     }
 };
 
-let songsData = []; // This will be filled by fetching songs.json
+let songsData = [];
 const defaultArtwork = 'https://i.imgur.com/ClMFeop.png';
 
 let sidebarToggleBtn, navLinks, tabContents, songListUl, musicSearchInput,
@@ -27,7 +27,7 @@ let sidebarToggleBtn, navLinks, tabContents, songListUl, musicSearchInput,
 
 let iconMap = {};
 
-// ... (keep all your functions like getAndApplyIcon, formatTime, etc. here)
+// --- UTILITY FUNCTIONS ---
 function getAndApplyIcon(element, cssVarName) {
     if (!element) return;
     const iconValue = iconMap[cssVarName] || getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
@@ -42,6 +42,7 @@ function getAndApplyIcon(element, cssVarName) {
         element.textContent = iconValue.replace(/['"]/g, '');
     }
 }
+
 function updateSidebarToggleIcon() {
     if (!sidebarToggleBtn) return;
     const iconElement = sidebarToggleBtn.querySelector('.icon');
@@ -50,6 +51,7 @@ function updateSidebarToggleIcon() {
     getAndApplyIcon(iconElement, isSidebarOpen ? '--icon-close' : '--icon-hamburger');
     sidebarToggleBtn.setAttribute('aria-expanded', isSidebarOpen.toString());
 }
+
 function setupIcons() {
     ['--icon-home', '--icon-music', '--icon-play', '--icon-pause', '--icon-download', '--icon-share', '--icon-mute', '--icon-unmute', '--icon-hamburger', '--icon-close'].forEach(varName => {
         iconMap[varName] = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
@@ -60,12 +62,15 @@ function setupIcons() {
     if (homeNavIcon) getAndApplyIcon(homeNavIcon, '--icon-home');
     if (musicNavIcon) getAndApplyIcon(musicNavIcon, '--icon-music');
 }
+
 function formatTime(seconds) {
   if (isNaN(seconds) || seconds === Infinity) return '--:--';
   const minutes = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
 }
+
+// --- DOM MANIPULATION & PLAYER LOGIC ---
 function createPlayerElement(track, index, isEmbedStyle = false) {
     const playerDiv = document.createElement("div");
     playerDiv.className = "player";
@@ -108,7 +113,7 @@ function createPlayerElement(track, index, isEmbedStyle = false) {
         if (shareBtn && copiedMsg) {
             shareBtn.addEventListener('click', () => {
                 const playerViewUrl = new URL(window.location.href);
-                playerViewUrl.search = ''; // Clear existing params
+                playerViewUrl.search = '';
                 playerViewUrl.searchParams.set('view', 'player');
                 playerViewUrl.searchParams.set('songId', index.toString());
                 navigator.clipboard.writeText(playerViewUrl.href).then(() => {
@@ -120,88 +125,86 @@ function createPlayerElement(track, index, isEmbedStyle = false) {
     }
     return playerDiv;
 }
+
 function initializeAudioForPlayer(playerDiv, autoPlay = false) {
-  if (playerDiv.audioInitialized && playerDiv.audio && playerDiv.audio.src === playerDiv.dataset.src && !autoPlay) return;
-  if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
-  const audio = new Audio();
-  audio.preload = "metadata";
-  playerDiv.audio = audio;
-  playerDiv.audioInitialized = true;
-  const playBtnIconElement = playerDiv.querySelector('.play-btn .icon');
-  const muteBtnIconElement = playerDiv.querySelector('.mute-btn .icon');
-  const progressFilled = playerDiv.querySelector('.progress-filled');
-  const progressBar = playerDiv.querySelector('.progress');
-  const volumeSlider = playerDiv.querySelector('.volume-slider');
-  const currentTimeDisplay = playerDiv.querySelector('.current-time');
-  const durationDisplay = playerDiv.querySelector('.duration');
-  const trackTitleElement = playerDiv.querySelector('.track-title');
-  const songIndex = parseInt(playerDiv.dataset.index);
-  audio.muted = globalPlayerState.isMuted;
-  audio.volume = globalPlayerState.lastVolume;
-  volumeSlider.value = globalPlayerState.lastVolume;
-  getAndApplyIcon(muteBtnIconElement, globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
-  volumeSlider.disabled = globalPlayerState.isMuted;
-  audio.addEventListener('loadedmetadata', () => {
-    durationDisplay.textContent = formatTime(audio.duration);
-    if (autoPlay) { audio.play().catch(e => console.warn("Autoplay prevented:", e)); }
-  });
-  audio.addEventListener('play', () => {
-    getAndApplyIcon(playBtnIconElement, '--icon-pause');
-    playerDiv.classList.add('player-playing');
-    globalPlayerState.currentPlayingAudio = audio; globalPlayerState.currentPlayingPlayerDiv = playerDiv;
-    if (trackTitleElement) document.title = `▶ ${trackTitleElement.textContent} - Nekohacker591`;
-  });
-  audio.addEventListener('pause', () => {
-    getAndApplyIcon(playBtnIconElement, '--icon-play');
-    playerDiv.classList.remove('player-playing');
-    if (globalPlayerState.currentPlayingAudio === audio && audio.ended) { document.title = 'Nekohackers Music'; }
-  });
-  audio.addEventListener('timeupdate', () => {
-    if (audio.duration) { const percent = (audio.currentTime / audio.duration) * 100; progressFilled.style.width = percent + '%'; }
-    currentTimeDisplay.textContent = formatTime(audio.currentTime);
-  });
-  audio.addEventListener('ended', () => {
-    getAndApplyIcon(playBtnIconElement, '--icon-play');
-    progressFilled.style.width = '0%'; currentTimeDisplay.textContent = formatTime(0);
-    playerDiv.classList.remove('player-playing'); document.title = 'Nekohackers Music';
-    if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
-    if (globalPlayerState.autoplayNext) {
-        const currentView = new URLSearchParams(window.location.search).get('view');
-        if (currentView === 'player' && songIndex < songsData.length - 1) { navigateToPlayerView(songIndex + 1, true); }
-        else if (currentView === 'player' && songIndex === songsData.length - 1) { navigateToPlayerView(0, true); }
-    }
-  });
-  audio.addEventListener('volumechange', () => {
-    getAndApplyIcon(muteBtnIconElement, audio.muted || audio.volume === 0 ? '--icon-unmute' : '--icon-mute');
-    volumeSlider.disabled = audio.muted;
-    if (!audio.muted) { volumeSlider.value = audio.volume; globalPlayerState.lastVolume = audio.volume; }
-    globalPlayerState.isMuted = audio.muted;
-    localStorage.setItem('nekohacker_globalVolume', globalPlayerState.lastVolume.toString());
-    localStorage.setItem('nekohacker_isMuted', JSON.stringify(globalPlayerState.isMuted));
-  });
-  volumeSlider.addEventListener('input', () => { audio.muted = false; audio.volume = parseFloat(volumeSlider.value); });
-  playerDiv.querySelector('.mute-btn').addEventListener('click', () => { audio.muted = !audio.muted; });
-  playerDiv.querySelector('.play-btn').addEventListener('click', () => {
-    if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
-    if (audio.paused) {
-      if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
-        globalPlayerState.currentPlayingAudio.pause();
-        if(globalPlayerState.currentPlayingPlayerDiv) {
-            globalPlayerState.currentPlayingPlayerDiv.classList.remove('player-playing');
-             getAndApplyIcon(globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn .icon'), '--icon-play');
+    if (playerDiv.audioInitialized && playerDiv.audio && playerDiv.audio.src === playerDiv.dataset.src && !autoPlay) return;
+    if (playerDiv.audio) { playerDiv.audio.pause(); playerDiv.audio.src = ""; }
+    const audio = new Audio();
+    audio.preload = "metadata";
+    playerDiv.audio = audio;
+    playerDiv.audioInitialized = true;
+    const playBtnIconElement = playerDiv.querySelector('.play-btn .icon');
+    const muteBtnIconElement = playerDiv.querySelector('.mute-btn .icon');
+    const progressFilled = playerDiv.querySelector('.progress-filled');
+    const progressBar = playerDiv.querySelector('.progress');
+    const volumeSlider = playerDiv.querySelector('.volume-slider');
+    const currentTimeDisplay = playerDiv.querySelector('.current-time');
+    const durationDisplay = playerDiv.querySelector('.duration');
+    const trackTitleElement = playerDiv.querySelector('.track-title');
+    const songIndex = parseInt(playerDiv.dataset.index);
+    audio.muted = globalPlayerState.isMuted;
+    audio.volume = globalPlayerState.lastVolume;
+    volumeSlider.value = globalPlayerState.lastVolume;
+    getAndApplyIcon(muteBtnIconElement, globalPlayerState.isMuted ? '--icon-unmute' : '--icon-mute');
+    volumeSlider.disabled = globalPlayerState.isMuted;
+    audio.addEventListener('loadedmetadata', () => {
+        durationDisplay.textContent = formatTime(audio.duration);
+        if (autoPlay) { audio.play().catch(e => console.warn("Autoplay prevented:", e)); }
+    });
+    audio.addEventListener('play', () => {
+        getAndApplyIcon(playBtnIconElement, '--icon-pause');
+        playerDiv.classList.add('player-playing');
+        if (globalPlayerState.currentPlayingAudio && globalPlayerState.currentPlayingAudio !== audio) {
+            globalPlayerState.currentPlayingAudio.pause();
         }
-      }
-      audio.play().catch(e => console.error("Play failed:", e));
-    } else { audio.pause(); }
-  });
-  progressBar.addEventListener('click', (e) => {
-    if (!audio.duration || audio.duration === Infinity) return;
-    const rect = progressBar.getBoundingClientRect(); const newTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-    audio.currentTime = newTime;
-    if (audio.paused) { progressFilled.style.width = ((newTime / audio.duration) * 100) + '%'; currentTimeDisplay.textContent = formatTime(newTime); }
-  });
-  if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+        globalPlayerState.currentPlayingAudio = audio; 
+        globalPlayerState.currentPlayingPlayerDiv = playerDiv;
+        if (trackTitleElement) document.title = `▶ ${trackTitleElement.textContent} - Nekohacker591`;
+    });
+    audio.addEventListener('pause', () => {
+        getAndApplyIcon(playBtnIconElement, '--icon-play');
+        playerDiv.classList.remove('player-playing');
+        if (globalPlayerState.currentPlayingAudio === audio && document.title.startsWith('▶')) { 
+             document.title = 'Nekohackers Music';
+        }
+    });
+    audio.addEventListener('timeupdate', () => {
+        if (audio.duration) { const percent = (audio.currentTime / audio.duration) * 100; progressFilled.style.width = percent + '%'; }
+        currentTimeDisplay.textContent = formatTime(audio.currentTime);
+    });
+    audio.addEventListener('ended', () => {
+        if (globalPlayerState.currentPlayingPlayerDiv === playerDiv) { globalPlayerState.currentPlayingAudio = null; globalPlayerState.currentPlayingPlayerDiv = null; }
+        if (globalPlayerState.autoplayNext) {
+            const currentView = new URLSearchParams(window.location.search).get('view');
+            if (currentView === 'player' && songIndex < songsData.length - 1) { navigateToPlayerView(songIndex + 1, true); }
+            else if (currentView === 'player' && songIndex === songsData.length - 1) { navigateToPlayerView(0, true); }
+        }
+    });
+    audio.addEventListener('volumechange', () => {
+        getAndApplyIcon(muteBtnIconElement, audio.muted || audio.volume === 0 ? '--icon-unmute' : '--icon-mute');
+        volumeSlider.disabled = audio.muted;
+        if (!audio.muted) { volumeSlider.value = audio.volume; globalPlayerState.lastVolume = audio.volume; }
+        globalPlayerState.isMuted = audio.muted;
+        localStorage.setItem('nekohacker_globalVolume', globalPlayerState.lastVolume.toString());
+        localStorage.setItem('nekohacker_isMuted', JSON.stringify(globalPlayerState.isMuted));
+    });
+    volumeSlider.addEventListener('input', () => { audio.muted = false; audio.volume = parseFloat(volumeSlider.value); });
+    playerDiv.querySelector('.mute-btn').addEventListener('click', () => { audio.muted = !audio.muted; });
+    playerDiv.querySelector('.play-btn').addEventListener('click', () => {
+        if (!audio.src || audio.src !== playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
+        if (audio.paused) {
+          audio.play().catch(e => console.error("Play failed:", e));
+        } else { audio.pause(); }
+    });
+    progressBar.addEventListener('click', (e) => {
+        if (!audio.duration || audio.duration === Infinity) return;
+        const rect = progressBar.getBoundingClientRect(); const newTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+        audio.currentTime = newTime;
+        if (audio.paused) { progressFilled.style.width = ((newTime / audio.duration) * 100) + '%'; currentTimeDisplay.textContent = formatTime(newTime); }
+    });
+    if (!audio.src && playerDiv.dataset.src) audio.src = playerDiv.dataset.src;
 }
+
 function populateUpNextList(currentSongId, mainContainer) {
     if (!mainContainer) return;
     let upNextContainer = mainContainer.querySelector('#up-next-list-container');
@@ -234,18 +237,15 @@ function populateUpNextList(currentSongId, mainContainer) {
         ul.appendChild(li);
     });
 }
+
 function setMetaTags(options = {}) {
-    // *** THIS IS THE FIX FOR THE 'null' ERROR ***
     const defaults = { title: 'Nekohackers Music', description: 'Welcome to Nekohacker\'s portfolio...', url: window.location.href, type: 'website', imageUrl: defaultArtwork, audioUrl: null, trackIdForEmbed: null, twitterCardType: 'summary_large_image' };
     const config = { ...defaults, ...options };
     document.title = config.title;
-    
-    // This function is fine otherwise, no more changes needed here.
     const head = document.head; 
     head.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]').forEach(tag => {
         if (!tag.hasAttribute('data-static')) tag.remove();
     });
-
     const tagsToSet = [
         { property: 'og:title', content: config.title },
         { property: 'og:description', content: config.description },
@@ -274,6 +274,7 @@ function setMetaTags(options = {}) {
         head.appendChild(meta); 
     });
 }
+
 function populateSongList(filteredSongs = songsData) {
   if (!songListUl) return;
   songListUl.innerHTML = '';
@@ -287,6 +288,8 @@ function populateSongList(filteredSongs = songsData) {
     li.appendChild(link); songListUl.appendChild(li);
   });
 }
+
+// --- NAVIGATION & VIEW RENDERING ---
 function navigateToPlayerView(songId, playNow = false) {
     const url = new URL(window.location);
     url.searchParams.set('view', 'player'); url.searchParams.set('songId', songId.toString());
@@ -294,6 +297,7 @@ function navigateToPlayerView(songId, playNow = false) {
     window.history.pushState({ view: 'player', songId: songId }, '', url);
     renderView({ triggeredByAutoplayNext: playNow });
 }
+
 function renderView(options = {}) {
     if (!tabContents || !navLinks || !pageTitleElement || !playerViewContainer || !musicContent || !homeContent) return;
     const { triggeredByAutoplayNext = false } = options;
@@ -337,9 +341,10 @@ function renderView(options = {}) {
     }
 }
 
-// *** THIS IS THE MAIN LOGIC WRAPPER ***
-// Everything waits until the songs.json is loaded.
+
+// --- MAIN APP INITIALIZATION LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
+    // We fetch the songs.json first. The app can't do anything without it.
     fetch('songs.json')
         .then(response => {
             if (!response.ok) {
@@ -348,8 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            songsData = data; // Load the song data into our variable
-            initializeApp(); // Now, run the rest of the app
+            songsData = data; // Load the song data into our global variable
+            initializeApp(); // Now, we can run the rest of the app
         })
         .catch(error => {
             console.error("Fatal Error: Could not load or parse songs.json.", error);
@@ -359,120 +364,164 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeApp() {
-    const pageWrapper = document.getElementById('page-wrapper');
-    const loadingOverlay = document.getElementById('loading-overlay');
-    
-    // The rest of your original DOMContentLoaded logic goes here.
+    // First, handle the special 'embed' mode case. It's lightweight and doesn't need the full preloader.
     const urlParamsForEmbed = new URLSearchParams(window.location.search);
     const embedIdParam = urlParamsForEmbed.get('embed');
 
     if (embedIdParam !== null && songsData[embedIdParam]) {
-        if (loadingOverlay) loadingOverlay.remove();
-        document.body.innerHTML = '';
+        document.body.innerHTML = ''; // Clear everything
         document.body.className = 'embed-mode';
         const track = songsData[embedIdParam];
         const playerDiv = createPlayerElement(track, parseInt(embedIdParam), true);
         document.body.appendChild(playerDiv);
         initializeAudioForPlayer(playerDiv, false);
-        return;
+        return; // Stop execution here for embed mode
     }
 
-    if (!pageWrapper) {
-        console.error("Required #page-wrapper element not found.");
-        return;
-    }
+    // --- THIS IS THE PRELOADER REPAIR LOGIC ---
+    const pageWrapper = document.getElementById('page-wrapper');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const loadingFadeDurationMs = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--loading-fade-duration').replace('s','')) * 1000;
 
-    sidebarToggleBtn = document.getElementById('sidebar-toggle');
-    navLinks = document.querySelectorAll('#page-wrapper #sidebar .nav-link');
-    tabContents = document.querySelectorAll('#page-wrapper .tab-content');
-    songListUl = document.getElementById('song-list');
-    musicSearchInput = document.getElementById('music-search-input');
-    autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn');
-    playerViewContainer = document.getElementById('player-view-content');
-    homeContent = document.getElementById('home-content');
-    musicContent = document.getElementById('music-content');
-    pageTitleElement = document.getElementById('page-title');
-
-    setupIcons();
-
-    const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
-    globalPlayerState.autoplayNext = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true; 
-
-    if (autoplayToggleBtnElement) {
-        autoplayToggleBtnElement.addEventListener('click', () => {
-            globalPlayerState.autoplayNext = !globalPlayerState.autoplayNext;
-            const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
-            if (playerViewContainer && playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
-                populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
-            }
-        });
-    }
+    // List of critical images to wait for. The background is the most important.
+    const cssVarNamesForImages = [
+        '--page-background', '--icon-home', '--icon-music', '--icon-pause',
+        '--icon-download', '--icon-share', '--icon-mute', '--icon-unmute'
+    ];
+    // Extract URLs from the CSS variables
+    const imageUrlsFromCss = cssVarNamesForImages.map(varName => {
+        const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        if (value.toLowerCase().startsWith('url(')) {
+            return value.slice(4, -1).replace(/["']/g, "");
+        }
+        return null;
+    }).filter(url => url !== null);
     
-    renderView();
+    // Combine with default artwork and ensure no duplicates
+    const allUniqueImageUrls = Array.from(new Set([...imageUrlsFromCss, defaultArtwork]));
 
-    if (sidebarToggleBtn) {
-        sidebarToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('sidebar-open');
-            updateSidebarToggleIcon();
+    // A function that returns a promise for a single image load
+    function loadImagePromise(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve({status: 'fulfilled', value: url});
+            img.onerror = () => resolve({status: 'rejected', reason: url}); // Resolve even on error so one broken icon doesn't stop the whole site
+            img.src = url;
         });
     }
 
-    if (navLinks) {
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-            e.preventDefault(); const targetView = link.dataset.view; const url = new URL(window.location);
-            const currentParams = new URLSearchParams(url.search); const currentView = currentParams.get('view') || 'home';
-            if (targetView === currentView && !(targetView === 'player' && currentParams.get('songId') !== link.dataset.songId)) {
-                    if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); } return;
-            }
-            if (targetView === 'home') { url.searchParams.delete('view'); url.searchParams.delete('s'); url.searchParams.delete('songId'); }
-            else { url.searchParams.set('view', targetView); url.searchParams.delete('songId'); }
-            window.history.pushState({ view: targetView }, '', url); renderView();
-            if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) { document.body.classList.remove('sidebar-open'); updateSidebarToggleIcon(); }
+    // Wait for all images to either load or fail before proceeding
+    Promise.allSettled(allUniqueImageUrls.map(loadImagePromise)).then(() => {
+        // --- ALL IMAGES ARE PRELOADED, NOW WE BUILD AND SHOW THE PAGE ---
+        
+        // Grab all the necessary DOM elements
+        sidebarToggleBtn = document.getElementById('sidebar-toggle');
+        navLinks = document.querySelectorAll('#page-wrapper #sidebar .nav-link');
+        tabContents = document.querySelectorAll('#page-wrapper .tab-content');
+        songListUl = document.getElementById('song-list');
+        musicSearchInput = document.getElementById('music-search-input');
+        autoplayToggleBtnElement = document.getElementById('autoplay-toggle-btn');
+        playerViewContainer = document.getElementById('player-view-content');
+        homeContent = document.getElementById('home-content');
+        musicContent = document.getElementById('music-content');
+        pageTitleElement = document.getElementById('page-title');
+
+        // Setup dynamic icons and initial state
+        setupIcons();
+        const storedAutoplay = localStorage.getItem('nekohacker_autoplayNext');
+        globalPlayerState.autoplayNext = storedAutoplay !== null ? JSON.parse(storedAutoplay) : true;
+        
+        // Setup event listeners
+        if (autoplayToggleBtnElement) {
+            autoplayToggleBtnElement.addEventListener('click', () => {
+                globalPlayerState.autoplayNext = !globalPlayerState.autoplayNext;
+                const currentSongIdParam = new URLSearchParams(window.location.search).get('songId');
+                if (playerViewContainer && playerViewContainer.classList.contains('active') && currentSongIdParam !== null) {
+                    populateUpNextList(parseInt(currentSongIdParam), playerViewContainer);
+                }
             });
-        });
-    }
+        }
+        
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('sidebar-open');
+                updateSidebarToggleIcon();
+            });
+        }
 
-    if (musicSearchInput) {
-        musicSearchInput.addEventListener('input', () => {
-            const query = musicSearchInput.value.toLowerCase(); const url = new URL(window.location);
-            if (query) url.searchParams.set('s', query.replace(/ /g, '+')); else url.searchParams.delete('s');
-            if (musicContent && musicContent.classList.contains('active')) { window.history.replaceState({ view: 'music', s: query }, '', url); renderView(); }
-        });
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        let activeAudio = globalPlayerState.currentPlayingAudio; let activePlayerDiv = globalPlayerState.currentPlayingPlayerDiv;
-        if (!activeAudio && playerViewContainer && playerViewContainer.classList.contains('active')) { activePlayerDiv = playerViewContainer.querySelector('.player'); if (activePlayerDiv && activePlayerDiv.audio) activeAudio = activePlayerDiv.audio; }
-        const playButton = activePlayerDiv ? activePlayerDiv.querySelector('.play-btn') : null;
-        const muteButton = activePlayerDiv ? activePlayerDiv.querySelector('.mute-btn') : null;
-        if (e.code === 'Space') { e.preventDefault(); if (playButton) playButton.click(); }
-        else if (e.code === 'KeyM') { e.preventDefault(); if (muteButton) muteButton.click(); }
-        else if (activeAudio && activePlayerDiv) {
-            let handled = false; const cT = activeAudio.currentTime, dur = activeAudio.duration, vol = activeAudio.volume;
-            if(e.code==='ArrowLeft'){if(dur&&dur!==Infinity)activeAudio.currentTime=Math.max(0,cT-5);handled=true;}
-            else if(e.code==='ArrowRight'){if(dur&&dur!==Infinity)activeAudio.currentTime=Math.min(dur,cT+5);handled=true;}
+        if (navLinks) {
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetView = link.dataset.view;
+                    const url = new URL(window.location);
+                    if (targetView === 'home') {
+                        url.search = '';
+                    } else {
+                        url.searchParams.set('view', targetView);
+                        url.searchParams.delete('songId');
+                        url.searchParams.delete('s');
+                    }
+                    window.history.pushState({ view: targetView }, '', url);
+                    renderView();
+                    if (window.innerWidth < 769 && document.body.classList.contains('sidebar-open')) {
+                        document.body.classList.remove('sidebar-open');
+                        updateSidebarToggleIcon();
+                    }
+                });
+            });
+        }
+        
+        if (musicSearchInput) {
+            musicSearchInput.addEventListener('input', () => {
+                const query = musicSearchInput.value.toLowerCase();
+                const url = new URL(window.location);
+                url.searchParams.set('view', 'music'); // Ensure we are on music view
+                if (query) {
+                    url.searchParams.set('s', query.replace(/ /g, '+'));
+                } else {
+                    url.searchParams.delete('s');
+                }
+                window.history.replaceState({ view: 'music', s: query }, '', url);
+                renderView();
+            });
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            let activeAudio = globalPlayerState.currentPlayingAudio;
+            if (!activeAudio) return;
+            const vol = activeAudio.volume;
+            let handled = false;
+            if(e.code==='Space'){ e.preventDefault(); globalPlayerState.currentPlayingPlayerDiv.querySelector('.play-btn').click(); }
+            else if(e.code==='KeyM'){ e.preventDefault(); globalPlayerState.currentPlayingPlayerDiv.querySelector('.mute-btn').click(); }
+            else if(e.code==='ArrowLeft'){activeAudio.currentTime=Math.max(0,activeAudio.currentTime-5);handled=true;}
+            else if(e.code==='ArrowRight'){activeAudio.currentTime=Math.min(activeAudio.duration,activeAudio.currentTime+5);handled=true;}
             else if(e.code==='ArrowUp'){activeAudio.muted=false;activeAudio.volume=Math.min(1,vol+0.05);handled=true;}
             else if(e.code==='ArrowDown'){activeAudio.muted=false;activeAudio.volume=Math.max(0,vol-0.05);handled=true;}
             if(handled)e.preventDefault();
-        }
-    });
-
-    window.addEventListener('popstate', () => renderView());
-
-    // Fade out loading screen and fade in the page
-    if (loadingOverlay) {
-        loadingOverlay.classList.add('hidden');
-        loadingOverlay.addEventListener('transitionend', function handleTransitionEnd(event) {
-            if (event.propertyName === 'opacity') {
-                loadingOverlay.remove();
-            }
         });
-    }
 
-    pageWrapper.style.display = 'flex';
-    requestAnimationFrame(() => {
-        pageWrapper.classList.add('visible');
+        window.addEventListener('popstate', () => renderView());
+
+        // Render the initial view based on the URL
+        renderView();
+
+        // FINALLY, hide the loading screen and show the page
+        if (loadingOverlay) {
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.addEventListener('transitionend', function handleTransitionEnd(event) {
+                if (event.propertyName === 'opacity') {
+                    loadingOverlay.remove();
+                }
+            });
+        }
+
+        if (pageWrapper) {
+            pageWrapper.style.display = 'flex';
+            requestAnimationFrame(() => {
+                pageWrapper.classList.add('visible');
+            });
+        }
     });
 }
