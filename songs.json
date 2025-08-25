@@ -6,7 +6,8 @@
   { "title": "Virtual Insanity", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/chill%20very%20much.wav?download=true" },
   { "title": "Icecream Angels Vocaloid Japanese Cover", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/Icecream%20Angels%20Vocaloid%20Cover.wav?download=true" },
   { "title": "Icecream Angels Vocaloid English Cover", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/Icecream%20Angels%20Vocaloid%20English%20Cover%20v2.wav?download=true" },
- 
+  { "title": "tsurupettan", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/cool%20song%201.wav?download=true" },
+  
   { "title": "Stupid Baka", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/tripple%20baka%20temp%20vocal%20finalized.wav?download=true" },
   { "title": "Longing Stars", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/longing%20stars.wav?download=true" },
   { "title": "Plain Asia", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/touhou%20project%20x%20deltarune.wav?download=true" },
@@ -63,5 +64,6 @@
   { "title": "Shelter Chill Remix", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/shelter%20chill%20edition.wav?download=true" },
   { "title": "Union", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/union%20remastered.wav?download=true" }
 ]
+
 
 
