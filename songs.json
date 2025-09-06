@@ -12,7 +12,7 @@
   { "title": "Lofi Metal", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/lofi%20metal%20v2.wav?download=true" },
   { "title": "Lofi J-Pop", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/lofi%20pop.wav?download=true" },
   { "title": "Running Out Of Time", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/umm%20dike%20v2.wav?download=true" },
-  { "title": "Experimental Japanese Funkot Song", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/uhh%20that%20one%20funkot%20japanese%20song.wav?download=true" },
+  { "title": "Experimental Japanese Funkot Song", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/uhh%20that%20one%20funkot%20japanese%20song%20v2.wav?download=true" },
   
   { "title": "Stupid Baka", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/tripple%20baka%20temp%20vocal%20finalized.wav?download=true" },
   { "title": "Longing Stars", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/longing%20stars.wav?download=true" },
@@ -70,6 +70,7 @@
   { "title": "Shelter Chill Remix", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/shelter%20chill%20edition.wav?download=true" },
   { "title": "Union", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/union%20remastered.wav?download=true" }
 ]
+
 
 
 
