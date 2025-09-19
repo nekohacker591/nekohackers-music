@@ -1,6 +1,7 @@
 [
   { "title": "Rock and Roll", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/rock%20and%20roll%20mixed.wav?download=true", "artwork": "https://i.imgur.com/ClMFeop.png" },
   { "title": "Hyper Active", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/hyper%20active%20final%20mix.wav?download=true" },
+  { "title": "Finality", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/finality%20premix.wav?download=true" },
   { "title": "Neko★Funkot", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/funkot%20no%20ah.wav?download=true" },
   { "title": "Retry Now", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/jpop%20mix%201.wav?download=true" },
   { "title": "Virtual Insanity", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/chill%20very%20much.wav?download=true" },
@@ -70,6 +71,7 @@
   { "title": "Shelter Chill Remix", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/shelter%20chill%20edition.wav?download=true" },
   { "title": "Union", "file": "https://huggingface.co/datasets/nekohacker591/music/resolve/main/mus/union%20remastered.wav?download=true" }
 ]
+
 
 
 
